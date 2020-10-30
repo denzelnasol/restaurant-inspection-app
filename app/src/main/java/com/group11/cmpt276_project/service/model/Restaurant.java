@@ -1,5 +1,8 @@
 package com.group11.cmpt276_project.service.model;
 
+/*
+This classes represents a restaurant as an object
+ */
 public class Restaurant {
     String trackingNumber;
     String name;

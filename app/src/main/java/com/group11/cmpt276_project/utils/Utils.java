@@ -5,6 +5,9 @@ import android.content.Context;
 import java.io.IOException;
 import java.io.InputStream;
 
+/*
+Various utility functions that are useful such as loading json
+ */
 public class Utils {
 
     public  static String getJsonFromAssets(Context context, String fileName) throws IOException {
