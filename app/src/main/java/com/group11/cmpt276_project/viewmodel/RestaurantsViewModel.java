@@ -10,6 +10,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+This class is a singleton that contains the restaurants data provided. The class stores the data in
+an ArrayList to allow quick updates should it be needed. It also returns a LiveData version of the list
+so anything observing will change accordingly
+ */
 public class RestaurantsViewModel {
 
     private List<Restaurant> restaurantList;
