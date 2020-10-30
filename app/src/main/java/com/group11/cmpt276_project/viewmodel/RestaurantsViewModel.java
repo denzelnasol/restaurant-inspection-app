@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.service.repository.RestaurantRepository;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantsViewModel {
@@ -28,8 +30,16 @@ public class RestaurantsViewModel {
     }
 
     public void init(RestaurantRepository restaurantRepository) {
-        if(this.restaurantRepository == null) {
+        if (this.restaurantRepository == null) {
             this.restaurantRepository = restaurantRepository;
+
+            try {
+                this.restaurantList = this.restaurantRepository.get();
+            } catch (IOException e) {
+                this.restaurantList = new ArrayList<>();
+            }
+
+            this.mRestaurantList = new MutableLiveData<>(this.restaurantList);
         }
     }
 
