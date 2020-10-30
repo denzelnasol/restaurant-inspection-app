@@ -1,6 +1,6 @@
 package com.group11.cmpt276_project.service.model;
 
-public class Resturant {
+public class Restaurant {
     String trackingNumber;
     String name;
     String physicalAddress;
