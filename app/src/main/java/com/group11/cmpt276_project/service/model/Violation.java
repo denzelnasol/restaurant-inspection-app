@@ -1,5 +1,9 @@
 package com.group11.cmpt276_project.service.model;
 
+/**
+ * Represent a single Violation including the id, status, details, and type.
+ */
+
 public class Violation {
     private int id;
     private String status;
