@@ -13,6 +13,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+/**This class serves to load the violations json file
+ * The get function will load the json file using getJsonFromAssets util function and maps it to a string and
+ * list using Jackson
+ */
 public class ViolationRepository {
     private Context context;
     private ObjectMapper objectMapper;

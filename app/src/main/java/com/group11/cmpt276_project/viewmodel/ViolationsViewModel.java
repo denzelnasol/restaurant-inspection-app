@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A singleton class that contains a map of all violations given. Violations are accessed through
+ * respective IDs
+ */
 public class ViolationsViewModel {
     private Map<String, Violation> violations;
     private ViolationRepository violationRepository;
