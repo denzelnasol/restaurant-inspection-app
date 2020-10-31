@@ -23,19 +23,21 @@ import java.util.List;
 public class RestuarantDetailActivity extends AppCompatActivity {
 
     private RestaurantsViewModel restaurant_viewModel;
+    private InspectionReportsViewModel inspectionReportsViewModel;
     private static int index;
     private Restaurant restaurant;
     private RecyclerView recyclerView;
-    private int[] hazardLevelIcon;
+    private int[] hazardLevelIcon = {R.drawable.ic_launcher_background};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restuarant_detail);
         restaurant_viewModel = RestaurantsViewModel.getInstance();
         restaurant = restaurant_viewModel.getByIndex(index);
-        List<InspectionReport> inspectionReports = InspectionReportViewModel.getInstance().get(restaurant.getTrackingNumber());
+        List<InspectionReport> inspectionReports = inspectionReportsViewModel.getInstance().get(restaurant.getTrackingNumber());
         setRestaurant_details();
         RestaurantDetailAdapter myAdapter = new RestaurantDetailAdapter(this, inspectionReports, hazardLevelIcon);
+        recyclerView = findViewById(R.id.res_detail_recycler);
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
