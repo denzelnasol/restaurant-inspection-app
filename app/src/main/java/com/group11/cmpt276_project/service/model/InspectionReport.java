@@ -1,15 +1,17 @@
 package com.group11.cmpt276_project.service.model;
 
+import java.util.Arrays;
+
 public class InspectionReport {
     private final String trackingNumber;
-    private final int inspectionDate;
+    private final String inspectionDate;
     private final String inspectionType;
     private final int numberCritical;
     private final int numberNonCritical;
     private final String hazardRating;
     private final int[] violLump;
-
-    public InspectionReport(String trackingNumber, int inspectionDate, String inspectionType,
+    
+    public InspectionReport(String trackingNumber, String inspectionDate, String inspectionType,
                             int numberCritical, int numberNonCritical, String hazardRating,
                             int[] violLump){
         this.trackingNumber = trackingNumber;
@@ -26,7 +28,7 @@ public class InspectionReport {
         return trackingNumber;
     }
 
-    public int getInspectionDate() {
+    public String getInspectionDate() {
         return inspectionDate;
     }
 
