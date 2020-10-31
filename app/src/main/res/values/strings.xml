@@ -2,4 +2,7 @@
     <string name="app_name">cmpt276_project</string>
     <string name="res_png">res_png</string>
     <string name="cutlery">cutlery</string>
+    <string name="critical_issues">Critical issues -</string>
+    <string name="non_critical_issues">Non-Critical issues -</string>
+    <string name="time">Time -</string>
 </resources>

@@ -2,6 +2,8 @@ package com.group11.cmpt276_project.view.ui;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
+import com.group11.cmpt276_project.view.adapter.RestaurantDetailAdapter;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
@@ -22,6 +25,8 @@ public class RestuarantDetailActivity extends AppCompatActivity {
     private RestaurantsViewModel restaurant_viewModel;
     private static int index;
     private Restaurant restaurant;
+    private RecyclerView recyclerView;
+    private int[] hazardLevelIcon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,8 +34,10 @@ public class RestuarantDetailActivity extends AppCompatActivity {
         restaurant_viewModel = RestaurantsViewModel.getInstance();
         restaurant = restaurant_viewModel.getByIndex(index);
         List<InspectionReport> inspectionReports = InspectionReportViewModel.getInstance().get(restaurant.getTrackingNumber());
-
         setRestaurant_details();
+        RestaurantDetailAdapter myAdapter = new RestaurantDetailAdapter(this, inspectionReports, hazardLevelIcon);
+        recyclerView.setAdapter(myAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @SuppressLint("SetTextI18n")
