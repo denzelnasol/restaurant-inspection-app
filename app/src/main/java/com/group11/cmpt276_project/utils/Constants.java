@@ -1,9 +1,8 @@
 package com.group11.cmpt276_project.utils;
-/*
-Constants used in various places
- */
+
 public class Constants {
 
     public static String ENCODING = "UTF-8";
-    public static String RESTAURANT_FILE = "restaurants.json";
+    public static final String RESTAURANT_FILE = "restaurant.json";
+    public static final String INSPECTION_REPORT_FILE = "inspectionReports.json";
 }
