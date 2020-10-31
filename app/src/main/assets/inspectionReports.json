@@ -281,7 +281,7 @@
          "numberCritical":7,
          "numberNonCritical":6,
          "hazardRating":"High",
-         "violLump":[201,202,205,206,209,210.301.302.304.305.306.308.401]
+         "violLump":[201,202,205,206,209,210,301,302,304,305,306,308,401]
       }
    ],
    "SWOD-APSP3X":[
@@ -292,7 +292,7 @@
          "numberCritical":2,
          "numberNonCritical":3,
          "hazardRating":"Moderate",
-         "violLump":[209.303.308.311.402]
+         "violLump":[209,303,308,311,402]
       },
       {
          "trackingNumber":"SWOD-APSP3X",

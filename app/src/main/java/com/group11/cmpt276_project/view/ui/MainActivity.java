@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.group11.cmpt276_project.R;
+import com.group11.cmpt276_project.service.model.InspectionReport;
+import com.group11.cmpt276_project.service.repository.InspectionReportRepository;
 import com.group11.cmpt276_project.service.repository.RestaurantRepository;
+import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,9 +33,11 @@ public class MainActivity extends AppCompatActivity {
         }, TIMEOUT);
     }
 
-    private void init() {
+    private void init()  {
         RestaurantRepository restaurantRepository = new RestaurantRepository(getApplicationContext());
         RestaurantsViewModel.getInstance().init(restaurantRepository);
+        InspectionReportRepository inspectionReportRepository = new InspectionReportRepository(getApplicationContext());
+        InspectionReportsViewModel.getInstance().init(inspectionReportRepository);
     }
 
 

@@ -1,19 +1,20 @@
 package com.group11.cmpt276_project.service.model;
 
-/**
- * Represent an Inspection Report including the TrackingNumber, InspectionDate, InspectionType,
- * NumCritical, NumNonCritical, HazardRating and ViolLump.
+/*
+This classes represents a inspection report as an object
  */
 public class InspectionReport {
-    private final String trackingNumber;
-    private final int inspectionDate;
-    private final String inspectionType;
-    private final int numberCritical;
-    private final int numberNonCritical;
-    private final String hazardRating;
-    private final int[] violLump;
+    private String trackingNumber;
+    private String inspectionDate;
+    private String inspectionType;
+    private int numberCritical;
+    private int numberNonCritical;
+    private String hazardRating;
+    private int[] violLump;
 
-    public InspectionReport(String trackingNumber, int inspectionDate, String inspectionType,
+    public InspectionReport() {};
+    
+    public InspectionReport(String trackingNumber, String inspectionDate, String inspectionType,
                             int numberCritical, int numberNonCritical, String hazardRating,
                             int[] violLump){
         this.trackingNumber = trackingNumber;
@@ -23,13 +24,14 @@ public class InspectionReport {
         this.numberNonCritical = numberNonCritical;
         this.hazardRating = hazardRating;
         this.violLump = violLump;
+
     }
 
     public String getTrackingNumber() {
         return trackingNumber;
     }
 
-    public int getInspectionDate() {
+    public String getInspectionDate() {
         return inspectionDate;
     }
 
