@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="restaurant"
+            type="com.group11.cmpt276_project.service.model.Restaurant" />
+        <variable
+            name="report"
+            type="com.group11.cmpt276_project.service.model.InspectionReport" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/restaurant_item_date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/restaurant_item_name"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/restaurant_item_hazard"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="16dp"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toStartOf="@+id/restaurant_item_name"
+            app:layout_constraintTop_toBottomOf="@+id/restaurant_item_name" />
+
+        <TextView
+            android:id="@+id/restaurant_item_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:textSize="18sp"
+            android:text="@{restaurant.name}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/restaurant_item_number_found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@{String.format(@string/number_violations, report.numberCritical + report.numberNonCritical)}"
+            app:layout_constraintBottom_toBottomOf="@+id/restaurant_item_hazard"
+            app:layout_constraintStart_toEndOf="@+id/restaurant_item_hazard"
+            app:layout_constraintTop_toTopOf="@+id/restaurant_item_hazard" />
+
+        <TextView
+            android:id="@+id/restaurant_item_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/restaurant_item_name"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/restaurant_item_hazard"
+            app:layout_constraintTop_toBottomOf="@+id/restaurant_item_hazard" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
