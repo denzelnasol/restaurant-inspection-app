@@ -23,9 +23,9 @@ public class ViolationRepository {
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
-    public Map<String, List<Violation>> get() throws IOException {
+    public Map<String, Violation> get() throws IOException {
         String jsonString = Utils.getJsonFromAssets(this.context, Constants.VIOLATION_FILE);
-        TypeReference<Map<String, List<Violation>>> mapTypeReference = new TypeReference<Map<String, List<Violation>>>() {};
+        TypeReference<Map<String, Violation>> mapTypeReference = new TypeReference<Map<String, Violation>>() {};
         return objectMapper.readValue(jsonString, mapTypeReference);
     }
 }
