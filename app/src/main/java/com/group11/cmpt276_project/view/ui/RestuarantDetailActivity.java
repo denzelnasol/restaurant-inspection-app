@@ -1,16 +1,51 @@
 package com.group11.cmpt276_project.view.ui;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.group11.cmpt276_project.R;
+import com.group11.cmpt276_project.service.model.InspectionReport;
+import com.group11.cmpt276_project.service.model.Restaurant;
+import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
+import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
+
+import java.util.List;
 
 public class RestuarantDetailActivity extends AppCompatActivity {
 
+    private RestaurantsViewModel restaurant_viewModel;
+    private static int index;
+    private Restaurant restaurant;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restuarant_detail);
+        restaurant_viewModel = RestaurantsViewModel.getInstance();
+        restaurant = restaurant_viewModel.getByIndex(index);
+        List<InspectionReport> inspectionReports = InspectionReportViewModel.getInstance().get(restaurant.getTrackingNumber());
+
+        setRestaurant_details();
     }
+
+    @SuppressLint("SetTextI18n")
+    private void setRestaurant_details() {
+        TextView name = findViewById(R.id.res_detail_name);
+        TextView address = findViewById(R.id.res_detail_address);
+        TextView coordinates = findViewById(R.id.res_detail_coordinates);
+        name.setText(restaurant.getName());
+        address.setText(restaurant.getPhysicalAddress());
+        coordinates.setText(restaurant.getLatitude() + ", " + restaurant.getLongitude());
+    }
+
+    public static Intent startActivity(Context context, int index_restaurant) {
+        index = index_restaurant;
+        return new Intent(context, RestaurantListActivity.class);
+    }
+
 }

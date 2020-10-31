@@ -1,12 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.ui.RestuarantDetailActivity">
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="390dp"
+            android:layout_height="159dp"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/res_png"
+            android:translationY="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.476"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.029"
+            app:srcCompat="@drawable/restaurant_detailed_img" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/res_detail_recycler"
+            android:layout_width="382dp"
+            android:layout_height="346dp"
+            android:translationY="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.482"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintVertical_bias="0.693" />
+
+        <TextView
+            android:id="@+id/res_detail_name"
+            android:layout_width="299dp"
+            android:layout_height="31dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-black"
+            android:text="Name"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:translationY="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <TextView
+            android:id="@+id/res_detail_address"
+            android:layout_width="296dp"
+            android:layout_height="23dp"
+            android:text="Address"
+            android:textSize="18sp"
+            android:translationY="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout"
+            app:layout_constraintTop_toBottomOf="@+id/res_detail_name" />
+
+        <TextView
+            android:id="@+id/res_detail_coordinates"
+            android:layout_width="295dp"
+            android:layout_height="26dp"
+            android:text="Coordinates"
+            android:textSize="18sp"
+            android:translationY="40dp"
+            app:layout_constraintBottom_toTopOf="@+id/res_detail_recycler"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.87"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout"
+            app:layout_constraintTop_toBottomOf="@+id/res_detail_address"
+            app:layout_constraintVertical_bias="0.016" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="315dp"
+            android:layout_height="35dp"
+            android:fontFamily="sans-serif-black"
+            android:text="Inspections -"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:translationY="40dp"
+            app:layout_constraintBottom_toTopOf="@+id/res_detail_recycler"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.11"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/res_detail_coordinates"
+            app:layout_constraintVertical_bias="0.94" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="93dp"
+            android:layout_height="89dp"
+            android:orientation="vertical"
+            android:translationY="40dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView4"
+            app:layout_constraintEnd_toEndOf="@+id/imageView"
+            app:layout_constraintHorizontal_bias="0.032"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.918">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="false"
+                app:lottie_rawRes="@raw/cutlery_lottie_anim"
+                app:lottie_url="REPLACE_JSON_URL" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintBottom_toTopOf="@+id/imageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
