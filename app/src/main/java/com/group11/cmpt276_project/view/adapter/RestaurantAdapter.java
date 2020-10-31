@@ -34,8 +34,10 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
     public void onBindViewHolder(@NonNull RestaurantViewHolder holder, int position) {
         Random random = new Random();
         Restaurant restaurant = this.restaurants.get(position);
+
+        String[] levels = new String[]{"Low", "Medium", "High"};
         //This is temporary
-        holder.bind(restaurant, new InspectionReport(restaurant.getTrackingNumber(), 20181106, "Follow-Up", random.nextInt(5), random.nextInt(5), "Low", new int[0]));
+        holder.bind(restaurant, new InspectionReport(restaurant.getTrackingNumber(), "20200405", "Follow-Up", random.nextInt(5), random.nextInt(5), "Low", new int[0]));
     }
 
     @Override
@@ -53,9 +55,9 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
         }
 
         public void bind(Restaurant restaurant, InspectionReport inspectionReport) {
-            binding.setRestaurant(restaurant);
-            binding.setReport(inspectionReport);
-            binding.executePendingBindings();
+            this.binding.setRestaurant(restaurant);
+            this.binding.setReport(inspectionReport);
+            this.binding.executePendingBindings();
         }
     }
 }

@@ -10,7 +10,7 @@ public class InspectionReport {
     private final int numberNonCritical;
     private final String hazardRating;
     private final int[] violLump;
-    
+
     public InspectionReport(String trackingNumber, String inspectionDate, String inspectionType,
                             int numberCritical, int numberNonCritical, String hazardRating,
                             int[] violLump){
