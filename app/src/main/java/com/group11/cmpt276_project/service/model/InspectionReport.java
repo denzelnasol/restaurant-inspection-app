@@ -4,10 +4,7 @@ package com.group11.cmpt276_project.service.model;
  * Represent an Inspection Report including the TrackingNumber, InspectionDate, InspectionType,
  * NumCritical, NumNonCritical, HazardRating and ViolLump.
  */
-<<<<<<< HEAD
-=======
 
->>>>>>> 385250f6bcb4856b0100b75034200561ae01a86d
 public class InspectionReport {
 
     private String trackingNumber;
