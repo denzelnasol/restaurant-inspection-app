@@ -5,7 +5,9 @@ public class Violation {
     private String status;
     private String details;
     private String type;
-    
+
+    public Violation() {};
+
     public Violation(int id, String status, String details, String type) {
         this.id = id;
         this.status = status;
