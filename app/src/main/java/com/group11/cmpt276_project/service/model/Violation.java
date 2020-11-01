@@ -5,23 +5,23 @@ package com.group11.cmpt276_project.service.model;
  */
 
 public class Violation {
-    private String id;
+    private int id;
     private String status;
     private String details;
     private String type;
     
-    public Violation(String id, String status, String details, String type) {
+    public Violation(int id, String status, String details, String type) {
         this.id = id;
         this.status = status;
         this.details = details;
         this.type = type;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
