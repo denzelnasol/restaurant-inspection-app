@@ -16,9 +16,11 @@ import java.util.Random;
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>{
 
     private List<Restaurant> restaurants;
+    private  List<InspectionReport> inspectionReports;
 
-    public RestaurantAdapter(List<Restaurant> restaurants) {
+    public RestaurantAdapter(List<Restaurant> restaurants, List<InspectionReport> inspectionReports) {
         this.restaurants = restaurants;
+        this.inspectionReports = inspectionReports;
     }
 
 
@@ -32,12 +34,10 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
 
     @Override
     public void onBindViewHolder(@NonNull RestaurantViewHolder holder, int position) {
-        Random random = new Random();
         Restaurant restaurant = this.restaurants.get(position);
+        InspectionReport report = this.inspectionReports.get(position);
 
-        String[] levels = new String[]{"Low", "Medium", "High"};
-        //This is temporary
-        holder.bind(restaurant, new InspectionReport(restaurant.getTrackingNumber(), "20200405", "Follow-Up", random.nextInt(5), random.nextInt(5), "Low", new int[0]));
+        holder.bind(restaurant, report);
     }
 
     @Override

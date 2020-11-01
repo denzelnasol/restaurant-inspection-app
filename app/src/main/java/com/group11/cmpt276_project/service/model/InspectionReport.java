@@ -1,15 +1,19 @@
 package com.group11.cmpt276_project.service.model;
 
-import java.util.Arrays;
-
+/*
+This classes represents a inspection report as an object
+ */
 public class InspectionReport {
-    private final String trackingNumber;
-    private final String inspectionDate;
-    private final String inspectionType;
-    private final int numberCritical;
-    private final int numberNonCritical;
-    private final String hazardRating;
-    private final int[] violLump;
+
+    private String trackingNumber;
+    private String inspectionDate;
+    private String inspectionType;
+    private int numberCritical;
+    private int numberNonCritical;
+    private String hazardRating;
+    private int[] violLump;
+
+    public InspectionReport() {};
 
     public InspectionReport(String trackingNumber, String inspectionDate, String inspectionType,
                             int numberCritical, int numberNonCritical, String hazardRating,

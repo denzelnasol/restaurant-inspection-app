@@ -19,6 +19,11 @@ public class DateBindingAdapter {
 
     @BindingAdapter("date")
     public static void setDateText(TextView textView, String date) {
+
+        if(date == null || date.isEmpty()) {
+            return;
+        }
+
         DateTimeFormatter formatter = DateTimeFormatter.BASIC_ISO_DATE;
         LocalDate inspectionDate = LocalDate.parse(Integer.valueOf(date).toString(), formatter);
         LocalDate currentDate = LocalDate.now();
