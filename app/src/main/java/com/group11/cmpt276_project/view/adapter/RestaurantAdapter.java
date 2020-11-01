@@ -1,6 +1,7 @@
 package com.group11.cmpt276_project.view.adapter;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.group11.cmpt276_project.databinding.RestaurantItemBinding;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
+import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClick;
 
 import java.util.List;
 import java.util.Random;
@@ -17,10 +19,12 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
 
     private List<Restaurant> restaurants;
     private  List<InspectionReport> inspectionReports;
+    private IItemOnClick onRestaurantItemClick;
 
-    public RestaurantAdapter(List<Restaurant> restaurants, List<InspectionReport> inspectionReports) {
+    public RestaurantAdapter(List<Restaurant> restaurants, List<InspectionReport> inspectionReports, IItemOnClick onRestaurantItemClick) {
         this.restaurants = restaurants;
         this.inspectionReports = inspectionReports;
+        this.onRestaurantItemClick = onRestaurantItemClick;
     }
 
 
@@ -29,7 +33,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
     public RestaurantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         RestaurantItemBinding itemBinding = RestaurantItemBinding.inflate(layoutInflater, parent, false);
-        return new RestaurantViewHolder(itemBinding);
+        return new RestaurantViewHolder(itemBinding, this.onRestaurantItemClick);
     }
 
     @Override
@@ -49,9 +53,12 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
 
         private RestaurantItemBinding binding;
 
-        public RestaurantViewHolder(RestaurantItemBinding binding) {
+        public RestaurantViewHolder(RestaurantItemBinding binding, IItemOnClick onRestaurantItemClick) {
             super(binding.getRoot());
             this.binding = binding;
+            this.binding.getRoot().setOnClickListener((View view) -> {
+                onRestaurantItemClick.onItemClick(view, getAdapterPosition());
+            });
         }
 
         public void bind(Restaurant restaurant, InspectionReport inspectionReport) {

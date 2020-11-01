@@ -7,11 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.view.adapter.RestaurantAdapter;
+import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClick;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
@@ -51,10 +53,19 @@ public class RestaurantListActivity extends AppCompatActivity {
                 reports.add(this.inspectionReportsViewModel.getMostRecentReport(restaurant.getTrackingNumber()));
             }
 
-            RestaurantAdapter restaurantAdapter = new RestaurantAdapter(data, reports);
+            RestaurantAdapter restaurantAdapter = new RestaurantAdapter(data, reports, new RestaurantItemOnClick());
 
             this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
             this.recyclerView.setAdapter(restaurantAdapter);
         });
+    }
+
+    private class RestaurantItemOnClick implements IItemOnClick{
+
+        @Override
+        public void onItemClick(View view, int position) {
+            Intent intent = RestuarantDetailActivity.startActivity(RestaurantListActivity.this, position);
+            startActivity(intent);
+        }
     }
 }
