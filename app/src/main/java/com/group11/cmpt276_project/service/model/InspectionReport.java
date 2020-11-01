@@ -1,8 +1,10 @@
 package com.group11.cmpt276_project.service.model;
 
-/*
-This classes represents a inspection report as an object
+/**
+ * Represent an Inspection Report including the TrackingNumber, InspectionDate, InspectionType,
+ * NumCritical, NumNonCritical, HazardRating and ViolLump.
  */
+
 public class InspectionReport {
 
     private String trackingNumber;
