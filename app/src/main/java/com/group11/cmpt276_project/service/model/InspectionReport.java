@@ -9,6 +9,7 @@ package com.group11.cmpt276_project.service.model;
 
 >>>>>>> 385250f6bcb4856b0100b75034200561ae01a86d
 public class InspectionReport {
+
     private String trackingNumber;
     private String inspectionDate;
     private String inspectionType;

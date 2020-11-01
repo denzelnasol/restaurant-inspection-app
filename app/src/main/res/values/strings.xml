@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">cmpt276_project</string>
+    <string name="number_violations">%d violations found during inspection</string>
+    <string name="last_inspect">Last inspection was %s</string>
+    <string name="days">%d days ago</string>
+    <string name="month">on %s %d</string>
+    <string name="year">in %s %d</string>
+    <string name="empty" />
+    <string name="low">Low</string>
+    <string name="no_inspections">No inspections so far</string>
 </resources>
