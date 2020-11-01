@@ -69,7 +69,7 @@ public class RestaurantListActivity extends AppCompatActivity {
     private class RestaurantItemOnClick implements IItemOnClick{
 
         @Override
-        public void onItemClick(View view, int position) {
+        public void onItemClick(int position) {
             Intent intent = RestuarantDetailActivity.startActivity(RestaurantListActivity.this, position);
             startActivity(intent);
         }

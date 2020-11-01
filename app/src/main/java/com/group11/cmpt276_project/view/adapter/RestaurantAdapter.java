@@ -57,7 +57,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
             super(binding.getRoot());
             this.binding = binding;
             this.binding.getRoot().setOnClickListener((View view) -> {
-                onRestaurantItemClick.onItemClick(view, getAdapterPosition());
+                onRestaurantItemClick.onItemClick(getAdapterPosition());
             });
         }
 
