@@ -6,6 +6,7 @@ package com.group11.cmpt276_project.service.model;
  */
 
 public class InspectionReport {
+
     private String trackingNumber;
     private String inspectionDate;
     private String inspectionType;
