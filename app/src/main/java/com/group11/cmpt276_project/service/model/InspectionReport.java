@@ -1,8 +1,10 @@
 package com.group11.cmpt276_project.service.model;
 
-/*
-This classes represents a inspection report as an object
+/**
+ * Represent an Inspection Report including the TrackingNumber, InspectionDate, InspectionType,
+ * NumCritical, NumNonCritical, HazardRating and ViolLump.
  */
+
 public class InspectionReport {
     private String trackingNumber;
     private String inspectionDate;
@@ -13,7 +15,7 @@ public class InspectionReport {
     private int[] violLump;
 
     public InspectionReport() {};
-    
+
     public InspectionReport(String trackingNumber, String inspectionDate, String inspectionType,
                             int numberCritical, int numberNonCritical, String hazardRating,
                             int[] violLump){
