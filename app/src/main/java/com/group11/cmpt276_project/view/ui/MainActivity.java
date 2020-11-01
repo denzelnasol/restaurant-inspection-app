@@ -8,10 +8,16 @@ import android.os.Handler;
 
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.service.model.InspectionReport;
+import com.group11.cmpt276_project.service.model.Violation;
 import com.group11.cmpt276_project.service.repository.InspectionReportRepository;
 import com.group11.cmpt276_project.service.repository.RestaurantRepository;
+import com.group11.cmpt276_project.service.repository.ViolationRepository;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
+import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
+
+import java.io.IOException;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         RestaurantsViewModel.getInstance().init(restaurantRepository);
         InspectionReportRepository inspectionReportRepository = new InspectionReportRepository(getApplicationContext());
         InspectionReportsViewModel.getInstance().init(inspectionReportRepository);
+        ViolationRepository violationRepository = new ViolationRepository(getApplicationContext());
+        ViolationsViewModel.getInstance().init(violationRepository);
     }
 
 

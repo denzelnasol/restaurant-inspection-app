@@ -1,25 +1,29 @@
 package com.group11.cmpt276_project.service.model;
 
+/**
+ * Represent a single Violation including the id, status, details, and type.
+ */
+
 public class Violation {
-    private int id;
+    private String id;
     private String status;
     private String details;
     private String type;
 
     public Violation() {};
 
-    public Violation(int id, String status, String details, String type) {
+    public Violation(String id, String status, String details, String type) {
         this.id = id;
         this.status = status;
         this.details = details;
         this.type = type;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
