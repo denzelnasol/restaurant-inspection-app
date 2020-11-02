@@ -15,7 +15,7 @@ import java.util.Locale;
 public class FullDateBindingAdapter {
 
     @BindingAdapter("fullDate")
-    public static void setDateText(TextView textView, String date) {
+    public static void setFullDateText(TextView textView, String date) {
 
         if(date == null || date.isEmpty()) {
             return;
