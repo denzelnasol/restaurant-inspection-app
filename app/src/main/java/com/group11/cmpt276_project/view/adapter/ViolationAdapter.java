@@ -10,7 +10,9 @@ import com.group11.cmpt276_project.databinding.ViolationItemBinding;
 import com.group11.cmpt276_project.service.model.Violation;
 
 import java.util.List;
-
+/**
+This class is an adapter to hook the RecyclerView with DataBinding for the violation list.
+ **/
 public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.ViolationViewHolder>{
 
     private final List<Violation> violations;

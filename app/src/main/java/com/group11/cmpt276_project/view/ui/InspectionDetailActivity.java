@@ -20,7 +20,10 @@ import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ This is an activity for the InspectionDetail.
+ It allow users to see list of violations using RecyclerView.
+ **/
 public class InspectionDetailActivity extends AppCompatActivity {
 
     private final static String INDEX = "index";
@@ -76,6 +79,10 @@ public class InspectionDetailActivity extends AppCompatActivity {
 
     private void observeVisibility() {
         List<Violation> violationList = this.getViolationList();
+
+        ViolationAdapter violationAdapter = new ViolationAdapter(violationList);
+        this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.recyclerView.setAdapter(violationAdapter);
     }
 
     private List<Violation> getViolationList(){
@@ -86,11 +93,6 @@ public class InspectionDetailActivity extends AppCompatActivity {
         for(int id: violationIds) {
             violationList.add(this.violationsViewModel.get(String.valueOf(id)));
         }
-
-        ViolationAdapter violationAdapter = new ViolationAdapter(violationList);
-
-        this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        this.recyclerView.setAdapter(violationAdapter);
 
         return violationList;
     }
