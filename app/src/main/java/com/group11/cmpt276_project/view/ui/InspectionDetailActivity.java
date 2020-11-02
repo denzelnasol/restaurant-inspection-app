@@ -10,9 +10,13 @@ import android.os.Bundle;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.ActivityInspectionDetailBinding;
 import com.group11.cmpt276_project.service.model.InspectionReport;
+import com.group11.cmpt276_project.service.model.Violation;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InspectionDetailActivity extends AppCompatActivity {
 
@@ -32,11 +36,13 @@ public class InspectionDetailActivity extends AppCompatActivity {
     private ViolationsViewModel violationsViewModel;
     private InspectionReportsViewModel inspectionReportsViewModel;
     private RestaurantsViewModel restaurantsViewModel;
+    private InspectionReport inspectionReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.bind();
+        this.observeVisibility();
     }
 
     public void onBackClicked() {
@@ -55,10 +61,26 @@ public class InspectionDetailActivity extends AppCompatActivity {
 
         String trackingNumber = this.restaurantsViewModel.getByIndex(parent).getTrackingNumber();
 
-        InspectionReport inspectionReport = this.inspectionReportsViewModel.getByIndexAndTrackingNumbe(trackingNumber, index);
+        this.inspectionReport = this.inspectionReportsViewModel.getByIndexAndTrackingNumbe(trackingNumber, index);
 
         ActivityInspectionDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_inspection_detail);
-        binding.setReport(inspectionReport);
+        binding.setReport(this.inspectionReport);
         binding.setActivity(this);
     };
+
+    private void observeVisibility() {
+        List<Violation> violationList = this.getViolationList();
+    }
+
+    private List<Violation> getViolationList(){
+        int[] violationIds = this.inspectionReport.getViolLump();
+
+        List<Violation> violationList = new ArrayList<>();
+
+        for(int id: violationIds) {
+            violationList.add(this.violationsViewModel.get(String.valueOf(id)));
+        }
+
+        return violationList;
+    }
 }
