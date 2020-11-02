@@ -15,6 +15,7 @@ import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.view.adapter.RestaurantDetailAdapter;
+import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClick;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
@@ -30,6 +31,7 @@ public class RestuarantDetailActivity extends AppCompatActivity {
     private Restaurant restaurant;
     private RecyclerView recyclerView;
     private int[] hazardLevelIcon = {R.drawable.ic_launcher_background};
+    private int index;
 
     public static Intent startActivity(Context context, int index) {
         Intent intent = new Intent(context, RestuarantDetailActivity.class);
@@ -42,11 +44,11 @@ public class RestuarantDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restuarant_detail);
         restaurant_viewModel = RestaurantsViewModel.getInstance();
-        int index = getIntent().getIntExtra(INDEX, -1);
+        index = getIntent().getIntExtra(INDEX, -1);
         restaurant = restaurant_viewModel.getByIndex(index);
         List<InspectionReport> inspectionReports = InspectionReportsViewModel.getInstance().getReports(restaurant.getTrackingNumber());
         setRestaurant_details();
-        RestaurantDetailAdapter adapter = new RestaurantDetailAdapter(this, inspectionReports, inspectionReports);
+        RestaurantDetailAdapter adapter = new RestaurantDetailAdapter( inspectionReports, new InspectionOnClick());
         recyclerView = findViewById(R.id.res_detail_recycler);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -61,5 +63,14 @@ public class RestuarantDetailActivity extends AppCompatActivity {
         coordinates.setText(restaurant.getLatitude() + ", " + restaurant.getLongitude());
     }
 
+    private class InspectionOnClick implements IItemOnClick{
+
+
+        @Override
+        public void onItemClick(int position) {
+            //Intent intent = InspectionDetailActivity.startActivity(RestaurantListActivity.this, 0, position);
+            //startActivity(intent);
+        }
+    }
 }
 
