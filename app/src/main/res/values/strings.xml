@@ -8,4 +8,9 @@
     <string name="empty" />
     <string name="low">Low</string>
     <string name="no_inspections">No inspections so far</string>
+    <string name="inspection_type">Inspection Type: %s</string>
+    <string name="non_critical"># Non-critical Issues Found: %d</string>
+    <string name="critical"># critical Issues Found: %d</string>
+    <string name="back">Back</string>
+    <string name="violation_summary">%s - %s</string>
 </resources>
