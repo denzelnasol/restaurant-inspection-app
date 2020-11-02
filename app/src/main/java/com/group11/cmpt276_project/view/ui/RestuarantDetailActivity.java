@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,11 +33,11 @@ public class RestuarantDetailActivity extends AppCompatActivity {
 
     public static Intent startActivity(Context context, int index) {
         Intent intent = new Intent(context, RestuarantDetailActivity.class);
+        intent.putExtra("index", index);
         intent.putExtra(INDEX, index);
         return intent;
     }
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restuarant_detail);
@@ -45,7 +46,7 @@ public class RestuarantDetailActivity extends AppCompatActivity {
         restaurant = restaurant_viewModel.getByIndex(index);
         List<InspectionReport> inspectionReports = InspectionReportsViewModel.getInstance().getReports(restaurant.getTrackingNumber());
         setRestaurant_details();
-        RestaurantDetailAdapter adapter = new RestaurantDetailAdapter(this, inspectionReports, hazardLevelIcon);
+        RestaurantDetailAdapter adapter = new RestaurantDetailAdapter(this, inspectionReports, inspectionReports);
         recyclerView = findViewById(R.id.res_detail_recycler);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -61,3 +62,4 @@ public class RestuarantDetailActivity extends AppCompatActivity {
     }
 
 }
+
