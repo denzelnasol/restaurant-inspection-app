@@ -13,8 +13,7 @@ import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.ActivityInspectionDetailBinding;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Violation;
-import com.group11.cmpt276_project.view.adapter.InspectionDetailAdapter;
-import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClick;
+import com.group11.cmpt276_project.view.adapter.ViolationAdapter;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
@@ -88,21 +87,12 @@ public class InspectionDetailActivity extends AppCompatActivity {
             violationList.add(this.violationsViewModel.get(String.valueOf(id)));
         }
 
-        InspectionDetailAdapter inspectionDetailAdapter = new InspectionDetailAdapter(violationList, new ViolationsOnClick()
-                );
+        ViolationAdapter violationAdapter = new ViolationAdapter(violationList);
 
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        this.recyclerView.setAdapter(inspectionDetailAdapter);
+        this.recyclerView.setAdapter(violationAdapter);
 
         return violationList;
     }
 
-    private class ViolationsOnClick implements IItemOnClick {
-
-        @Override
-        public void onItemClick(int position) {
-            Intent intent = InspectionDetailActivity.startActivity(InspectionDetailActivity.this, 0, position);
-            startActivity(intent);
-        }
-    }
 }
