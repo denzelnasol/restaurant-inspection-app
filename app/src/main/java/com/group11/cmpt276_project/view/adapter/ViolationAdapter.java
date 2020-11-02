@@ -1,6 +1,7 @@
 package com.group11.cmpt276_project.view.adapter;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.group11.cmpt276_project.databinding.ViolationItemBinding;
 import com.group11.cmpt276_project.service.model.Violation;
+import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClick;
 
 import java.util.List;
 /**
@@ -16,9 +18,13 @@ This class is an adapter to hook the RecyclerView with DataBinding for the viola
 public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.ViolationViewHolder>{
 
     private final List<Violation> violations;
+    private final boolean[] isVisibleData;
+    private final IItemOnClick onViolationItemClick;
 
-    public ViolationAdapter(List<Violation> violations) {
+    public ViolationAdapter(List<Violation> violations, boolean[] isVisibleData, IItemOnClick onViolationItemClick) {
         this.violations = violations;
+        this.isVisibleData = isVisibleData;
+        this.onViolationItemClick = onViolationItemClick;
     }
 
     @NonNull
@@ -32,7 +38,8 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.Viol
     @Override
     public void onBindViewHolder(@NonNull ViolationViewHolder holder, int position) {
         Violation violation = violations.get(position);
-        holder.bind(violation);
+        boolean isVisible = isVisibleData[position];
+        holder.bind(violation, isVisible);
     }
 
     @Override
@@ -47,11 +54,15 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.Viol
         public ViolationViewHolder(ViolationItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            this.binding.getRoot().setOnClickListener((View view) -> {
+                onViolationItemClick.onItemClick(getAdapterPosition());
+            });
         }
 
-        public void bind(Violation violation) {
+        public void bind(Violation violation, boolean isVisible) {
             this.binding.setViolation(violation);
             this.binding.executePendingBindings();
+            this.binding.setIsVisible(isVisible);
         }
     }
 }

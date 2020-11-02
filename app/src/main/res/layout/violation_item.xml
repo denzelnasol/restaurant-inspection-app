@@ -5,9 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
         <variable
             name="violation"
             type="com.group11.cmpt276_project.service.model.Violation" />
+        <variable
+            name="isVisible"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,13 +45,55 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:visibility="@{isVisible ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <TextView
+                        android:id="@+id/violation_id"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="@{violation.id}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/violation_detail"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@{violation.details}"
+                        app:layout_constraintLeft_toLeftOf="@id/violation_id"
+                        app:layout_constraintRight_toRightOf="@id/violation_id"
+                        app:layout_constraintTop_toBottomOf="@id/violation_id" />
+
+                    <TextView
+                        android:id="@+id/violation_type"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@{violation.type}"
+                        app:layout_constraintLeft_toLeftOf="@id/violation_detail"
+                        app:layout_constraintRight_toRightOf="@id/violation_detail"
+                        app:layout_constraintTop_toBottomOf="@id/violation_detail" />
+
+                    <TextView
+                        android:id="@+id/violation_status"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@{violation.status}"
+                        app:layout_constraintLeft_toLeftOf="@id/violation_type"
+                        app:layout_constraintRight_toRightOf="@id/violation_type"
+                        app:layout_constraintTop_toBottomOf="@id/violation_type" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

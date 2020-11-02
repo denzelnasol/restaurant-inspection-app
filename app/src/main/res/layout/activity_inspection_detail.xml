@@ -17,65 +17,58 @@
         android:layout_height="match_parent"
         tools:context=".view.ui.InspectionDetailActivity">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/violation_list"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/grey_300"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            app:layout_constraintVertical_bias="0.0"
-            tools:listitem="@layout/violation_item"/>
-
         <ImageView
             android:id="@+id/inspection_item_hazard"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="16dp"
             android:scaleType="fitXY"
             app:hazard="@{report != null ? report.hazardRating: @string/low}"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inspection_item_date" />
+            app:layout_constraintTop_toTopOf="@+id/inspection_type" />
 
         <TextView
             android:id="@+id/inspection_item_date"
             android:layout_width="0dp"
-            android:layout_height="19dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:textSize="14sp"
-            app:date="@{report != null ? report.inspectionDate : @string/empty}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+            app:fullDate="@{report != null ? report.inspectionDate : @string/empty}"
+            app:layout_constraintEnd_toEndOf="@+id/inspection_type"
+            app:layout_constraintStart_toStartOf="@+id/inspection_type"
+            app:layout_constraintTop_toBottomOf="@+id/inspection_type" />
 
         <TextView
             android:id="@+id/inspection_type"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:text="@{String.format(@string/inspection_type, report.inspectionType)}"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inspection_item_hazard" />
+            app:layout_constraintStart_toEndOf="@+id/inspection_item_hazard"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
 
         <TextView
             android:id="@+id/inspection_number_critical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@{String.format(@string/critical, report.numberCritical)}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inspection_type" />
+            app:layout_constraintEnd_toEndOf="@+id/inspection_item_date"
+            app:layout_constraintStart_toStartOf="@+id/inspection_item_date"
+            app:layout_constraintTop_toBottomOf="@+id/inspection_item_date" />
 
         <TextView
             android:id="@+id/inspection_number_non_critical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="@{String.format(@string/non_critical, report.numberNonCritical)}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/inspection_number_critical"
+            app:layout_constraintStart_toStartOf="@+id/inspection_number_critical"
             app:layout_constraintTop_toBottomOf="@+id/inspection_number_critical" />
 
         <androidx.appcompat.widget.Toolbar
@@ -93,14 +86,37 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
             android:background="@null"
+            android:onClick="@{() -> activity.onBackClicked()}"
             android:text="@string/back"
             android:textColor="#FFFFFF"
-            android:onClick="@{() -> activity.onBackClicked()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{report.hazardRating}"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/inspection_item_hazard"
+            app:layout_constraintStart_toStartOf="@+id/inspection_item_hazard"
+            app:layout_constraintTop_toBottomOf="@+id/inspection_item_hazard" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/violation_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/grey_300"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inspection_number_non_critical" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

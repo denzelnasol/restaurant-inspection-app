@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,9 +15,12 @@ import com.group11.cmpt276_project.databinding.ActivityInspectionDetailBinding;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Violation;
 import com.group11.cmpt276_project.view.adapter.ViolationAdapter;
+import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClick;
+import com.group11.cmpt276_project.viewmodel.InspectionReportViewModel;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
+import com.group11.cmpt276_project.viewmodel.factory.InspectionReportViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +43,16 @@ public class InspectionDetailActivity extends AppCompatActivity {
 
     private int parent;
     private int index;
+
     private ViolationsViewModel violationsViewModel;
     private InspectionReportsViewModel inspectionReportsViewModel;
     private RestaurantsViewModel restaurantsViewModel;
-    private InspectionReport inspectionReport;
+    private InspectionReportViewModel inspectionReportViewModel;
+
+    private  List<Violation> violationList;
     private RecyclerView recyclerView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,32 +71,37 @@ public class InspectionDetailActivity extends AppCompatActivity {
         this.index = intent.getIntExtra(INDEX, -1);
         this.parent = intent.getIntExtra(PARENT, -1);
 
+
         this.violationsViewModel = ViolationsViewModel.getInstance();
         this.inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
         this.restaurantsViewModel = RestaurantsViewModel.getInstance();
 
         String trackingNumber = this.restaurantsViewModel.getByIndex(parent).getTrackingNumber();
 
-        this.inspectionReport = this.inspectionReportsViewModel.getByIndexAndTrackingNumbe(trackingNumber, index);
+        InspectionReport inspectionReport = this.inspectionReportsViewModel.getByIndexAndTrackingNumbe(trackingNumber, index);
+
+        InspectionReportViewModelFactory inspectionReportViewModelFactory = new InspectionReportViewModelFactory(inspectionReport.getViolLump().length);
+        this.inspectionReportViewModel = new ViewModelProvider(this, inspectionReportViewModelFactory).get(InspectionReportViewModel.class);
+
+        this.violationList = this.getViolationList(inspectionReport.getViolLump());
 
         ActivityInspectionDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_inspection_detail);
-        binding.setReport(this.inspectionReport);
+        binding.setReport(inspectionReport);
         binding.setActivity(this);
 
         this.recyclerView = findViewById(R.id.violation_list);
     }
 
     private void observeVisibility() {
-        List<Violation> violationList = this.getViolationList();
 
-        ViolationAdapter violationAdapter = new ViolationAdapter(violationList);
-        this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        this.recyclerView.setAdapter(violationAdapter);
+        this.inspectionReportViewModel.getIsVisibleData().observe(this, (data) -> {
+            ViolationAdapter violationAdapter = new ViolationAdapter(violationList, data, new ViolationItemOnClick());
+            this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            this.recyclerView.setAdapter(violationAdapter);
+        });
     }
 
-    private List<Violation> getViolationList(){
-        int[] violationIds = this.inspectionReport.getViolLump();
-
+    private List<Violation> getViolationList(int[] violationIds){
         List<Violation> violationList = new ArrayList<>();
 
         for(int id: violationIds) {
@@ -97,4 +111,11 @@ public class InspectionDetailActivity extends AppCompatActivity {
         return violationList;
     }
 
+    private class ViolationItemOnClick implements IItemOnClick {
+
+        @Override
+        public void onItemClick(int position) {
+            inspectionReportViewModel.setIsVisible(position);
+        }
+    }
 }
