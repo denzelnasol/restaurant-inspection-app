@@ -17,6 +17,19 @@
         android:layout_height="match_parent"
         tools:context=".view.ui.InspectionDetailActivity">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/violation_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/grey_300"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintVertical_bias="0.0"
+            tools:listitem="@layout/violation_item"/>
+
         <ImageView
             android:id="@+id/inspection_item_hazard"
             android:layout_width="25dp"
