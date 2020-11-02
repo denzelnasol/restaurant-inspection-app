@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,27 +21,36 @@ import java.util.List;
 
 public class RestuarantDetailActivity extends AppCompatActivity {
 
+    private static final String INDEX = "index";
+
+
     private RestaurantsViewModel restaurant_viewModel;
     private InspectionReportsViewModel inspectionReportsViewModel;
-    private static int index;
     private Restaurant restaurant;
     private RecyclerView recyclerView;
     private int[] hazardLevelIcon = {R.drawable.ic_launcher_background};
+
+    public static Intent startActivity(Context context, int index) {
+        Intent intent = new Intent(context, RestuarantDetailActivity.class);
+        intent.putExtra(INDEX, index);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restuarant_detail);
         restaurant_viewModel = RestaurantsViewModel.getInstance();
+        int index = getIntent().getIntExtra(INDEX, -1);
         restaurant = restaurant_viewModel.getByIndex(index);
-        List<InspectionReport> inspectionReports = inspectionReportsViewModel.getInstance().get(restaurant.getTrackingNumber());
+        List<InspectionReport> inspectionReports = InspectionReportsViewModel.getInstance().getReports(restaurant.getTrackingNumber());
         setRestaurant_details();
-        RestaurantDetailAdapter myAdapter = new RestaurantDetailAdapter(this, inspectionReports, hazardLevelIcon);
+        RestaurantDetailAdapter adapter = new RestaurantDetailAdapter(this, inspectionReports, hazardLevelIcon);
         recyclerView = findViewById(R.id.res_detail_recycler);
-        recyclerView.setAdapter(myAdapter);
+        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    @SuppressLint("SetTextI18n")
     private void setRestaurant_details() {
         TextView name = findViewById(R.id.res_detail_name);
         TextView address = findViewById(R.id.res_detail_address);
@@ -50,11 +58,6 @@ public class RestuarantDetailActivity extends AppCompatActivity {
         name.setText(restaurant.getName());
         address.setText(restaurant.getPhysicalAddress());
         coordinates.setText(restaurant.getLatitude() + ", " + restaurant.getLongitude());
-    }
-
-    public static Intent startActivity(Context context, int index_restaurant) {
-        index = index_restaurant;
-        return new Intent(context, RestaurantListActivity.class);
     }
 
 }
