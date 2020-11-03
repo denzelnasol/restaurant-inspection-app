@@ -69,7 +69,7 @@ public class RestaurantListActivity extends AppCompatActivity {
 
         @Override
         public void onItemClick(int position) {
-            Intent intent = InspectionDetailActivity.startActivity(RestaurantListActivity.this, 0, position);
+            Intent intent = RestuarantDetailActivity.startActivity(RestaurantListActivity.this, position);
             startActivity(intent);
         }
     }
