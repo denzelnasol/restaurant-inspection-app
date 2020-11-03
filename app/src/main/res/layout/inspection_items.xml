@@ -61,6 +61,7 @@
                 android:fontFamily="sans-serif-black"
                 android:textStyle="bold"
                 app:date="@{report != null ? report.inspectionDate : @string/empty}"
+                app:show_last="@{false}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/recycler_row_icon"
                 app:layout_constraintTop_toTopOf="@+id/recycler_row_icon" />
