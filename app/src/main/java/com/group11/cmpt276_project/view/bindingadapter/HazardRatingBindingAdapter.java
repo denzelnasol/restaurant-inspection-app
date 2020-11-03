@@ -1,6 +1,5 @@
 package com.group11.cmpt276_project.view.bindingadapter;
 
-import android.graphics.PorterDuff;
 import android.widget.ImageView;
 
 import androidx.databinding.BindingAdapter;
@@ -19,7 +18,7 @@ public class HazardRatingBindingAdapter {
 
         if(Constants.LOW.equals(hazard)) {
             imageView.setImageResource(R.drawable.ic_smiling);
-        } else if(Constants.MEDIUM.equals(hazard)) {
+        } else if(Constants.MODERATE.equals(hazard)) {
             imageView.setImageResource(R.drawable.ic_neutral);
         } else {
             imageView.setImageResource(R.drawable.ic_sad);

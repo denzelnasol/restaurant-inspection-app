@@ -7,5 +7,5 @@ public class Constants {
     public static final String INSPECTION_REPORT_FILE = "inspectionReports.json";
     public static final String RESTAURANT_FILE = "restaurants.json";
     public static final String LOW = "Low";
-    public static final String MEDIUM = "Medium";
+    public static final String MODERATE = "Moderate";
 }

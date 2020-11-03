@@ -26,13 +26,10 @@ public class RestuarantDetailActivity extends AppCompatActivity {
 
     private static final String INDEX = "index";
 
-    ActivityRestuarantDetailBinding mBinding;
-
     private RestaurantsViewModel restaurantViewModel;
-    private InspectionReportsViewModel inspectionReportsViewModel;
     private Restaurant restaurant;
-    private RecyclerView recyclerView;
-    private int[] hazardLevelIcon = {R.drawable.ic_launcher_background};
+
+    private int index;
 
     public static Intent startActivity(Context context, int index) {
         Intent intent = new Intent(context, RestuarantDetailActivity.class);
@@ -50,28 +47,34 @@ public class RestuarantDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restuarant_detail);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_restuarant_detail);
-        bind();
 
-        int index = getIntent().getIntExtra(INDEX, -1);
-        restaurant = restaurantViewModel.getByIndex(index);
-        mBinding.setRestaurant(restaurant);
-        mBinding.setRestaurantDetailActivity(this);
-
-        List<InspectionReport> inspectionReports = InspectionReportsViewModel.getInstance().getReports(restaurant.getTrackingNumber());
-
-        if (inspectionReports.size() != 0) {
-            InspectionAdapter adapter = new InspectionAdapter( inspectionReports, new InspectionOnClick(index));
-            recyclerView = findViewById(R.id.res_detail_recycler);
-            recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        }
-
+        this.bind();
+        this.setupReyclerView();
     }
 
     private void bind() {
         this.restaurantViewModel = RestaurantsViewModel.getInstance();
+
+        this.index = getIntent().getIntExtra(INDEX, -1);
+        this.restaurant = restaurantViewModel.getByIndex(index);
+
+        ActivityRestuarantDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_restuarant_detail);
+        binding.setRestaurant(restaurant);
+        binding.setRestaurantDetailActivity(this);
     }
+
+    private void setupReyclerView() {
+        List<InspectionReport> inspectionReports = InspectionReportsViewModel.getInstance().getReports(restaurant.getTrackingNumber());
+
+        if (inspectionReports.size() != 0) {
+            InspectionAdapter adapter = new InspectionAdapter( inspectionReports, new InspectionOnClick(index));
+            RecyclerView recyclerView = findViewById(R.id.res_detail_recycler);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        }
+    }
+
+
 
     private class InspectionOnClick implements IItemOnClick{
 
