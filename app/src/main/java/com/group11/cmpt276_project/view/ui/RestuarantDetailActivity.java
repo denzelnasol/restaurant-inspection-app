@@ -63,7 +63,7 @@ public class RestuarantDetailActivity extends AppCompatActivity {
 
         ActivityRestuarantDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_restuarant_detail);
         binding.setRestaurant(restaurant);
-        binding.setRestaurantDetailActivity(this);
+        binding.setActivity(this);
     }
 
     private void setupReyclerView() {
@@ -77,6 +77,10 @@ public class RestuarantDetailActivity extends AppCompatActivity {
         }
     }
 
+    public void onBackClick() {
+        Intent intent = RestaurantListActivity.startActivity(this);
+        startActivity(intent);
+    }
 
 
     private class InspectionOnClick implements IItemOnClick{

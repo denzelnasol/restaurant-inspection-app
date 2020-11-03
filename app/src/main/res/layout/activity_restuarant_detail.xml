@@ -8,7 +8,7 @@
             name="restaurant"
             type="com.group11.cmpt276_project.service.model.Restaurant" />
         <variable
-            name="restaurantDetailActivity"
+            name="activity"
             type="com.group11.cmpt276_project.view.ui.RestuarantDetailActivity" />
     </data>
 
@@ -24,7 +24,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
             android:background="@null"
-            android:onClick="@{()->restaurantDetailActivity.finish()}"
+            android:onClick="@{()->activity.onBackPressed()}"
             android:text="@string/backText"
             android:textColor="#FFFFFF"
             app:layout_constraintStart_toStartOf="parent"
