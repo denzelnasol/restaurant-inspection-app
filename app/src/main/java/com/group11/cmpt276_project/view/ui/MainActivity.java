@@ -20,7 +20,8 @@ import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private static int TIMEOUT = 1000;
+    private static int TIMEOUT = 4000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

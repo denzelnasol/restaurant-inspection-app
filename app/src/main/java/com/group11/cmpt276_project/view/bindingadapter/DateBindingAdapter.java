@@ -19,8 +19,8 @@ import java.util.Locale;
  **/
 public class DateBindingAdapter {
 
-    @BindingAdapter("date")
-    public static void setDateText(TextView textView, String date) {
+    @BindingAdapter({"date", "show_last"})
+    public static void setDateText(TextView textView, String date, boolean showLast) {
 
         if(date == null || date.isEmpty()) {
             return;
@@ -30,17 +30,47 @@ public class DateBindingAdapter {
         LocalDate inspectionDate = LocalDate.parse(Integer.valueOf(date).toString(), formatter);
         LocalDate currentDate = LocalDate.now();
 
-        long daysSince = ChronoUnit.DAYS.between(inspectionDate, currentDate);
+
 
         Context context = textView.getContext();
 
-        String month = inspectionDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.CANADA);
+        long daysSince = ChronoUnit.DAYS.between(inspectionDate, currentDate);
+        int currentYear = currentDate.getYear();
 
-        String sinceString =  "";
+        if(showLast) {
+            formLast(textView, context, inspectionDate, daysSince, currentYear);
+        } else {
+            formatNormal(textView, context, inspectionDate, daysSince, currentYear);
+        }
+
+
+    }
+
+    private static void formatNormal(TextView textView, Context context, LocalDate inspectionDate, long daysSince, int currentYear) {
+
+        String month = inspectionDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.CANADA);
+        int year = inspectionDate.getYear();
+        int day = inspectionDate.getDayOfMonth();
+
+        String dateString = null;
 
         if(daysSince <= 30) {
-             sinceString = context.getString(R.string.days, daysSince);
-        } else if (inspectionDate.getYear() == currentDate.getYear()) {
+            dateString = context.getString(R.string.days, daysSince);
+        } else {
+            dateString = context.getString(R.string.date, month, currentYear == year ? day : year);
+        }
+
+        textView.setText(dateString);
+    }
+
+    private static void formLast(TextView textView, Context context, LocalDate inspectionDate, long daysSince, int currentYear) {
+        String sinceString =  "";
+
+        String month = inspectionDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.CANADA);
+
+        if(daysSince <= 30) {
+            sinceString = context.getString(R.string.days, daysSince);
+        } else if (inspectionDate.getYear() == currentYear) {
             int day = inspectionDate.getDayOfMonth();
             sinceString = context.getString(R.string.month, month, day);
         } else {
@@ -53,4 +83,5 @@ public class DateBindingAdapter {
 
         textView.setText(lastInspectionString);
     }
+
 }

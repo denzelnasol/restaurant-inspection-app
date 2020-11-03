@@ -87,6 +87,7 @@
                     android:layout_marginBottom="16dp"
                     android:textSize="11sp"
                     app:date="@{report != null ? report.inspectionDate : @string/empty}"
+                    app:show_last="@{true}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/restaurant_item_name"
                     app:layout_constraintHorizontal_bias="1.0"

@@ -22,6 +22,7 @@ public class RestaurantRepository {
     private ObjectMapper objectMapper;
 
     public RestaurantRepository(Context context) {
+
         this.context = context;
         this.objectMapper = new ObjectMapper();
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);

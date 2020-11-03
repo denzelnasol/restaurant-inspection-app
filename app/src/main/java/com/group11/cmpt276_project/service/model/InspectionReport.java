@@ -27,7 +27,6 @@ public class InspectionReport {
         this.numberNonCritical = numberNonCritical;
         this.hazardRating = hazardRating;
         this.violLump = violLump;
-
     }
 
     public String getTrackingNumber() {

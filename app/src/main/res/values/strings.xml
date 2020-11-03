@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">cmpt276_project</string>
+    <string name="res_png">res_png</string>
+    <string name="cutlery">cutlery</string>
+    <string name="critical_issues">Critical issues -</string>
+    <string name="non_critical_issues">Non-Critical issues -</string>
+    <string name="time">Time -</string>
     <string name="number_violations">%d violations found during inspection</string>
     <string name="last_inspect">Last inspection was %s</string>
     <string name="days">%d days ago</string>
@@ -8,10 +13,13 @@
     <string name="empty" />
     <string name="low">Low</string>
     <string name="no_inspections">No inspections so far</string>
+    <string name="inspections">Inspections</string>
+    <string name="backText">back</string>
     <string name="inspection_type">Inspection Type: %s</string>
     <string name="non_critical"># Non-critical Issues Found: %d</string>
     <string name="critical"># critical Issues Found: %d</string>
     <string name="back">Back</string>
     <string name="violation_summary">%s - %s</string>
     <string name="full_date">%s %d, %d</string>
+    <string name="date">%s %d</string>
 </resources>

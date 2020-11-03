@@ -119,7 +119,7 @@
          "numberCritical":2,
          "numberNonCritical":3,
          "hazardRating":"Moderate",
-         "violLump": [205, 209, 306, 402]
+         "violLump": [205, 209, 306, 308, 402]
       },
       {
          "trackingNumber":"SWOD-AHZUMF",
