@@ -28,6 +28,7 @@ import java.util.List;
  This is an activity for the InspectionDetail.
  It allow users to see list of violations using RecyclerView.
  **/
+
 public class InspectionDetailActivity extends AppCompatActivity {
 
     private final static String INDEX = "index";

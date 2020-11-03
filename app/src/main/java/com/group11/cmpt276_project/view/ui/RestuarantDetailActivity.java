@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.group11.cmpt276_project.R;
-
+/**
+ * This activity displays details of a specific restaurant
+ */
 public class RestuarantDetailActivity extends AppCompatActivity {
 
     public static Intent startActivity(Context context, int index) {
