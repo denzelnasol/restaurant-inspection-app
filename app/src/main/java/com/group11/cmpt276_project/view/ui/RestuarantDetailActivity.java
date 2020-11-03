@@ -30,7 +30,6 @@ public class RestuarantDetailActivity extends AppCompatActivity {
     private Restaurant restaurant;
     private RecyclerView recyclerView;
     private int[] hazardLevelIcon = {R.drawable.ic_launcher_background};
-    private int index;
 
     public static Intent startActivity(Context context, int index) {
         Intent intent = new Intent(context, RestuarantDetailActivity.class);
@@ -39,17 +38,24 @@ public class RestuarantDetailActivity extends AppCompatActivity {
         return intent;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = RestaurantListActivity.startActivity(this);
+        startActivity(intent);
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restuarant_detail);
         restaurant_viewModel = RestaurantsViewModel.getInstance();
-        index = getIntent().getIntExtra(INDEX, -1);
+        int index = getIntent().getIntExtra(INDEX, -1);
         restaurant = restaurant_viewModel.getByIndex(index);
         List<InspectionReport> inspectionReports = InspectionReportsViewModel.getInstance().getReports(restaurant.getTrackingNumber());
         setRestaurant_details();
 
         if (inspectionReports.size() != 0) {
-            InspectionAdapter adapter = new InspectionAdapter( inspectionReports, new InspectionOnClick());
+            InspectionAdapter adapter = new InspectionAdapter( inspectionReports, new InspectionOnClick(index));
             recyclerView = findViewById(R.id.res_detail_recycler);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -68,10 +74,15 @@ public class RestuarantDetailActivity extends AppCompatActivity {
 
     private class InspectionOnClick implements IItemOnClick{
 
+        private int parent;
+
+        public InspectionOnClick(int index) {
+            this.parent = index;
+        }
 
         @Override
         public void onItemClick(int position) {
-            //Intent intent = InspectionDetailActivity.startActivity(RestaurantListActivity.this, 0, position);
+            //Intent intent = InspectionDetailActivity.startActivity(RestaurantListActivity.this, position, this.parent);
             //startActivity(intent);
         }
     }
