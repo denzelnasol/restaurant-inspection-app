@@ -8,6 +8,7 @@ import com.group11.cmpt276_project.service.repository.RestaurantRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /*
@@ -40,6 +41,7 @@ public class RestaurantsViewModel {
 
             try {
                 this.restaurantList = this.restaurantRepository.get();
+                Collections.sort(this.restaurantList, (Restaurant A, Restaurant B) -> A.getName().compareTo(B.getName()));
             } catch (IOException e) {
                 this.restaurantList = new ArrayList<>();
             }
