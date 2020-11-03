@@ -51,12 +51,12 @@ public class RestuarantDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restuarant_detail);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_restuarant_detail);
-
         bind();
 
         int index = getIntent().getIntExtra(INDEX, -1);
         restaurant = restaurantViewModel.getByIndex(index);
         mBinding.setRestaurant(restaurant);
+        mBinding.setRestaurantDetailActivity(this);
 
         List<InspectionReport> inspectionReports = InspectionReportsViewModel.getInstance().getReports(restaurant.getTrackingNumber());
 

@@ -16,4 +16,5 @@
     <string name="non_critical"># Non-critical Issues Found: %d</string>
     <string name="critical"># critical Issues Found: %d</string>
     <string name="inspections">Inspections</string>
+    <string name="backText">back</string>
 </resources>
