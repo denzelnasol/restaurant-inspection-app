@@ -13,4 +13,7 @@
     <string name="empty" />
     <string name="low">Low</string>
     <string name="no_inspections">No inspections so far</string>
+    <string name="non_critical"># Non-critical Issues Found: %d</string>
+    <string name="critical"># critical Issues Found: %d</string>
+    <string name="inspections">Inspections</string>
 </resources>

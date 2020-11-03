@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +13,7 @@ import android.widget.TextView;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
-import com.group11.cmpt276_project.view.adapter.RestaurantDetailAdapter;
+import com.group11.cmpt276_project.view.adapter.InspectionAdapter;
 import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClick;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
@@ -48,10 +47,14 @@ public class RestuarantDetailActivity extends AppCompatActivity {
         restaurant = restaurant_viewModel.getByIndex(index);
         List<InspectionReport> inspectionReports = InspectionReportsViewModel.getInstance().getReports(restaurant.getTrackingNumber());
         setRestaurant_details();
-        RestaurantDetailAdapter adapter = new RestaurantDetailAdapter( inspectionReports, new InspectionOnClick());
-        recyclerView = findViewById(R.id.res_detail_recycler);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        if (inspectionReports.size() != 0) {
+            InspectionAdapter adapter = new InspectionAdapter( inspectionReports, new InspectionOnClick());
+            recyclerView = findViewById(R.id.res_detail_recycler);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        }
+
     }
 
     private void setRestaurant_details() {
