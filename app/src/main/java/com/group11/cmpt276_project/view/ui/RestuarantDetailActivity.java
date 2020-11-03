@@ -2,6 +2,7 @@ package com.group11.cmpt276_project.view.ui;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.group11.cmpt276_project.R;
+import com.group11.cmpt276_project.databinding.ActivityRestuarantDetailBinding;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.view.adapter.InspectionAdapter;
@@ -24,8 +26,9 @@ public class RestuarantDetailActivity extends AppCompatActivity {
 
     private static final String INDEX = "index";
 
+    ActivityRestuarantDetailBinding mBinding;
 
-    private RestaurantsViewModel restaurant_viewModel;
+    private RestaurantsViewModel restaurantViewModel;
     private InspectionReportsViewModel inspectionReportsViewModel;
     private Restaurant restaurant;
     private RecyclerView recyclerView;
@@ -33,7 +36,6 @@ public class RestuarantDetailActivity extends AppCompatActivity {
 
     public static Intent startActivity(Context context, int index) {
         Intent intent = new Intent(context, RestuarantDetailActivity.class);
-        intent.putExtra("index", index);
         intent.putExtra(INDEX, index);
         return intent;
     }
@@ -48,11 +50,15 @@ public class RestuarantDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restuarant_detail);
-        restaurant_viewModel = RestaurantsViewModel.getInstance();
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_restuarant_detail);
+
+        bind();
+
         int index = getIntent().getIntExtra(INDEX, -1);
-        restaurant = restaurant_viewModel.getByIndex(index);
+        restaurant = restaurantViewModel.getByIndex(index);
+        mBinding.setRestaurant(restaurant);
+
         List<InspectionReport> inspectionReports = InspectionReportsViewModel.getInstance().getReports(restaurant.getTrackingNumber());
-        setRestaurant_details();
 
         if (inspectionReports.size() != 0) {
             InspectionAdapter adapter = new InspectionAdapter( inspectionReports, new InspectionOnClick(index));
@@ -63,13 +69,8 @@ public class RestuarantDetailActivity extends AppCompatActivity {
 
     }
 
-    private void setRestaurant_details() {
-        TextView name = findViewById(R.id.res_detail_name);
-        TextView address = findViewById(R.id.res_detail_address);
-        TextView coordinates = findViewById(R.id.res_detail_coordinates);
-        name.setText(restaurant.getName());
-        address.setText(restaurant.getPhysicalAddress());
-        coordinates.setText(restaurant.getLatitude() + ", " + restaurant.getLongitude());
+    private void bind() {
+        this.restaurantViewModel = RestaurantsViewModel.getInstance();
     }
 
     private class InspectionOnClick implements IItemOnClick{

@@ -2,11 +2,28 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="com.group11.cmpt276_project.utils.Utils"/>
+        <variable
+            name="restaurant"
+            type="com.group11.cmpt276_project.service.model.Restaurant" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.ui.RestuarantDetailActivity">
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="76dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="8dp"
+            android:text="back"
+            app:layout_constraintBottom_toTopOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/toolbar"
+            app:layout_constraintVertical_bias="0.388" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -32,6 +49,7 @@
 
         <TextView
             android:id="@+id/res_detail_name"
+            android:text="@{restaurant.getName()}"
             android:layout_width="299dp"
             android:layout_height="31dp"
             android:layout_marginTop="8dp"
@@ -43,6 +61,7 @@
 
         <TextView
             android:id="@+id/res_detail_address"
+            android:text="@{restaurant.getPhysicalAddress()}"
             android:layout_width="296dp"
             android:layout_height="23dp"
             android:layout_marginTop="4dp"
@@ -53,6 +72,7 @@
 
         <TextView
             android:id="@+id/res_detail_coordinates"
+            android:text="@{Utils.convertCoordinatesText(restaurant.getLatitude(), restaurant.getLongitude())}"
             android:layout_width="295dp"
             android:layout_height="26dp"
             android:layout_marginTop="4dp"
