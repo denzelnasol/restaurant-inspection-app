@@ -21,8 +21,4 @@ public class Utils {
 
         return new String(buffer, Constants.ENCODING);
     }
-
-    public static String convertCoordinatesText(double latitude, double longitude) {
-        return (latitude + ", " + longitude);
-    }
 }

@@ -22,4 +22,5 @@
     <string name="violation_summary">%s - %s</string>
     <string name="full_date">%s %d, %d</string>
     <string name="date">%s %d</string>
+    <string name="comma_separated">%s, %s</string>
 </resources>
