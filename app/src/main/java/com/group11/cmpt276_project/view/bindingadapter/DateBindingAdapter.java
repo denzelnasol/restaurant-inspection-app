@@ -14,7 +14,9 @@ import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
-
+/**
+ This class is a binding adapter to set the date depending on the days since an inspection.
+ **/
 public class DateBindingAdapter {
 
     @BindingAdapter("date")

@@ -19,7 +19,9 @@ import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * This activity displays the restaurant list
+ */
 public class RestaurantListActivity extends AppCompatActivity {
 
     private RestaurantsViewModel restaurantsViewModel;

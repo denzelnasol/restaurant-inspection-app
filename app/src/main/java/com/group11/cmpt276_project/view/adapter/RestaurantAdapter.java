@@ -14,7 +14,9 @@ import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClick;
 
 import java.util.List;
 import java.util.Random;
-
+/**
+ This class is an adapter to hook the RecyclerView with DataBinding for the restaurant list.
+ **/
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>{
 
     private List<Restaurant> restaurants;

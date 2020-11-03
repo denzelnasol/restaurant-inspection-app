@@ -6,6 +6,9 @@ import android.os.Bundle;
 
 import com.group11.cmpt276_project.R;
 
+/**
+ * This activity displays inspection details
+ */
 public class InspectionDetailActivity extends AppCompatActivity {
 
     @Override
