@@ -10,7 +10,6 @@ import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.utils.Utils;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**This class serves to load the violations json file

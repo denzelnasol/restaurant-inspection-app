@@ -6,7 +6,9 @@ import androidx.databinding.BindingAdapter;
 
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.utils.Constants;
-
+/**
+ This class is a binding adapter to set the hazard image depending on the hazard.
+ **/
 public class HazardRatingBindingAdapter {
 
     @BindingAdapter("hazard")

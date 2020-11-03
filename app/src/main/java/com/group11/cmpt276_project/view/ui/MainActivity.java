@@ -15,6 +15,9 @@ import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
 
+/**
+ * This activity displays a welcome screen prior to showing the restaurant list
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static int TIMEOUT = 4000;

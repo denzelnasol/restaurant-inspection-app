@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.service.model.InspectionReport;
@@ -19,7 +18,9 @@ import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * This activity displays the restaurant list
+ */
 public class RestaurantListActivity extends AppCompatActivity {
 
     private RestaurantsViewModel restaurantsViewModel;

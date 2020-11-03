@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.ActivityRestuarantDetailBinding;
@@ -21,6 +20,10 @@ import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
 import java.util.List;
+
+/**
+ * This activity displays details of a specific restaurant
+ */
 
 public class RestuarantDetailActivity extends AppCompatActivity {
 
@@ -86,8 +89,8 @@ public class RestuarantDetailActivity extends AppCompatActivity {
 
         @Override
         public void onItemClick(int position) {
-            //Intent intent = InspectionDetailActivity.startActivity(RestaurantListActivity.this, position, this.parent);
-            //startActivity(intent);
+            Intent intent = InspectionDetailActivity.startActivity(RestuarantDetailActivity.this, position, this.parent);
+            startActivity(intent);
         }
     }
 }
