@@ -19,15 +19,16 @@
 
         <Button
             android:id="@+id/backButton"
-            android:onClick="@{()->restaurantDetailActivity.finish()}"
             android:layout_width="76dp"
             android:layout_height="41dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:background="@null"
+            android:onClick="@{()->restaurantDetailActivity.finish()}"
             android:text="@string/backText"
-            app:layout_constraintBottom_toTopOf="@+id/imageView"
+            android:textColor="#FFFFFF"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/toolbar"
-            app:layout_constraintVertical_bias="0.388" />
+            app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -130,6 +131,7 @@
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
