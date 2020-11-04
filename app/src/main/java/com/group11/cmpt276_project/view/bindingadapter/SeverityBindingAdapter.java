@@ -7,6 +7,7 @@ import androidx.databinding.BindingAdapter;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.utils.Constants;
 
+// A binding adapter to set the severity icon
 public class SeverityBindingAdapter {
 
     @BindingAdapter("severity")

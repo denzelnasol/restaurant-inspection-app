@@ -7,6 +7,9 @@ import androidx.databinding.BindingAdapter;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.utils.Constants;
 
+/**
+ * A binding adapter that changes the sets the arrow image depending on visibility
+ */
 public class ExpandArrowBindingAdapter {
 
     @BindingAdapter("arrow")

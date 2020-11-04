@@ -12,6 +12,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
+/**
+ * A binding adapter that sets the full date of an inspection
+ */
 public class FullDateBindingAdapter {
 
     @BindingAdapter("fullDate")
