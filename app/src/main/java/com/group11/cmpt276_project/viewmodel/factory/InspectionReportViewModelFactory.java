@@ -6,6 +6,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.group11.cmpt276_project.viewmodel.InspectionReportViewModel;
 
+/**
+ * This factory is used to create a InspectionReportViewModel. It is is needed because the constructor
+ * has arguments
+ */
 public class InspectionReportViewModelFactory implements ViewModelProvider.Factory {
 
     private final int size;

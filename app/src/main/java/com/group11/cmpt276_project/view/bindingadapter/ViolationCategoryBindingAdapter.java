@@ -17,8 +17,7 @@ public class ViolationCategoryBindingAdapter {
         if(stringId == null || stringId.isEmpty()) {
             return;
         }
-
-        //int id = Integer.parseInt(stringId);
+        
 
         if (stringId.startsWith("1")) {
             imageView.setImageResource(R.drawable.ic_vegetables);
