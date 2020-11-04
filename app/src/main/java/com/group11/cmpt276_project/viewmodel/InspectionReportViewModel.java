@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+/**
+ * An inspection report view model to set the visibility of an inspection
+ */
 public class InspectionReportViewModel extends ViewModel {
 
     private boolean[] isVisible;
