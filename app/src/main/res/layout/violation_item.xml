@@ -54,7 +54,8 @@
                     app:layout_constraintBottom_toBottomOf="@id/severity_icon"
                     app:layout_constraintStart_toEndOf="@id/severity_icon"
                     app:layout_constraintTop_toTopOf="@id/severity_icon"
-                    app:layout_constraintVertical_bias="0.20999998" />
+                    app:category="@{violation.id}"
+                    />
 
                 <TextView
                     android:id="@+id/violation_summary"
