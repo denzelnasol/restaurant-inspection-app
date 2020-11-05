@@ -111,12 +111,26 @@
             android:id="@+id/violation_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
             android:background="@color/grey_300"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inspection_number_non_critical" />
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/violations"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
