@@ -42,6 +42,11 @@ public class MainPageActivity extends FragmentActivity {
         return intent;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finishAffinity();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
