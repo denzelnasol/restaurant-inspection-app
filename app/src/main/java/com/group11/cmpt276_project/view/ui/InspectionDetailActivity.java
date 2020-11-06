@@ -54,6 +54,9 @@ public class InspectionDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
 
 
+    private ActivityInspectionDetailBinding binding;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +66,7 @@ public class InspectionDetailActivity extends AppCompatActivity {
     }
 
     public void onBackClicked() {
-        Intent intent = RestuarantDetailActivity.startActivity(this, this.parent);
+        Intent intent = RestaurantDetailActivity.startActivity(this, this.parent);
         startActivity(intent);
     }
 
@@ -86,11 +89,11 @@ public class InspectionDetailActivity extends AppCompatActivity {
 
         this.violationList = this.getViolationList(inspectionReport.getViolLump());
 
-        ActivityInspectionDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_inspection_detail);
-        binding.setReport(inspectionReport);
-        binding.setActivity(this);
+        this.binding = DataBindingUtil.setContentView(this, R.layout.activity_inspection_detail);
+        this.binding.setReport(inspectionReport);
+        this.binding.setActivity(this);
 
-        this.recyclerView = findViewById(R.id.violation_list);
+        this.recyclerView = this.binding.violationList;
     }
 
     private void observeVisibility() {

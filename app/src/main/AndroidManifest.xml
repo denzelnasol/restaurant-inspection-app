@@ -9,18 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.ui.InspectionDetailActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"/>
-        <activity android:name=".view.ui.RestuarantDetailActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"/>
-        <activity android:name=".view.ui.RestaurantListActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"/>
-        <activity android:name=".view.ui.MainActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboard|orientation|keyboardHidden|screenSize">
+        <activity android:name=".view.ui.MainPageActivity"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.ui.InspectionDetailActivity"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.ui.RestaurantDetailActivity"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.ui.MainActivity"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
