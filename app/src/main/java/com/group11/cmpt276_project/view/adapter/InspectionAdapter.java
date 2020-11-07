@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.group11.cmpt276_project.databinding.InspectionItemsBinding;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickIndex;
-import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickTrackingNumber;
 
 import java.util.List;
 
