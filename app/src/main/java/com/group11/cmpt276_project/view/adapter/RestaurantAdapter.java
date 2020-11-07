@@ -10,21 +10,34 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.group11.cmpt276_project.databinding.RestaurantItemBinding;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
-import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClick;
+import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickTrackingNumber;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
+
 /**
  This class is an adapter to hook the RecyclerView with DataBinding for the restaurant list.
  **/
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>{
 
-    private List<Restaurant> restaurants;
-    private  List<InspectionReport> inspectionReports;
-    private IItemOnClick onRestaurantItemClick;
+    private Map<String,Restaurant> restaurants;
+    private List<String> trackingNumbers;
+    private  Map<String, InspectionReport> inspectionReports;
+    private IItemOnClickTrackingNumber onRestaurantItemClick;
 
-    public RestaurantAdapter(List<Restaurant> restaurants, List<InspectionReport> inspectionReports, IItemOnClick onRestaurantItemClick) {
+    public RestaurantAdapter(Map<String,Restaurant> restaurants, Map<String, InspectionReport> inspectionReports, IItemOnClickTrackingNumber onRestaurantItemClick) {
         this.restaurants = restaurants;
+        this.trackingNumbers = new ArrayList<>(restaurants.keySet());
+
+        Collections.sort(this.trackingNumbers, (String a, String b) -> {
+            Restaurant aRestaurant = restaurants.get(a);
+            Restaurant bRestaurant = restaurants.get(b);
+
+            return aRestaurant.getName().compareTo(bRestaurant.getName());
+        });
+
         this.inspectionReports = inspectionReports;
         this.onRestaurantItemClick = onRestaurantItemClick;
     }
@@ -40,26 +53,29 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
 
     @Override
     public void onBindViewHolder(@NonNull RestaurantViewHolder holder, int position) {
-        Restaurant restaurant = this.restaurants.get(position);
-        InspectionReport report = this.inspectionReports.get(position);
+
+        String trackingNumber = this.trackingNumbers.get(position);
+
+        Restaurant restaurant = this.restaurants.get(trackingNumber);
+        InspectionReport report = this.inspectionReports.get(trackingNumber);
 
         holder.bind(restaurant, report);
     }
 
     @Override
     public int getItemCount() {
-        return this.restaurants != null ? this.restaurants.size() : 0;
+        return this.trackingNumbers != null ? this.trackingNumbers.size() : 0;
     }
 
     class RestaurantViewHolder extends RecyclerView.ViewHolder {
 
         private RestaurantItemBinding binding;
 
-        public RestaurantViewHolder(RestaurantItemBinding binding, IItemOnClick onRestaurantItemClick) {
+        public RestaurantViewHolder(RestaurantItemBinding binding, IItemOnClickTrackingNumber onRestaurantItemClick) {
             super(binding.getRoot());
             this.binding = binding;
             this.binding.getRoot().setOnClickListener((View view) -> {
-                onRestaurantItemClick.onItemClick(getAdapterPosition());
+                onRestaurantItemClick.onItemClick(trackingNumbers.get(getAdapterPosition()));
             });
         }
 

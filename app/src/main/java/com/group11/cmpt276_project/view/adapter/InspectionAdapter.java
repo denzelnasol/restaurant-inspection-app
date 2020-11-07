@@ -9,19 +9,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.group11.cmpt276_project.databinding.InspectionItemsBinding;
 import com.group11.cmpt276_project.service.model.InspectionReport;
-import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClick;
+import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickIndex;
+import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickTrackingNumber;
 
 import java.util.List;
 
 //Adapter for setting List of inspections in Restaurant detail activity
 public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.ViewHolder> {
     private List<InspectionReport> inspectionList;
-    private IItemOnClick iItemOnClick;
+    private IItemOnClickIndex iItemOnClickTrackingNumber;
 
 
-    public InspectionAdapter(List<InspectionReport> inspectionReports, IItemOnClick itemOnClick) {
+    public InspectionAdapter(List<InspectionReport> inspectionReports, IItemOnClickIndex itemOnClick) {
         inspectionList = inspectionReports;
-        this.iItemOnClick = itemOnClick;
+        this.iItemOnClickTrackingNumber = itemOnClick;
     }
 
     @NonNull
@@ -29,7 +30,7 @@ public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.Vi
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         InspectionItemsBinding itemBinding = InspectionItemsBinding.inflate(layoutInflater, parent, false);
-        return new InspectionAdapter.ViewHolder(itemBinding, iItemOnClick);
+        return new InspectionAdapter.ViewHolder(itemBinding, iItemOnClickTrackingNumber);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.Vi
 
         private InspectionItemsBinding binding;
 
-        public ViewHolder(InspectionItemsBinding binding, IItemOnClick inspectionOnClick) {
+        public ViewHolder(InspectionItemsBinding binding, IItemOnClickIndex inspectionOnClick) {
             super(binding.getRoot());
             this.binding = binding;
             this.binding.getRoot().setOnClickListener((View view) -> {

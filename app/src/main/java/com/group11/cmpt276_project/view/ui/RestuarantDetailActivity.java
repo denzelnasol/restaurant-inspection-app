@@ -14,8 +14,10 @@ import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.ActivityRestuarantDetailBinding;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
+import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.view.adapter.InspectionAdapter;
-import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClick;
+import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickIndex;
+import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickTrackingNumber;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
@@ -27,16 +29,14 @@ import java.util.List;
 
 public class RestuarantDetailActivity extends AppCompatActivity {
 
-    private static final String INDEX = "index";
-
     private RestaurantsViewModel restaurantViewModel;
     private Restaurant restaurant;
 
-    private int index;
+    private String trackingNumber;
 
-    public static Intent startActivity(Context context, int index) {
+    public static Intent startActivity(Context context, String trackingNumber) {
         Intent intent = new Intent(context, RestuarantDetailActivity.class);
-        intent.putExtra(INDEX, index);
+        intent.putExtra(Constants.TRACKING_NUMBER, trackingNumber);
         return intent;
     }
 
@@ -58,8 +58,8 @@ public class RestuarantDetailActivity extends AppCompatActivity {
     private void bind() {
         this.restaurantViewModel = RestaurantsViewModel.getInstance();
 
-        this.index = getIntent().getIntExtra(INDEX, -1);
-        this.restaurant = restaurantViewModel.getByIndex(index);
+        this.trackingNumber = getIntent().getStringExtra(Constants.TRACKING_NUMBER);
+        this.restaurant = restaurantViewModel.getByTrackingNumber(trackingNumber);
 
         ActivityRestuarantDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_restuarant_detail);
         binding.setRestaurant(restaurant);
@@ -70,7 +70,7 @@ public class RestuarantDetailActivity extends AppCompatActivity {
         List<InspectionReport> inspectionReports = InspectionReportsViewModel.getInstance().getReports(restaurant.getTrackingNumber());
 
         if (inspectionReports.size() != 0) {
-            InspectionAdapter adapter = new InspectionAdapter( inspectionReports, new InspectionOnClick(index));
+            InspectionAdapter adapter = new InspectionAdapter( inspectionReports, new InspectionOnClickTrackingNumber(trackingNumber));
             RecyclerView recyclerView = findViewById(R.id.res_detail_recycler);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -83,12 +83,12 @@ public class RestuarantDetailActivity extends AppCompatActivity {
     }
 
 
-    private class InspectionOnClick implements IItemOnClick{
+    private class InspectionOnClickTrackingNumber implements IItemOnClickIndex {
 
-        private int parent;
+        private String parent;
 
-        public InspectionOnClick(int index) {
-            this.parent = index;
+        public InspectionOnClickTrackingNumber(String trackingNUmber) {
+            this.parent = trackingNUmber;
         }
 
         @Override

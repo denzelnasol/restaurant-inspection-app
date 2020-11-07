@@ -28,7 +28,7 @@ public class InspectionReportRepository {
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
-    public Map<String, List<InspectionReport>> get() throws IOException {
+    public Map<String, List<InspectionReport>> getFromAssets() throws IOException {
         String jsonString = Utils.getJsonFromAssets(this.context, Constants.INSPECTION_REPORT_FILE);
         TypeReference<Map<String, List<InspectionReport>>> mapTypeReference =
                 new TypeReference<Map<String, List<InspectionReport>>>() {};

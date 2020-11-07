@@ -10,14 +10,16 @@ import android.os.Bundle;
 
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.service.model.InspectionReport;
-import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.view.adapter.RestaurantAdapter;
-import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClick;
+import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickTrackingNumber;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 /**
  * This activity displays the restaurant list
  */
@@ -54,24 +56,24 @@ public class RestaurantListActivity extends AppCompatActivity {
 
     private void observeRestaurants() {
         this.restaurantsViewModel.get().observe(this, (data) -> {
-            List<InspectionReport> reports = new ArrayList<>();
+            Map<String, InspectionReport> reports = new HashMap<>();
 
-            for(Restaurant restaurant : data) {
-                reports.add(this.inspectionReportsViewModel.getMostRecentReport(restaurant.getTrackingNumber()));
+            for(String trackingNumber : data.keySet()) {
+                reports.put(trackingNumber, this.inspectionReportsViewModel.getMostRecentReport(trackingNumber));
             }
 
-            RestaurantAdapter restaurantAdapter = new RestaurantAdapter(data, reports, new RestaurantItemOnClick());
+            RestaurantAdapter restaurantAdapter = new RestaurantAdapter(data, reports, new RestaurantItemOnClickTrackingNumber());
 
             this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
             this.recyclerView.setAdapter(restaurantAdapter);
         });
     }
 
-    private class RestaurantItemOnClick implements IItemOnClick{
+    private class RestaurantItemOnClickTrackingNumber implements IItemOnClickTrackingNumber {
 
         @Override
-        public void onItemClick(int position) {
-            Intent intent = RestuarantDetailActivity.startActivity(RestaurantListActivity.this, position);
+        public void onItemClick(String trackingNumber) {
+            Intent intent = RestuarantDetailActivity.startActivity(RestaurantListActivity.this, trackingNumber);
             startActivity(intent);
         }
     }

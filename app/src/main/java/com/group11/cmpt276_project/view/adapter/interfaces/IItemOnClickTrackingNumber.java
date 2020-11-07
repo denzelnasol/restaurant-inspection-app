@@ -5,6 +5,6 @@ import android.view.View;
 /**
  * This is an interface to set an item on click given a position
  */
-public interface IItemOnClick {
-    void onItemClick(int position);
+public interface IItemOnClickTrackingNumber {
+    void onItemClick(String position);
 }

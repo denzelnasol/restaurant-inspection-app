@@ -36,7 +36,7 @@ public class InspectionReportsViewModel {
             this.inspectionReportRepository = inspectionReportRepository;
 
             try {
-                this.reports = this.inspectionReportRepository.get();
+                this.reports = this.inspectionReportRepository.getFromAssets();
 
                 for(Map.Entry<String, List<InspectionReport>> entry : this.reports.entrySet()) {
                     Collections.sort(entry.getValue(), (InspectionReport A, InspectionReport B) -> Integer.parseInt(B.getInspectionDate()) - Integer.parseInt(A.getInspectionDate()));

@@ -1,74 +1,74 @@
-[
- {
-   "trackingNumber": "SDFO-8HKP7E",
-   "name": "Pattullo A&W",
-   "physicalAddress": "12808 King George Blvd",
-   "physicalCity": "Surrey",
-   "facilityType": "Restaurant",
-   "latitude": 49.20610961,
-   "longitude": -122.8668064
- },
- {
-   "trackingNumber": "SHEN-B7BNSR",
-   "name": "Lee Yuen Seafood Restaurant",
-   "physicalAddress": "1812 152 St",
-   "physicalCity": "Surrey",
-   "facilityType": "Restaurant",
-   "latitude": 49.03508252,
-   "longitude": -122.8008684
- },
- {
-   "trackingNumber": "NOSU-CHNUM",
-   "name": "The Unfindable Bar",
-   "physicalAddress": "12345 67 Ave",
-   "physicalCity": "Surrey",
-   "facilityType": "Restaurant",
-   "latitude": 49.14214908,
-   "longitude": -122.8681586
- },
- {
-   "trackingNumber": "SWOD-AHZUMF",
-   "name": "Lee Yuen Seafood Restaurant",
-   "physicalAddress": "14755 104 Ave",
-   "physicalCity": "Surrey",
-   "facilityType": "Restaurant",
-   "latitude": 49.19166808,
-   "longitude": -122.8136896
- },
- {
-   "trackingNumber": "SDFO-8GPUJX",
-   "name": "Top in Town Pizza",
-   "physicalAddress": "12788 76A Ave",
-   "physicalCity": "Surrey",
-   "facilityType": "Restaurant",
-   "latitude": 49.14218908,
-   "longitude": -122.8685586
- },
- {
-   "trackingNumber": "SWOD-APSP3X",
-   "name": "104 Sushi & Co.",
-   "physicalAddress": "10422 168 St",
-   "physicalCity": "Surrey",
-   "facilityType": "Restaurant",
-   "latitude": 49.19205936,
-   "longitude": -122.7562559
- },
- {
-   "trackingNumber": "SHEN-ANSLB4",
-   "name": "Top In Town Pizza",
-   "physicalAddress": "14330 64 Ave",
-   "physicalCity": "Surrey",
-   "facilityType": "Restaurant",
-   "latitude": 49.11851305,
-   "longitude": -122.825215
- },
- {
-   "trackingNumber": "SPLH-9NEUHG",
-   "name": "Zugba Flame Grilled Chicken",
-   "physicalAddress": "14351 104 Ave",
-   "physicalCity": "Surrey",
-   "facilityType": "Restaurant",
-   "latitude": 49.19172759,
-   "longitude": -122.8241835
- }
-]
+{
+  "SDFO-8HKP7E": {
+    "trackingNumber": "SDFO-8HKP7E",
+    "name": "Pattullo A&W",
+    "physicalAddress": "12808 King George Blvd",
+    "physicalCity": "Surrey",
+    "facilityType": "Restaurant",
+    "latitude": "49.20610961",
+    "longitude": "-122.8668064"
+  },
+  "SHEN-B7BNSR": {
+    "trackingNumber": "SHEN-B7BNSR",
+    "name": "Lee Yuen Seafood Restaurant",
+    "physicalAddress": "1812 152 St",
+    "physicalCity": "Surrey",
+    "facilityType": "Restaurant",
+    "latitude": "49.03508252",
+    "longitude": "-122.8008684"
+  },
+  "NOSU-CHNUM": {
+    "trackingNumber": "NOSU-CHNUM",
+    "name": "The Unfindable Bar",
+    "physicalAddress": "12345 67 Ave",
+    "physicalCity": "Surrey",
+    "facilityType": "Restaurant",
+    "latitude": "49.14214908",
+    "longitude": "-122.8681586"
+  },
+  "SWOD-AHZUMF": {
+    "trackingNumber": "SWOD-AHZUMF",
+    "name": "Lee Yuen Seafood Restaurant",
+    "physicalAddress": "14755 104 Ave",
+    "physicalCity": "Surrey",
+    "facilityType": "Restaurant",
+    "latitude": "49.19166808",
+    "longitude": "-122.8136896"
+  },
+  "SDFO-8GPUJX": {
+    "trackingNumber": "SDFO-8GPUJX",
+    "name": "Top in Town Pizza",
+    "physicalAddress": "12788 76A Ave",
+    "physicalCity": "Surrey",
+    "facilityType": "Restaurant",
+    "latitude": "49.14218908",
+    "longitude": "-122.8685586"
+  },
+  "SWOD-APSP3X": {
+    "trackingNumber": "SWOD-APSP3X",
+    "name": "104 Sushi & Co.",
+    "physicalAddress": "10422 168 St",
+    "physicalCity": "Surrey",
+    "facilityType": "Restaurant",
+    "latitude": "49.19205936",
+    "longitude": "-122.7562559"
+  },
+  "SHEN-ANSLB4": {
+    "trackingNumber": "SHEN-ANSLB4",
+    "name": "Top In Town Pizza",
+    "physicalAddress": "14330 64 Ave",
+    "physicalCity": "Surrey",
+    "facilityType": "Restaurant",
+    "latitude": "49.11851305",
+    "longitude": "-122.825215"
+  },
+  "SPLH-9NEUHG": {
+    "trackingNumber": "SPLH-9NEUHG",
+    "name": "Zugba Flame Grilled Chicken",
+    "physicalAddress": "14351 104 Ave",
+    "physicalCity": "Surrey",
+    "facilityType": "Restaurant",
+    "latitude": "49.19172759",
+    "longitude": "-122.8241835"
+  }
+}
