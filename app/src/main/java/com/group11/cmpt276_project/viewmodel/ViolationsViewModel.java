@@ -30,7 +30,7 @@ public class ViolationsViewModel {
             this.violationRepository = violationRepository;
 
             try {
-                this.violations = this.violationRepository.get();
+                this.violations = this.violationRepository.getFromAssets();
             }
             catch (IOException e) {
                 this.violations = new HashMap<>();

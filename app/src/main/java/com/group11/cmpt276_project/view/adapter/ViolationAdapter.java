@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.group11.cmpt276_project.databinding.ViolationItemBinding;
 import com.group11.cmpt276_project.service.model.Violation;
-import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClick;
+import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickIndex;
 
 import java.util.List;
 /**
@@ -19,9 +19,9 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.Viol
 
     private final List<Violation> violations;
     private final boolean[] isVisibleData;
-    private final IItemOnClick onViolationItemClick;
+    private final IItemOnClickIndex onViolationItemClick;
 
-    public ViolationAdapter(List<Violation> violations, boolean[] isVisibleData, IItemOnClick onViolationItemClick) {
+    public ViolationAdapter(List<Violation> violations, boolean[] isVisibleData, IItemOnClickIndex onViolationItemClick) {
         this.violations = violations;
         this.isVisibleData = isVisibleData;
         this.onViolationItemClick = onViolationItemClick;
@@ -32,7 +32,7 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.Viol
     public ViolationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         ViolationItemBinding itemBinding = ViolationItemBinding.inflate(layoutInflater, parent, false);
-        return new ViolationViewHolder(itemBinding);
+        return new ViolationViewHolder(itemBinding, this.onViolationItemClick);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.Viol
 
         private final ViolationItemBinding binding;
 
-        public ViolationViewHolder(ViolationItemBinding binding) {
+        public ViolationViewHolder(ViolationItemBinding binding, IItemOnClickIndex onViolationItemClick) {
             super(binding.getRoot());
             this.binding = binding;
             this.binding.getRoot().setOnClickListener((View view) -> {

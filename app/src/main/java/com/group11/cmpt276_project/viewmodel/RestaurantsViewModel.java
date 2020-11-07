@@ -7,9 +7,8 @@ import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.service.repository.RestaurantRepository;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
 This class is a singleton that contains the restaurants data provided. The class stores the data in
@@ -18,8 +17,8 @@ so anything observing will change accordingly
  */
 public class RestaurantsViewModel {
 
-    private List<Restaurant> restaurantList;
-    private MutableLiveData<List<Restaurant>> mRestaurantList;
+    private Map<String,Restaurant> restaurants;
+    private MutableLiveData<Map<String,Restaurant>> mRestaurants;
 
     private RestaurantRepository restaurantRepository;
 
@@ -40,21 +39,20 @@ public class RestaurantsViewModel {
             this.restaurantRepository = restaurantRepository;
 
             try {
-                this.restaurantList = this.restaurantRepository.get();
-                Collections.sort(this.restaurantList, (Restaurant A, Restaurant B) -> A.getName().compareTo(B.getName()));
+                this.restaurants = this.restaurantRepository.getFromAssets();
             } catch (IOException e) {
-                this.restaurantList = new ArrayList<>();
+                this.restaurants = new HashMap<>();
             }
 
-            this.mRestaurantList = new MutableLiveData<>(this.restaurantList);
+            this.mRestaurants = new MutableLiveData<>(this.restaurants);
         }
     }
 
-    public Restaurant getByIndex(int index) {
-        return this.mRestaurantList.getValue().get(index);
+    public Restaurant getByTrackingNumber(String trackingNumber) {
+        return this.mRestaurants.getValue().get(trackingNumber);
     }
 
-    public LiveData<List<Restaurant>> get() {
-        return this.mRestaurantList;
+    public LiveData<Map<String,Restaurant>> get() {
+        return this.mRestaurants;
     }
 }
