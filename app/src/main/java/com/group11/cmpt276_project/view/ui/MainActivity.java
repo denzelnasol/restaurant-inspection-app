@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void moveToRestaurantList() {
         new Handler().postDelayed(() -> {
-            Intent intent = RestaurantListActivity.startActivity(this);
+            Intent intent = MainPageActivity.startActivity(this, false, null);
             startActivity(intent);
         }, TIMEOUT);
     }

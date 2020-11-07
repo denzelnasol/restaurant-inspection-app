@@ -12,11 +12,13 @@ import android.os.Bundle;
 
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.ActivityRestuarantDetailBinding;
+import com.group11.cmpt276_project.service.model.GPSCoordiantes;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.view.adapter.InspectionAdapter;
 import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClick;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
+import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
 import java.util.List;
@@ -25,17 +27,19 @@ import java.util.List;
  * This activity displays details of a specific restaurant
  */
 
-public class RestuarantDetailActivity extends AppCompatActivity {
+public class RestaurantDetailActivity extends AppCompatActivity {
 
     private static final String INDEX = "index";
 
     private RestaurantsViewModel restaurantViewModel;
     private Restaurant restaurant;
 
+    private ActivityRestuarantDetailBinding binding;
+
     private int index;
 
     public static Intent startActivity(Context context, int index) {
-        Intent intent = new Intent(context, RestuarantDetailActivity.class);
+        Intent intent = new Intent(context, RestaurantDetailActivity.class);
         intent.putExtra(INDEX, index);
         return intent;
     }
@@ -43,7 +47,7 @@ public class RestuarantDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = RestaurantListActivity.startActivity(this);
+        Intent intent = MainPageActivity.startActivity(this, false, null);
         startActivity(intent);
     }
 
@@ -61,9 +65,9 @@ public class RestuarantDetailActivity extends AppCompatActivity {
         this.index = getIntent().getIntExtra(INDEX, -1);
         this.restaurant = restaurantViewModel.getByIndex(index);
 
-        ActivityRestuarantDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_restuarant_detail);
-        binding.setRestaurant(restaurant);
-        binding.setActivity(this);
+        this.binding = DataBindingUtil.setContentView(this, R.layout.activity_restuarant_detail);
+        this.binding.setRestaurant(restaurant);
+        this.binding.setActivity(this);
     }
 
     private void setupReyclerView() {
@@ -71,14 +75,23 @@ public class RestuarantDetailActivity extends AppCompatActivity {
 
         if (inspectionReports.size() != 0) {
             InspectionAdapter adapter = new InspectionAdapter( inspectionReports, new InspectionOnClick(index));
-            RecyclerView recyclerView = findViewById(R.id.res_detail_recycler);
+            RecyclerView recyclerView = this.binding.resDetailRecycler;
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         }
     }
 
+    public void onCoordinateClicked(double latitude, double longitude) {
+
+        GPSCoordiantes coordiantes = new GPSCoordiantes(latitude, longitude);
+
+        Intent intent = MainPageActivity.startActivity(this, false, coordiantes);
+        MainPageViewModel.getInstance().setSelectedTabTab(0);
+        startActivity(intent);
+    }
+
     public void onBackClick() {
-        Intent intent = RestaurantListActivity.startActivity(this);
+        Intent intent = MainPageActivity.startActivity(this, false, null);
         startActivity(intent);
     }
 
@@ -93,7 +106,7 @@ public class RestuarantDetailActivity extends AppCompatActivity {
 
         @Override
         public void onItemClick(int position) {
-            Intent intent = InspectionDetailActivity.startActivity(RestuarantDetailActivity.this, position, this.parent);
+            Intent intent = InspectionDetailActivity.startActivity(RestaurantDetailActivity.this, position, this.parent);
             startActivity(intent);
         }
     }

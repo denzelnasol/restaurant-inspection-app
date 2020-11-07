@@ -8,13 +8,13 @@
             type="com.group11.cmpt276_project.service.model.Restaurant" />
         <variable
             name="activity"
-            type="com.group11.cmpt276_project.view.ui.RestuarantDetailActivity" />
+            type="com.group11.cmpt276_project.view.ui.RestaurantDetailActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.ui.RestuarantDetailActivity">
+        tools:context=".view.ui.RestaurantDetailActivity">
 
         <Button
             android:id="@+id/backButton"
@@ -65,7 +65,7 @@
 
         <TextView
             android:id="@+id/res_detail_address"
-            android:text="@{String.format(@string/comma_separated, restaurant.physicalAddress, restaurant.physicalCity)}"
+            android:text="@{String.format(@string/address, restaurant.physicalAddress, restaurant.physicalCity)}"
             android:layout_width="296dp"
             android:layout_height="23dp"
             android:layout_marginTop="4dp"
@@ -76,11 +76,12 @@
 
         <TextView
             android:id="@+id/res_detail_coordinates"
-            android:text="@{String.format(@string/comma_separated, restaurant.latitude, restaurant.longitude)}"
             android:layout_width="295dp"
             android:layout_height="26dp"
             android:layout_marginTop="4dp"
             android:textSize="18sp"
+            android:onClick="@{() -> activity.onCoordinateClicked(restaurant.latitude, restaurant.longitude)}"
+            app:link="@{String.format(@string/coord, restaurant.latitude, restaurant.longitude)}"
             app:layout_constraintEnd_toEndOf="@+id/res_detail_address"
             app:layout_constraintStart_toStartOf="@+id/res_detail_address"
             app:layout_constraintTop_toBottomOf="@+id/res_detail_address" />
