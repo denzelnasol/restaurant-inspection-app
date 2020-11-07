@@ -10,10 +10,7 @@ import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.utils.Utils;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 /*This class serves to load the restaurants json file
 * The get function will load the json file using getJsonFromAssets util function and maps it to a
@@ -34,7 +31,7 @@ public class RestaurantRepository {
     public Map<String,Restaurant> getFromAssets() throws IOException {
 
         String jsonString = Utils.getJsonFromAssets(this.context, Constants.RESTAURANT_FILE);
-        TypeReference<TreeMap<String,Restaurant>> mapTypeReference = new TypeReference<TreeMap<String,Restaurant>>() {};
+        TypeReference<Map<String,Restaurant>> mapTypeReference = new TypeReference<Map<String,Restaurant>>() {};
         return objectMapper.readValue(jsonString, mapTypeReference);
     }
 }

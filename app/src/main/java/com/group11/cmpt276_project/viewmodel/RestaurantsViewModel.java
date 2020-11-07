@@ -7,8 +7,8 @@ import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.service.repository.RestaurantRepository;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /*
 This class is a singleton that contains the restaurants data provided. The class stores the data in
@@ -41,7 +41,7 @@ public class RestaurantsViewModel {
             try {
                 this.restaurants = this.restaurantRepository.getFromAssets();
             } catch (IOException e) {
-                this.restaurants = new TreeMap<>();
+                this.restaurants = new HashMap<>();
             }
 
             this.mRestaurants = new MutableLiveData<>(this.restaurants);
