@@ -1,9 +1,7 @@
 package com.group11.cmpt276_project.view.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Context;
@@ -18,7 +16,10 @@ import com.group11.cmpt276_project.service.model.GPSCoordiantes;
 import com.group11.cmpt276_project.view.adapter.TabAdapter;
 import com.group11.cmpt276_project.view.ui.fragment.MapFragment;
 import com.group11.cmpt276_project.view.ui.fragment.RestaurantListFragment;
+import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
+import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
+import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
 
 public class MainPageActivity extends FragmentActivity {
 
@@ -33,7 +34,7 @@ public class MainPageActivity extends FragmentActivity {
     private ActivityMainPageBinding binding;
 
     private boolean shouldUpdate;
-    private GPSCoordiantes gpsCoordiantes;
+    private GPSCoordiantes gpsCoordinates;
 
     public static Intent startActivity(Context context, boolean shouldUpdate, GPSCoordiantes gpsCoordiantes) {
         Intent intent = new Intent(context, MainPageActivity.class);
@@ -45,6 +46,9 @@ public class MainPageActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        RestaurantsViewModel.getInstance().save();
+        InspectionReportsViewModel.getInstance().save();
+        ViolationsViewModel.getInstance().save();
         this.finishAffinity();
     }
 
@@ -57,8 +61,8 @@ public class MainPageActivity extends FragmentActivity {
         this.setUpTabs();
     }
 
-    public GPSCoordiantes getGpsCoordiantes() {
-        return this.gpsCoordiantes;
+    public GPSCoordiantes getGpsCoordinates() {
+        return this.gpsCoordinates;
     }
 
     private void bind() {
@@ -68,7 +72,7 @@ public class MainPageActivity extends FragmentActivity {
         Intent intent = getIntent();
 
         this.shouldUpdate = intent.getBooleanExtra(SHOULD_UPDATE, false);
-        this.gpsCoordiantes = intent.getParcelableExtra(GPS_COORDINATES);
+        this.gpsCoordinates = intent.getParcelableExtra(GPS_COORDINATES);
     }
 
     private void setUpViewPager() {

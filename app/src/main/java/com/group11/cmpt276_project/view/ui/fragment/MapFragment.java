@@ -49,7 +49,7 @@ public class MapFragment extends Fragment {
         this.restaurantsViewModel = RestaurantsViewModel.getInstance();
         this.inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
         MainPageActivity activity = (MainPageActivity) getActivity();
-        this.selected = activity.getGpsCoordiantes();
+        this.selected = activity.getGpsCoordinates();
     }
 
     @Override
