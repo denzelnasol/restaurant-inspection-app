@@ -1,9 +1,10 @@
 package com.group11.cmpt276_project.viewmodel;
 
+import com.group11.cmpt276_project.exception.RepositoryReadError;
+import com.group11.cmpt276_project.exception.RepositoryWriteError;
 import com.group11.cmpt276_project.service.model.InspectionReport;
-import com.group11.cmpt276_project.service.repository.InspectionReportRepository;
+import com.group11.cmpt276_project.service.repository.impl.JsonInspectionReportRepository;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ a Map to allow quick access without searching. The data is sorted in descending 
 public class InspectionReportsViewModel {
 
     private Map<String, List<InspectionReport>> reports;
-    private InspectionReportRepository inspectionReportRepository;
+    private JsonInspectionReportRepository inspectionReportRepository;
 
     private InspectionReportsViewModel() {
 
@@ -31,17 +32,17 @@ public class InspectionReportsViewModel {
         return InspectionReportsViewModelHolder.INSTANCE;
     }
 
-    public void init(InspectionReportRepository inspectionReportRepository) {
+    public void init(JsonInspectionReportRepository jsonInspectionReportRepository) {
         if(this.inspectionReportRepository == null) {
-            this.inspectionReportRepository = inspectionReportRepository;
+            this.inspectionReportRepository = jsonInspectionReportRepository;
 
             try {
-                this.reports = this.inspectionReportRepository.getFromAssets();
+                this.reports = this.inspectionReportRepository.getInspections();
 
                 for(Map.Entry<String, List<InspectionReport>> entry : this.reports.entrySet()) {
                     Collections.sort(entry.getValue(), (InspectionReport A, InspectionReport B) -> Integer.parseInt(B.getInspectionDate()) - Integer.parseInt(A.getInspectionDate()));
                 }
-            } catch (IOException e) {
+            } catch (RepositoryReadError e) {
                 System.out.println(e);
                 this.reports = new HashMap<>();
             }
@@ -66,5 +67,13 @@ public class InspectionReportsViewModel {
         }
 
         return this.reports.get(trackingNumber).get(index);
+    }
+
+    public void save() {
+        try {
+            this.inspectionReportRepository.saveInspections(this.reports);
+        } catch (RepositoryWriteError repositoryWriteError) {
+            repositoryWriteError.printStackTrace();
+        }
     }
 }

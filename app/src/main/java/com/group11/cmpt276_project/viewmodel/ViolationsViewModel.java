@@ -1,7 +1,7 @@
 package com.group11.cmpt276_project.viewmodel;
 
 import com.group11.cmpt276_project.service.model.Violation;
-import com.group11.cmpt276_project.service.repository.ViolationRepository;
+import com.group11.cmpt276_project.service.repository.impl.JsonViolationRepository;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class ViolationsViewModel {
     private Map<String, Violation> violations;
-    private ViolationRepository violationRepository;
+    private JsonViolationRepository jsonViolationRepository;
 
     private ViolationsViewModel() {}
 
@@ -25,12 +25,12 @@ public class ViolationsViewModel {
         return ViolationsViewModelHolder.INSTANCE;
     }
 
-    public void init(ViolationRepository violationRepository) {
-        if (this.violationRepository == null) {
-            this.violationRepository = violationRepository;
+    public void init(JsonViolationRepository jsonViolationRepository) {
+        if (this.jsonViolationRepository == null) {
+            this.jsonViolationRepository = jsonViolationRepository;
 
             try {
-                this.violations = this.violationRepository.getFromAssets();
+                this.violations = this.jsonViolationRepository.getFromAssets();
             }
             catch (IOException e) {
                 this.violations = new HashMap<>();

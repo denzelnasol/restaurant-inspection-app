@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.group11.cmpt276_project.viewmodel.InspectionReportViewModel;
+import com.group11.cmpt276_project.viewmodel.InspectionReportDetailViewModel;
 
 /**
  * This factory is used to create a InspectionReportViewModel. It is is needed because the constructor
@@ -21,8 +21,8 @@ public class InspectionReportViewModelFactory implements ViewModelProvider.Facto
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(InspectionReportViewModel.class)) {
-            return (T) new InspectionReportViewModel(this.size);
+        if (modelClass.isAssignableFrom(InspectionReportDetailViewModel.class)) {
+            return (T) new InspectionReportDetailViewModel(this.size);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
