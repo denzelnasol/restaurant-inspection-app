@@ -5,7 +5,6 @@ import android.content.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.group11.cmpt276_project.exception.RepositoryReadError;
 import com.group11.cmpt276_project.exception.RepositoryWriteError;
 import com.group11.cmpt276_project.service.model.InspectionReport;
@@ -29,7 +28,6 @@ public class JsonInspectionReportRepository implements IInspectionReportReposito
     public JsonInspectionReportRepository(Context context) {
         this.context = context;
         this.objectMapper = new ObjectMapper();
-        //this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     @Override

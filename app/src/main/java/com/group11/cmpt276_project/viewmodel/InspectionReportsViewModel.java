@@ -3,6 +3,7 @@ package com.group11.cmpt276_project.viewmodel;
 import com.group11.cmpt276_project.exception.RepositoryReadError;
 import com.group11.cmpt276_project.exception.RepositoryWriteError;
 import com.group11.cmpt276_project.service.model.InspectionReport;
+import com.group11.cmpt276_project.service.repository.IInspectionReportRepository;
 import com.group11.cmpt276_project.service.repository.impl.JsonInspectionReportRepository;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ a Map to allow quick access without searching. The data is sorted in descending 
 public class InspectionReportsViewModel {
 
     private Map<String, List<InspectionReport>> reports;
-    private JsonInspectionReportRepository inspectionReportRepository;
+    private IInspectionReportRepository inspectionReportRepository;
 
     private InspectionReportsViewModel() {
 
@@ -32,7 +33,7 @@ public class InspectionReportsViewModel {
         return InspectionReportsViewModelHolder.INSTANCE;
     }
 
-    public void init(JsonInspectionReportRepository jsonInspectionReportRepository) {
+    public void init(IInspectionReportRepository jsonInspectionReportRepository) {
         if(this.inspectionReportRepository == null) {
             this.inspectionReportRepository = jsonInspectionReportRepository;
 

@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.group11.cmpt276_project.service.model.Violation;
 import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.utils.Utils;
@@ -23,7 +22,6 @@ public class JsonViolationRepository {
     public JsonViolationRepository(Context context) {
         this.context = context;
         this.objectMapper = new ObjectMapper();
-        this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     public Map<String, Violation> getFromAssets() throws IOException {

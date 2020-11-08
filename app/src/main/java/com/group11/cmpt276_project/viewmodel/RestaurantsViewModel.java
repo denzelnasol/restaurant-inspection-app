@@ -36,7 +36,7 @@ public class RestaurantsViewModel {
         return RestaurantsViewModelHolder.INSTANCE;
     }
 
-    public void init(JsonRestaurantRepository jsonRestaurantRepository) {
+    public void init(IRestaurantRepository jsonRestaurantRepository) {
         if (this.restaurantRepository == null) {
             this.restaurantRepository = jsonRestaurantRepository;
 
