@@ -52,7 +52,7 @@ public class MapFragment extends Fragment {
     private double userLat;
     private double userLong;
 
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+   private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         /**
          * Manipulates the map once available.
@@ -66,12 +66,13 @@ public class MapFragment extends Fragment {
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(userLat, userLong);
+           /* LatLng sydney = new LatLng(userLat, userLong);
             googleMap.addMarker(new MarkerOptions().position(sydney).title("" + userLat));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
         }
     };
 
+    // On application start up, default location is the user location
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,6 +113,7 @@ public class MapFragment extends Fragment {
         }
     }
 
+    // find current location of user and goes to it
     private void getCurrentLocation() {
         @SuppressLint("MissingPermission") Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
