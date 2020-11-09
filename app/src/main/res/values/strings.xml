@@ -27,6 +27,9 @@
     <string name="violations">Violations</string>
     <string name="map">Map</string>
     <string name="list">List</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Download Now</string>
+    <string name="updates">New updates are available</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

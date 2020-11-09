@@ -16,5 +16,7 @@ public class Constants {
     public static final String TRACKING_NUMBER = "trackingNumber";
     public static final String INDEX = "index";
     public static final String PARENT = "parent";
-
+    public static final String LAST_UPDATE_INSPECTION = "lastUpdateInspection";
+    public static final String LAST_UPDATE_RESTAURANT = "lastUpdateRestaurant";
+    public static final String LAST_UPDATE = "lastUpdate";
 }
