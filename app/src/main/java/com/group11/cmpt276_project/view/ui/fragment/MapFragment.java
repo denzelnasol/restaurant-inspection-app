@@ -49,8 +49,6 @@ public class MapFragment extends Fragment {
     private GPSCoordiantes selected;
 
     private FusedLocationProviderClient fusedLocationProviderClient;
-    private double userLat;
-    private double userLong;
 
    private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -78,11 +76,11 @@ public class MapFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getCurrentLocation();
         }
         else {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
     }
 
@@ -115,7 +113,7 @@ public class MapFragment extends Fragment {
 
     // find current location of user and goes to it
     private void getCurrentLocation() {
-        @SuppressLint("MissingPermission") Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
