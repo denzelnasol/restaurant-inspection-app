@@ -4,7 +4,10 @@ package com.group11.cmpt276_project.view.ui.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,9 +23,12 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -37,6 +43,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -47,13 +54,15 @@ import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.FragmentMapBinding;
 import com.group11.cmpt276_project.service.model.GPSCoordiantes;
 import com.group11.cmpt276_project.service.model.Restaurant;
+import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickTrackingNumber;
 import com.group11.cmpt276_project.view.ui.MainPageActivity;
+import com.group11.cmpt276_project.view.ui.RestaurantDetailActivity;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
 import java.util.Map;
 
-public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
+public class MapFragment extends Fragment {
 
     private static final float DEFAULT_ZOOM = 15f;
 
@@ -69,7 +78,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     private LocationRequest locationRequest;
     private GoogleMap mGoogleMap;
 
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+    private final OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
          * Manipulates the map once available.
          * This callback is triggered when the map is ready to be used.
@@ -182,15 +191,58 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     }
 
     private void addRestaurantMarkers(GoogleMap googleMap) {
-        for (Map.Entry<String, Restaurant> entry : restaurantsViewModel.get().getValue().entrySet()) {
+        for (Map.Entry<String, Restaurant> entry : this.restaurantsViewModel.get().getValue().entrySet()) {
             // Add marker
             LatLng latLng = new LatLng(entry.getValue().getLatitude(), entry.getValue().getLongitude());
+            String address = entry.getValue().getPhysicalAddress();
             Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title(entry.getValue().getName()).
-                    snippet("Address: " + entry.getValue().getPhysicalAddress() + "\n" + this.inspectionReportsViewModel.getMostRecentReport(entry.getValue().getTrackingNumber())));
+                    snippet(address + "\n" + "Hazard rating here").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            marker.setTag(entry.getValue().getTrackingNumber());
+
+        }
 
             // Set Marker display
-            onMarkerClick(marker);
-        }
+            googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                @Override
+                public View getInfoWindow(Marker marker) {
+                    return null;
+                }
+
+                @Override
+                public View getInfoContents(Marker marker) {
+
+                    LinearLayout info = new LinearLayout(getContext());
+                    info.setOrientation(LinearLayout.VERTICAL);
+
+                    TextView title = new TextView(getContext());
+                    title.setTextColor(Color.BLACK);
+                    title.setGravity(Gravity.CENTER);
+                    title.setTypeface(null, Typeface.BOLD);
+                    title.setText(marker.getTitle());
+
+                    TextView snippet = new TextView(getContext());
+                    snippet.setTextColor(Color.GRAY);
+                    snippet.setText(marker.getSnippet());
+
+                    info.addView(title);
+                    info.addView(snippet);
+
+                    return info;
+                }
+            });
+
+            googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    for (Map.Entry<String, Restaurant> entry : restaurantsViewModel.get().getValue().entrySet()) {
+                        if (marker.getTag().equals(entry.getValue().getTrackingNumber())) {
+                            Intent intent = RestaurantDetailActivity.startActivity(getActivity(), entry.getValue().getTrackingNumber());
+                            startActivity(intent);
+                        }
+
+                    }
+                }
+            });
     }
 
     @Override
@@ -200,11 +252,5 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
                 checkSettingAndStartLocationUpdates();
             }
         }
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        Toast.makeText(this.getActivity(), "Info window clicked", Toast.LENGTH_SHORT).show();
-        return false;
     }
 }
