@@ -1,4 +1,4 @@
-package com.group11.cmpt276_project.service.network.api.endpoints;
+package com.group11.cmpt276_project.service.network.endpoints;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

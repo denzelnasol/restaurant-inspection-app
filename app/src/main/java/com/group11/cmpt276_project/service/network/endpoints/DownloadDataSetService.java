@@ -1,4 +1,4 @@
-package com.group11.cmpt276_project.service.network.download;
+package com.group11.cmpt276_project.service.network.endpoints;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

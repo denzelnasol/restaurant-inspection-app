@@ -19,4 +19,5 @@ public class Constants {
     public static final String LAST_UPDATE_INSPECTION = "lastUpdateInspection";
     public static final String LAST_UPDATE_RESTAURANT = "lastUpdateRestaurant";
     public static final String LAST_UPDATE = "lastUpdate";
+    public static final String BASE_URL = "https://data.surrey.ca/";
 }

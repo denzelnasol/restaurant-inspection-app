@@ -35,7 +35,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
             Restaurant aRestaurant = restaurants.get(a);
             Restaurant bRestaurant = restaurants.get(b);
 
-            return aRestaurant.getName().compareTo(bRestaurant.getName());
+            return aRestaurant.getName().toLowerCase().compareTo(bRestaurant.getName().toLowerCase());
         });
 
         this.inspectionReports = inspectionReports;

@@ -13,8 +13,9 @@ import android.os.Handler;
 import com.group11.cmpt276_project.R;
 
 import com.group11.cmpt276_project.databinding.ActivityWelcomeBinding;
-import com.group11.cmpt276_project.service.network.api.SurreyApiClient;
-import com.group11.cmpt276_project.service.network.api.endpoints.GetDataSetService;
+import com.group11.cmpt276_project.service.network.SurreyApiClient;
+import com.group11.cmpt276_project.service.network.endpoints.DownloadDataSetService;
+import com.group11.cmpt276_project.service.network.endpoints.GetDataSetService;
 import com.group11.cmpt276_project.service.repository.IPreferenceRepository;
 import com.group11.cmpt276_project.service.repository.impl.JsonInspectionReportRepository;
 import com.group11.cmpt276_project.service.repository.impl.JsonRestaurantRepository;
@@ -25,6 +26,8 @@ import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
 import com.group11.cmpt276_project.viewmodel.WelcomeViewModel;
 import com.group11.cmpt276_project.viewmodel.factory.WelcomeViewModelFactory;
+
+import retrofit2.Retrofit;
 
 /**
  * This activity displays a welcome screen prior to showing the restaurant list
@@ -52,13 +55,14 @@ public class WelcomeActivity extends AppCompatActivity {
                 builder.setMessage(R.string.updates)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                welcomeViewModel.startDownload();
                                 dialog.dismiss();
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.dismiss();
-                                moveToRestaurantList(0);
+                                moveToRestaurantList(250);
                             }
                         });
 
@@ -68,6 +72,34 @@ public class WelcomeActivity extends AppCompatActivity {
                 this.moveToRestaurantList(TIMEOUT);
             }
         });
+        this.welcomeViewModel.getUpdateDone().observe(this, (data) -> {
+            if(data) {
+                moveToRestaurantList(250);
+            }
+        });
+        this.welcomeViewModel.getDownloadFailed().observe(this, (data) -> {
+            if(data) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Download failed")
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+        this.welcomeViewModel.getIsCancelled().observe(this, (data) -> {
+            if(data) {
+                this.moveToRestaurantList(500);
+            }
+        });
+    }
+
+    public void onCancelClick() {
+        this.welcomeViewModel.cancelDownload();
     }
 
     private void moveToRestaurantList(int timeOut) {
@@ -87,14 +119,17 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void bind() {
-        GetDataSetService service = SurreyApiClient.getInstance().create(GetDataSetService.class);
+        Retrofit surreyApiClient = SurreyApiClient.getInstance();
+        GetDataSetService apiService = surreyApiClient.create(GetDataSetService.class);
+        DownloadDataSetService downloadService = surreyApiClient.create(DownloadDataSetService.class);
         IPreferenceRepository preferenceRepository = new SharedPreferenceRepository();
-        WelcomeViewModelFactory viewModelFactory = new WelcomeViewModelFactory(service, preferenceRepository);
+        WelcomeViewModelFactory viewModelFactory = new WelcomeViewModelFactory(apiService, downloadService, preferenceRepository, getApplicationContext());
         this.welcomeViewModel = new ViewModelProvider(this, viewModelFactory).get(WelcomeViewModel.class);
 
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_welcome);
         this.binding.setLifecycleOwner(this);
-        binding.setWelcomeViewModel(this.welcomeViewModel);
+        this.binding.setWelcomeViewModel(this.welcomeViewModel);
+        this.binding.setActivity(this);
     }
 
 

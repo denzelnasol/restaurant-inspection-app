@@ -40,7 +40,7 @@ public class ViolationsViewModel {
     }
 
     public Violation get(String id) {
-        return violations.get(id);
+        return violations.getOrDefault(id, new Violation());
     }
 
     public void save() {

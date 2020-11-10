@@ -30,6 +30,9 @@
     <string name="cancel">Cancel</string>
     <string name="ok">Download Now</string>
     <string name="updates">New updates are available</string>
+    <string name="finalize_updates">Finalizing updates</string>
+    <string name="current_downloading">Downloading %s… %s%%</string>
+    <string name="start_download">Starting %s</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
