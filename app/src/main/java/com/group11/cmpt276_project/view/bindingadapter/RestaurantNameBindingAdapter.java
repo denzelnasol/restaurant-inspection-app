@@ -11,40 +11,40 @@ import com.group11.cmpt276_project.utils.Constants;
  **/
 public class RestaurantNameBindingAdapter {
 
-    @BindingAdapter("app:srcCompat")
+    @BindingAdapter("restaurantIcon")
     public static void setRestaurantIcon(ImageView imageView, String restaurant){
 
-        if(Constants.SEVEN_ELEVEN.equals(restaurant)) {
+        if (restaurant.contains(Constants.SEVEN_ELEVEN)) {
             imageView.setImageResource(R.drawable.res_ic_7eleven);
-        } else if(Constants.AW.equals(restaurant)) {
+        } else if (restaurant.contains(Constants.AW)) {
             imageView.setImageResource(R.drawable.res_ic_aw);
-        } else if(Constants.BOOSTER_JUICE.equals(restaurant)) {
+        } else if (restaurant.contains(Constants.BOOSTER_JUICE)) {
             imageView.setImageResource(R.drawable.res_ic_booster_juice);
-        } else if(Constants.BROWNS.equals(restaurant)) {
+        } else if (restaurant.contains(Constants.BROWNS)) {
             imageView.setImageResource(R.drawable.res_ic_browns);
-        } else if(Constants.CHURCHS_CHICKEN.equals(restaurant)){
+        } else if (restaurant.contains(Constants.CHURCHS_CHICKEN)) {
             imageView.setImageResource(R.drawable.res_ic_churchs_chicken);
-        } else if(Constants.DAIRY_QUEEN.equals(restaurant)) {
+        } else if (restaurant.contains(Constants.DAIRY_QUEEN)) {
             imageView.setImageResource(R.drawable.res_ic_dairy_queen);
-        } else if(Constants.DOMINOS.equals(restaurant)) {
+        } else if (restaurant.contains(Constants.DOMINOS)) {
             imageView.setImageResource(R.drawable.res_ic_dominos);
-        } else if(Constants.MCDONALDS.equals(restaurant)) {
+        } else if (restaurant.contains(Constants.MCDONALDS)) {
             imageView.setImageResource(R.drawable.res_ic_mcdonalds);
-        } else if(Constants.PIZZAHUT.equals(restaurant)) {
+        } else if (restaurant.contains(Constants.PIZZAHUT)) {
             imageView.setImageResource(R.drawable.res_ic_pizzahut);
-        } else if(Constants.REAL_CANADIAN.equals(restaurant)) {
+        } else if (restaurant.contains(Constants.REAL_CANADIAN)) {
             imageView.setImageResource(R.drawable.res_ic_real_canadian);
-        } else if(Constants.STARBUCKS.equals(restaurant)) {
+        } else if (restaurant.contains(Constants.STARBUCKS)) {
             imageView.setImageResource(R.drawable.res_ic_starbucks);
-        } else if(Constants.SUBWAY.equals(restaurant)) {
+        } else if (restaurant.contains(Constants.SUBWAY)) {
             imageView.setImageResource(R.drawable.res_ic_subway);
-        } else if(Constants.TIM_HORTONS.equals(restaurant)) {
+        } else if (restaurant.contains(Constants.TIM_HORTONS)) {
             imageView.setImageResource(R.drawable.res_ic_tim_hortons);
-        } else if(Constants.WALMART.equals(restaurant)) {
+        } else if (restaurant.contains(Constants.WALMART)) {
             imageView.setImageResource(R.drawable.res_ic_walmart);
-        } else if(Constants.WENDYS.equals(restaurant)) {
+        } else if (restaurant.contains(Constants.WENDYS)) {
             imageView.setImageResource(R.drawable.res_ic_wendys);
-        } else{
+        } else {
             imageView.setImageResource(R.drawable.restaurant_detailed_img);
         }
     }

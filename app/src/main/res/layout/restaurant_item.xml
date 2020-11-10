@@ -38,7 +38,7 @@
                     android:layout_height="0dp"
                     android:layout_marginStart="16dp"
                     android:scaleType="fitXY"
-                    app:srcCompat="@{restaurant.name}"
+                    app:restaurantIcon="@{restaurant.name}"
                     app:layout_constraintBottom_toBottomOf="@+id/restaurant_item_date"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/restaurant_item_name"
@@ -65,7 +65,7 @@
                     android:text="@{restaurant.name}"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView"
+                    app:layout_constraintStart_toEndOf="@+id/restaurant_icon"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
