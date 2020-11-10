@@ -2,15 +2,12 @@ package com.group11.cmpt276_project.view.ui.fragment;
 
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -21,7 +18,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import android.os.Looper;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,14 +44,19 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.collections.MarkerManager;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.FragmentMapBinding;
+import com.group11.cmpt276_project.service.model.ClusterItem;
 import com.group11.cmpt276_project.service.model.GPSCoordiantes;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.view.ui.MainPageActivity;
 import com.group11.cmpt276_project.view.ui.RestaurantDetailActivity;
+import com.group11.cmpt276_project.viewmodel.ClusterRenderer;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
@@ -63,7 +64,7 @@ import java.util.Map;
 
 public class MapFragment extends Fragment {
 
-    private static final float DEFAULT_ZOOM = 15f;
+    private static final float DEFAULT_ZOOM = 12f;
 
     private FragmentMapBinding binding;
     private SupportMapFragment mapFragment;
@@ -76,6 +77,9 @@ public class MapFragment extends Fragment {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationRequest locationRequest;
     private GoogleMap mGoogleMap;
+    private ClusterManager clusterManager;
+    private ClusterRenderer clusterRenderer;
+
 
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -91,6 +95,7 @@ public class MapFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
+            setUpClusters();
             addRestaurantMarkers(mGoogleMap);
         }
     };
@@ -132,7 +137,6 @@ public class MapFragment extends Fragment {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         createLocationRequest();
-
         zoomToUserLocation();
 
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -202,14 +206,16 @@ public class MapFragment extends Fragment {
     private void addRestaurantMarkers(GoogleMap googleMap) {
         for (Map.Entry<String, Restaurant> entry : this.restaurantsViewModel.get().getValue().entrySet()) {
             // Add marker
-            LatLng latLng = new LatLng(entry.getValue().getLatitude(), entry.getValue().getLongitude());
             String address = entry.getValue().getPhysicalAddress();
             String hazardRating;
+            BitmapDescriptor icon;
+            MarkerOptions markerOptions;
 
             String trackingNumber = this.restaurantsViewModel.getByTrackingNumber(entry.getValue().getTrackingNumber()).getTrackingNumber();
             InspectionReport inspectionReport = this.inspectionReportsViewModel.getMostRecentReport(trackingNumber);
+            LatLng latLng = new LatLng(entry.getValue().getLatitude(), entry.getValue().getLongitude());
 
-            // Set hazard rating string for each marker
+//            // Set hazard rating string for each marker
             if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.MODERATE)) {
                 hazardRating = Constants.MODERATE;
             }
@@ -219,69 +225,25 @@ public class MapFragment extends Fragment {
             else {
                 hazardRating = Constants.LOW;
             }
-            Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title(entry.getValue().getName()).
-                    snippet(address + "\n" + hazardRating).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-
-            // Each marker given a tracking number
-            marker.setTag(entry.getValue().getTrackingNumber());
-
-            // Set icon for each marker
+//
+//            // Set icon for each marker
             if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.MODERATE)) {
-                marker.setIcon(BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.neutral)));
+                icon = BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.neutral));
             }
             else if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.CRITICAL)){
-                marker.setIcon(BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.sad)));
+                icon = BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.sad));
             }
             else {
-                marker.setIcon(BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.happy)));
+                icon = BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.happy));
             }
 
+            // Add marker to cluster
+            markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(address + " - Hazardous Rating: " + hazardRating).title(entry.getValue().getName());
+            ClusterItem clusterItem = new ClusterItem(markerOptions);
+            clusterManager.addItem(clusterItem);
+
+
         }
-
-
-            // Set Marker display
-            googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                @Override
-                public View getInfoWindow(Marker marker) {
-                    return null;
-                }
-
-                @Override
-                public View getInfoContents(Marker marker) {
-
-                    LinearLayout info = new LinearLayout(getContext());
-                    info.setOrientation(LinearLayout.VERTICAL);
-
-                    TextView title = new TextView(getContext());
-                    title.setTextColor(Color.BLACK);
-                    title.setGravity(Gravity.CENTER);
-                    title.setTypeface(null, Typeface.BOLD);
-                    title.setText(marker.getTitle());
-
-                    TextView snippet = new TextView(getContext());
-                    snippet.setTextColor(Color.GRAY);
-                    snippet.setText(marker.getSnippet());
-
-                    info.addView(title);
-                    info.addView(snippet);
-
-                    return info;
-                }
-            });
-
-            // Change Activity on info window click
-            googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                @Override
-                public void onInfoWindowClick(Marker marker) {
-                    for (Map.Entry<String, Restaurant> entry : restaurantsViewModel.get().getValue().entrySet()) {
-                        if (marker.getTag().equals(entry.getValue().getTrackingNumber())) {
-                            Intent intent = RestaurantDetailActivity.startActivity(getActivity(), entry.getValue().getTrackingNumber());
-                            startActivity(intent);
-                        }
-
-                    }
-                }
-            });
     }
 
     private Bitmap changeMarker(int drawable) {
@@ -293,6 +255,28 @@ public class MapFragment extends Fragment {
         BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);
 
         return smallMarker;
+    }
+
+    private void setUpClusters() {
+        clusterManager = new ClusterManager<>(this.getContext(), mGoogleMap);
+        clusterRenderer = new ClusterRenderer(this.getActivity(), mGoogleMap, clusterManager);
+
+        mGoogleMap.setOnCameraIdleListener(clusterManager);
+        //mGoogleMap.setOnMarkerClickListener(clusterManager);
+
+        // Change Activity on info window click
+        clusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<ClusterItem>() {
+            @Override
+            public void onClusterItemInfoWindowClick(ClusterItem item) {
+                for (Map.Entry<String, Restaurant> entry : restaurantsViewModel.get().getValue().entrySet()) {
+                    LatLng tempLatLng = new LatLng(entry.getValue().getLatitude(), entry.getValue().getLongitude());
+                    if (item.getPosition().equals(tempLatLng)) {
+                        Intent intent = RestaurantDetailActivity.startActivity(getActivity(), entry.getValue().getTrackingNumber());
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
     }
 
     @Override
