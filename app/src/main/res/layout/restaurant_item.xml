@@ -33,12 +33,12 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/restaurant_icon"
                     android:layout_width="85dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="16dp"
                     android:scaleType="fitXY"
-                    android:src="@{restaurant.icon}"
+                    app:restaurantIcon="@{restaurant.name}"
                     app:layout_constraintBottom_toBottomOf="@+id/restaurant_item_date"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/restaurant_item_name"

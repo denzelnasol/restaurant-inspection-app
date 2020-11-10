@@ -3,7 +3,6 @@ package com.group11.cmpt276_project.view.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -70,12 +69,10 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
 
     class RestaurantViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView icon;
-        private RestaurantItemBinding binding;
+        private final RestaurantItemBinding binding;
 
         public RestaurantViewHolder(RestaurantItemBinding binding, IItemOnClickTrackingNumber onRestaurantItemClick) {
             super(binding.getRoot());
-            this.icon = this.binding.imageView;
             this.binding = binding;
             this.binding.getRoot().setOnClickListener((View view) -> {
                 onRestaurantItemClick.onItemClick(trackingNumbers.get(getAdapterPosition()));

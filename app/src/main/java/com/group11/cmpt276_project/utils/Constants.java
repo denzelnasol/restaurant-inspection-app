@@ -26,10 +26,10 @@ public class Constants {
     public static final String MCDONALDS = "Mcdonalds";
     public static final String PIZZAHUT = "Pizzahut";
     public static final String REAL_CANADIAN = "Real Canadian";
-    public static final String STARBUCKS = "Starbucks";
+    public static final String STARBUCKS = "Starbucks Coffee";
     public static final String SUBWAY = "Subway";
     public static final String TIM_HORTONS = "Tim Hortons";
     public static final String WALMART = "Walmart";
-    public static final String WENDYS = "Wendys";
+    public static final String WENDYS = "Wendy's";
 
 }
