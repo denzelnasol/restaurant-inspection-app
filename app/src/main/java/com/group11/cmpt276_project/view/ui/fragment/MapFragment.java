@@ -43,9 +43,12 @@ import com.google.android.gms.tasks.Task;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.FragmentMapBinding;
 import com.group11.cmpt276_project.service.model.GPSCoordiantes;
+import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.view.ui.MainPageActivity;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
+
+import java.util.Map;
 
 public class MapFragment extends Fragment {
 
@@ -78,7 +81,7 @@ public class MapFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
-
+            addRestaurantMarkers(mGoogleMap);
         }
     };
 
@@ -144,8 +147,8 @@ public class MapFragment extends Fragment {
 
     private void createLocationRequest() {
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(4000);
-        locationRequest.setFastestInterval(2000);
+        locationRequest.setInterval(20000);
+        locationRequest.setFastestInterval(15000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
@@ -173,6 +176,13 @@ public class MapFragment extends Fragment {
                 mGoogleMap.setMyLocationEnabled(true);
             }
         });
+    }
+
+    private void addRestaurantMarkers(GoogleMap googleMap) {
+        for (Map.Entry<String, Restaurant> entry : restaurantsViewModel.get().getValue().entrySet()) {
+            LatLng latLng = new LatLng(entry.getValue().getLatitude(), entry.getValue().getLongitude());
+            googleMap.addMarker(new MarkerOptions().position(latLng).title(entry.getValue().getName()));
+        }
     }
 
     @Override
