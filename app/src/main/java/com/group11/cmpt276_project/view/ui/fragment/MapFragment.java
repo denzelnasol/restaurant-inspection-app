@@ -77,7 +77,7 @@ public class MapFragment extends Fragment {
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            mGoogleMap = googleMap;
+            //mGoogleMap = googleMap;
         }
     };
 
@@ -122,7 +122,6 @@ public class MapFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(callback);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         createLocationRequest();
@@ -132,13 +131,6 @@ public class MapFragment extends Fragment {
         } else {
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-    }
-
-    // Zooms to user location on start up
-    @Override
-    public void onStart() {
-        super.onStart();
-        zoomToUserLocation();
     }
 
     //Stops location updates
@@ -174,9 +166,16 @@ public class MapFragment extends Fragment {
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
-                mGoogleMap.setMyLocationEnabled(true);
+                if (location != null) {
+                    mapFragment.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
+                            googleMap.setMyLocationEnabled(true);
+                        }
+                    });
+                }
             }
         });
     }
