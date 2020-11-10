@@ -11,7 +11,7 @@ import com.group11.cmpt276_project.utils.Constants;
  **/
 public class RestaurantNameBindingAdapter {
 
-    @BindingAdapter("restaurantIcon")
+    @BindingAdapter("app:srcCompat")
     public static void setRestaurantIcon(ImageView imageView, String restaurant){
 
         if(Constants.SEVEN_ELEVEN.equals(restaurant)) {
