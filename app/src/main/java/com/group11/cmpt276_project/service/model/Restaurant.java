@@ -11,7 +11,6 @@ public class Restaurant {
     String facilityType;
     double latitude;
     double longitude;
-    int icon;
 
     public void setTrackingNumber(String trackingNumber) {
         this.trackingNumber = trackingNumber;
@@ -68,9 +67,5 @@ public class Restaurant {
     public double getLongitude() {
         return longitude;
     }
-
-    public int getIcon() { return icon; }
-
-    public void setIcon(int icon) { this.icon = icon; }
 
 }
