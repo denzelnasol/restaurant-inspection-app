@@ -67,4 +67,5 @@ public class Restaurant {
     public double getLongitude() {
         return longitude;
     }
+
 }

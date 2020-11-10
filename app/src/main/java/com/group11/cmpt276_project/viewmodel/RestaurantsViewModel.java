@@ -3,10 +3,12 @@ package com.group11.cmpt276_project.viewmodel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.group11.cmpt276_project.exception.RepositoryReadError;
+import com.group11.cmpt276_project.exception.RepositoryWriteError;
 import com.group11.cmpt276_project.service.model.Restaurant;
-import com.group11.cmpt276_project.service.repository.RestaurantRepository;
+import com.group11.cmpt276_project.service.repository.IRestaurantRepository;
+import com.group11.cmpt276_project.service.repository.impl.JsonRestaurantRepository;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,10 +19,10 @@ so anything observing will change accordingly
  */
 public class RestaurantsViewModel {
 
-    private Map<String,Restaurant> restaurants;
-    private MutableLiveData<Map<String,Restaurant>> mRestaurants;
+    private Map<String, Restaurant> restaurants;
+    private MutableLiveData<Map<String, Restaurant>> mRestaurants;
 
-    private RestaurantRepository restaurantRepository;
+    private IRestaurantRepository restaurantRepository;
 
     private RestaurantsViewModel() {
 
@@ -34,13 +36,13 @@ public class RestaurantsViewModel {
         return RestaurantsViewModelHolder.INSTANCE;
     }
 
-    public void init(RestaurantRepository restaurantRepository) {
+    public void init(IRestaurantRepository jsonRestaurantRepository) {
         if (this.restaurantRepository == null) {
-            this.restaurantRepository = restaurantRepository;
+            this.restaurantRepository = jsonRestaurantRepository;
 
             try {
-                this.restaurants = this.restaurantRepository.getFromAssets();
-            } catch (IOException e) {
+                this.restaurants = this.restaurantRepository.getRestaurants();
+            } catch (RepositoryReadError repositoryReadError) {
                 this.restaurants = new HashMap<>();
             }
 
@@ -52,7 +54,15 @@ public class RestaurantsViewModel {
         return this.mRestaurants.getValue().get(trackingNumber);
     }
 
-    public LiveData<Map<String,Restaurant>> get() {
+    public LiveData<Map<String, Restaurant>> get() {
         return this.mRestaurants;
+    }
+
+    public void save() {
+        try {
+            this.restaurantRepository.saveRestaurants(this.restaurants);
+        } catch (RepositoryWriteError repositoryWriteError) {
+            repositoryWriteError.printStackTrace();
+        }
     }
 }
