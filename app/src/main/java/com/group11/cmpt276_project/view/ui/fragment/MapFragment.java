@@ -13,6 +13,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -22,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -36,6 +38,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,7 +53,7 @@ import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
 import java.util.Map;
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
 
     private static final float DEFAULT_ZOOM = 15f;
 
@@ -67,7 +70,6 @@ public class MapFragment extends Fragment {
     private GoogleMap mGoogleMap;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
-
         /**
          * Manipulates the map once available.
          * This callback is triggered when the map is ready to be used.
@@ -94,7 +96,6 @@ public class MapFragment extends Fragment {
                 return;
             }
             for (Location location : locationResult.getLocations()) {
-                zoomToUserLocation();
                 Log.d("TEST", "onLocationResult: " + location.toString());
             }
         }
@@ -130,6 +131,8 @@ public class MapFragment extends Fragment {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         createLocationRequest();
+
+        zoomToUserLocation();
 
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             checkSettingAndStartLocationUpdates();
@@ -180,8 +183,13 @@ public class MapFragment extends Fragment {
 
     private void addRestaurantMarkers(GoogleMap googleMap) {
         for (Map.Entry<String, Restaurant> entry : restaurantsViewModel.get().getValue().entrySet()) {
+            // Add marker
             LatLng latLng = new LatLng(entry.getValue().getLatitude(), entry.getValue().getLongitude());
-            googleMap.addMarker(new MarkerOptions().position(latLng).title(entry.getValue().getName()));
+            Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title(entry.getValue().getName()).
+                    snippet("Address: " + entry.getValue().getPhysicalAddress() + "\n" + this.inspectionReportsViewModel.getMostRecentReport(entry.getValue().getTrackingNumber())));
+
+            // Set Marker display
+            onMarkerClick(marker);
         }
     }
 
@@ -192,5 +200,11 @@ public class MapFragment extends Fragment {
                 checkSettingAndStartLocationUpdates();
             }
         }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Toast.makeText(this.getActivity(), "Info window clicked", Toast.LENGTH_SHORT).show();
+        return false;
     }
 }
