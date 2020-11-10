@@ -194,20 +194,27 @@ public class MapFragment extends Fragment {
             // Add marker
             LatLng latLng = new LatLng(entry.getValue().getLatitude(), entry.getValue().getLongitude());
             String address = entry.getValue().getPhysicalAddress();
+            String hazardRating;
+
+            String trackingNumber = this.restaurantsViewModel.getByTrackingNumber(entry.getValue().getTrackingNumber()).getTrackingNumber();
+            InspectionReport inspectionReport = this.inspectionReportsViewModel.getMostRecentReport(trackingNumber);
+
+            if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.MODERATE)) {
+                hazardRating = Constants.MODERATE;
+            }
+            else if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.CRITICAL)){
+                hazardRating = Constants.CRITICAL;
+            }
+            else {
+                hazardRating = Constants.LOW;
+            }
             Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title(entry.getValue().getName()).
-                    snippet(address + "\n" + "Hazard rating here").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    snippet(address + "\n" + hazardRating).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
             // Each marker given a tracking number
             marker.setTag(entry.getValue().getTrackingNumber());
-            String trackingNumber = this.restaurantsViewModel.getByTrackingNumber(entry.getValue().getTrackingNumber()).getTrackingNumber();
 
-            InspectionReport inspectionReport = this.inspectionReportsViewModel.getMostRecentReport(trackingNumber);
-
-
-            if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.LOW)) {
-                marker.setIcon(BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.happy)));
-            }
-            else if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.MODERATE)) {
+            if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.MODERATE)) {
                 marker.setIcon(BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.neutral)));
             }
             else if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.CRITICAL)){
