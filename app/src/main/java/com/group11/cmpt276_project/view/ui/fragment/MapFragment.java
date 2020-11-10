@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -18,12 +16,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import android.os.Looper;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -40,13 +35,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
-import com.google.maps.android.collections.MarkerManager;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.FragmentMapBinding;
 import com.group11.cmpt276_project.service.model.ClusterItem;
@@ -97,7 +89,7 @@ public class MapFragment extends Fragment {
         public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
             setUpClusters();
-            addRestaurantMarkers(mGoogleMap);
+            addRestaurantMarkers();
         }
     };
 
@@ -204,7 +196,7 @@ public class MapFragment extends Fragment {
         });
     }
 
-    private void addRestaurantMarkers(GoogleMap googleMap) {
+    private void addRestaurantMarkers() {
         for (Map.Entry<String, Restaurant> entry : this.restaurantsViewModel.get().getValue().entrySet()) {
             // Add marker
             String address = entry.getValue().getPhysicalAddress();
@@ -253,7 +245,6 @@ public class MapFragment extends Fragment {
 
         Bitmap b = BitmapFactory.decodeResource(getResources(), drawable);
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-        BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);
 
         return smallMarker;
     }
