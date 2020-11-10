@@ -77,6 +77,7 @@ public class MainPageActivity extends FragmentActivity {
         tabAdapter.addFragment(new MapFragment());
         tabAdapter.addFragment(new RestaurantListFragment());
 
+        this.viewPager.setUserInputEnabled(false);
         this.viewPager.setAdapter(tabAdapter);
         this.viewPager.setCurrentItem(mainPageViewModel.getSelectedTab());
         this.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
