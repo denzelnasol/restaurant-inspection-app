@@ -4,6 +4,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+// A cluster item model that represents a restaurant marker
 public class ClusterItem implements com.google.maps.android.clustering.ClusterItem {
     private LatLng position;
     private String title;

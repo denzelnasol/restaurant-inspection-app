@@ -13,6 +13,7 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.service.model.ClusterItem;
 
+// This is a class that renders markers icons before the cluster is rendered
 public class ClusterRenderer extends DefaultClusterRenderer<ClusterItem> {
 
 

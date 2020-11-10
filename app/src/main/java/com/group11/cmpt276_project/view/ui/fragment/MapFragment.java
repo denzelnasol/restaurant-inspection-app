@@ -62,6 +62,7 @@ import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
 import java.util.Map;
 
+// Fragment to implement a map including user location and restaurant markers
 public class MapFragment extends Fragment {
 
     private static final float DEFAULT_ZOOM = 12f;
