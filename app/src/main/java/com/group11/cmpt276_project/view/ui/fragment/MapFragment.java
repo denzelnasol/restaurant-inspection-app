@@ -6,8 +6,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -38,6 +41,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -47,7 +51,9 @@ import com.google.android.gms.tasks.Task;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.FragmentMapBinding;
 import com.group11.cmpt276_project.service.model.GPSCoordiantes;
+import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
+import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.view.ui.MainPageActivity;
 import com.group11.cmpt276_project.view.ui.RestaurantDetailActivity;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
@@ -190,9 +196,29 @@ public class MapFragment extends Fragment {
             String address = entry.getValue().getPhysicalAddress();
             Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title(entry.getValue().getName()).
                     snippet(address + "\n" + "Hazard rating here").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+            // Each marker given a tracking number
             marker.setTag(entry.getValue().getTrackingNumber());
+            String trackingNumber = this.restaurantsViewModel.getByTrackingNumber(entry.getValue().getTrackingNumber()).getTrackingNumber();
+
+            InspectionReport inspectionReport = this.inspectionReportsViewModel.getMostRecentReport(trackingNumber);
+
+
+            if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.LOW)) {
+                marker.setIcon(BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.happy)));
+            }
+            else if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.MODERATE)) {
+                marker.setIcon(BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.neutral)));
+            }
+            else if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.CRITICAL)){
+                marker.setIcon(BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.sad)));
+            }
+            else {
+                marker.setIcon(BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.happy)));
+            }
 
         }
+
 
             // Set Marker display
             googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -224,6 +250,7 @@ public class MapFragment extends Fragment {
                 }
             });
 
+            // Change Activity on info window click
             googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                 @Override
                 public void onInfoWindowClick(Marker marker) {
@@ -236,6 +263,17 @@ public class MapFragment extends Fragment {
                     }
                 }
             });
+    }
+
+    private Bitmap changeMarker(int drawable) {
+        int height = 100;
+        int width = 100;
+
+        Bitmap b = BitmapFactory.decodeResource(getResources(), drawable);
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+        BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);
+
+        return smallMarker;
     }
 
     @Override
