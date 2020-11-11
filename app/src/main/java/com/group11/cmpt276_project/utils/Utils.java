@@ -1,6 +1,7 @@
 package com.group11.cmpt276_project.utils;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.util.Pair;
 
 import com.group11.cmpt276_project.service.model.InspectionReport;
@@ -17,8 +18,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,28 @@ import java.util.Map;
 Various utility functions that are useful such as loading json
  */
 public class Utils {
+
+    public static boolean isNetworkAvailable(Context context){
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return connectivityManager.getActiveNetwork() != null;
+    }
+
+    public static boolean isConnected(Context context) {
+        if(isNetworkAvailable(context)) {
+            try {
+                HttpURLConnection connection = (HttpURLConnection) new URL(Constants.CONNECTION_TEST_URL).openConnection();
+                connection.setRequestProperty("User-Agent", "ConnectionTest");
+                connection.setRequestProperty("Connection", "close");
+                connection.setConnectTimeout(1000);
+                connection.connect();
+                return connection.getResponseCode() == 200;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
+    }
 
     public static String readJsonFromAssets(Context context, String fileName) throws IOException {
         InputStream inputStream = context.getAssets().open(fileName);

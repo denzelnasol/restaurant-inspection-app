@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Pair;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -48,6 +49,8 @@ public class WelcomeViewModel extends ViewModel {
     public MutableLiveData<Boolean> mCanCancel;
     public MutableLiveData<String> mDownloadText;
 
+    private final MutableLiveData<Boolean> mHasInternetConnection;
+
     private final MediatorLiveData<Boolean> mShouldUpdate;
     private final MediatorLiveData<Boolean> mUpdateDone;
 
@@ -86,6 +89,7 @@ public class WelcomeViewModel extends ViewModel {
         this.apiService = apiService;
         this.downloadService = downloadService;
 
+        this.mHasInternetConnection = new MutableLiveData<>();
         this.mIsCancelled = new MutableLiveData<>(false);
         this.mDownloadText = new MutableLiveData<>("");
         this.mProgress = new MutableLiveData<>(0);
@@ -174,6 +178,17 @@ public class WelcomeViewModel extends ViewModel {
         } else {
             this.mShouldUpdate.setValue(false);
         }
+    }
+
+    public void testInternetConnectivity() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                mHasInternetConnection.postValue(Utils.isConnected(context));
+                return null;
+            }
+        }.execute();
     }
 
     public void startDownload() {
@@ -283,20 +298,22 @@ public class WelcomeViewModel extends ViewModel {
         }
     }
 
+    public LiveData<Boolean> getHasInternetConnection() { return this.mHasInternetConnection; }
+
     public MediatorLiveData<Boolean> getShouldUpdate() {
-        return mShouldUpdate;
+        return this.mShouldUpdate;
     }
 
-    public MutableLiveData<Boolean> getDownloadFailed() {
-        return mDownloadFailed;
+    public LiveData<Boolean> getDownloadFailed() {
+        return this.mDownloadFailed;
     }
 
-    public MutableLiveData<Boolean> getUpdateDone() {
-        return mUpdateDone;
+    public LiveData<Boolean> getUpdateDone() {
+        return this.mUpdateDone;
     }
 
-    public MutableLiveData<Boolean> getIsCancelled() {
-        return mIsCancelled;
+    public LiveData<Boolean> getIsCancelled() {
+        return this.mIsCancelled;
     }
 
     private class DownloadRestaurantTask extends AsyncTask<ResponseBody, Pair<Integer, Long>, String> {

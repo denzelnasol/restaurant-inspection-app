@@ -7,12 +7,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 
 import com.group11.cmpt276_project.R;
 
 import com.group11.cmpt276_project.databinding.ActivityWelcomeBinding;
+import com.group11.cmpt276_project.service.model.Violation;
 import com.group11.cmpt276_project.service.network.SurreyApiClient;
 import com.group11.cmpt276_project.service.network.endpoints.DownloadDataSetService;
 import com.group11.cmpt276_project.service.network.endpoints.GetDataSetService;
@@ -22,6 +24,7 @@ import com.group11.cmpt276_project.service.repository.impl.JsonRestaurantReposit
 import com.group11.cmpt276_project.service.repository.impl.JsonViolationRepository;
 import com.group11.cmpt276_project.service.repository.impl.SharedPreferenceRepository;
 import com.group11.cmpt276_project.utils.Constants;
+import com.group11.cmpt276_project.utils.Utils;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
@@ -35,7 +38,7 @@ import retrofit2.Retrofit;
  */
 public class WelcomeActivity extends AppCompatActivity {
 
-    private final int TIMEOUT = 3000;
+    private final int TIMEOUT = 1500;
 
     private WelcomeViewModel welcomeViewModel;
     private ActivityWelcomeBinding binding;
@@ -46,10 +49,17 @@ public class WelcomeActivity extends AppCompatActivity {
         this.init();
         this.bind();
         this.observe();
-        this.welcomeViewModel.checkForUpdates();
+        this.welcomeViewModel.testInternetConnectivity();
     }
 
     public void observe() {
+        this.welcomeViewModel.getHasInternetConnection().observe(this, (data) -> {
+            if(data) {
+                welcomeViewModel.checkForUpdates();
+            } else {
+                moveToRestaurantList(TIMEOUT);
+            }
+        });
         this.welcomeViewModel.getShouldUpdate().observe(this, (data) -> {
             if (data) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -130,6 +140,4 @@ public class WelcomeActivity extends AppCompatActivity {
         this.binding.setWelcomeViewModel(this.welcomeViewModel);
         this.binding.setActivity(this);
     }
-
-
 }

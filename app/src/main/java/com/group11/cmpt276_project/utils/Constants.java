@@ -21,4 +21,5 @@ public class Constants {
     public static final String LAST_UPDATE = "lastUpdate";
     public static final String BASE_URL = "https://data.surrey.ca/";
     public static final String SHARE_PREFERENCES_URL = "restaurantInspectionPreferences";
+    public static final String CONNECTION_TEST_URL = "https://www.google.com";
 }
