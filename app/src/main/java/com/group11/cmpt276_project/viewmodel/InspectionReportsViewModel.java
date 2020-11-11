@@ -44,10 +44,13 @@ public class InspectionReportsViewModel {
                     Collections.sort(entry.getValue(), (InspectionReport A, InspectionReport B) -> Integer.parseInt(B.getInspectionDate()) - Integer.parseInt(A.getInspectionDate()));
                 }
             } catch (RepositoryReadError e) {
-                System.out.println(e);
                 this.reports = new HashMap<>();
             }
         }
+    }
+
+    public void add(Map<String, List<InspectionReport>> newReports) {
+
     }
 
     public List<InspectionReport> getReports(String trackingNumber) {

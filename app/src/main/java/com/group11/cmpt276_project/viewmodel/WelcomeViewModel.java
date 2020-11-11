@@ -11,10 +11,13 @@ import androidx.lifecycle.ViewModel;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.group11.cmpt276_project.R;
+import com.group11.cmpt276_project.service.model.InspectionReport;
+import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.service.network.endpoints.DownloadDataSetService;
 import com.group11.cmpt276_project.service.network.endpoints.GetDataSetService;
 import com.group11.cmpt276_project.service.repository.IPreferenceRepository;
 import com.group11.cmpt276_project.utils.Constants;
+import com.group11.cmpt276_project.utils.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,6 +26,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Map;
 
 import okhttp3.Headers;
 import okhttp3.ResponseBody;
@@ -50,7 +55,7 @@ public class WelcomeViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> mDownloadFailed;
     private final MutableLiveData<Boolean> mDownloadDone;
-    private MutableLiveData<Boolean> mIsCancelled;
+    private final MutableLiveData<Boolean> mIsCancelled;
 
     private final GetDataSetService apiService;
     private final DownloadDataSetService downloadService;
@@ -63,14 +68,14 @@ public class WelcomeViewModel extends ViewModel {
     private final String lastUpdateRestaurant;
     private final String lastUpdate;
 
-    private Context context;
+    private final Context context;
 
     private AsyncTask<ResponseBody, Pair<Integer, Long>, String> currentTask;
     private Call<ResponseBody> currentCall;
 
-
-
     private long contentRangeFileSize;
+
+    LocalDateTime updateTime;
 
     private boolean shouldUpdateInspection;
     private boolean shouldUpdateRestaurants;
@@ -92,7 +97,9 @@ public class WelcomeViewModel extends ViewModel {
 
         this.mUpdateDone = new MediatorLiveData<>();
         this.mUpdateDone.addSource(this.mDownloadDone, (data) -> {
-            this.finalizeUpdate();
+            if(data) {
+                this.finalizeUpdate();
+            }
         });
         this.mShouldUpdate = new MediatorLiveData<>();
         this.mShouldUpdate.addSource(this.mLastModifiedInspections, (data) -> {
@@ -109,7 +116,7 @@ public class WelcomeViewModel extends ViewModel {
     }
 
     public void cancelDownload() {
-        if(this.currentCall != null) {
+        if (this.currentCall != null) {
             this.mIsCancelled.setValue(true);
             this.currentCall.cancel();
         }
@@ -118,11 +125,11 @@ public class WelcomeViewModel extends ViewModel {
     public void checkForUpdates() {
 
         boolean pastTwentyHours = true;
+        this.updateTime = LocalDateTime.now();
 
         if (this.lastUpdate != null && !this.lastUpdate.isEmpty()) {
             LocalDateTime lastUpdateTime = LocalDateTime.parse(this.lastUpdate);
-            LocalDateTime now = LocalDateTime.now();
-            pastTwentyHours = ChronoUnit.HOURS.between(lastUpdateTime, now) >= 20;
+            pastTwentyHours = ChronoUnit.HOURS.between(lastUpdateTime, updateTime) >= 2;
         }
 
         if (pastTwentyHours) {
@@ -183,6 +190,8 @@ public class WelcomeViewModel extends ViewModel {
     private void finalizeUpdate() {
         this.mCanCancel.setValue(false);
         this.mDownloadText.setValue(context.getString(R.string.finalize_updates));
+        FinalizeUpdateTask finalizeUpdateTask = new FinalizeUpdateTask();
+        finalizeUpdateTask.execute();
     }
 
     private void downloadRestaurant() {
@@ -204,7 +213,7 @@ public class WelcomeViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                if(call.isCanceled()) {
+                if (call.isCanceled()) {
                     return;
                 }
                 mDownloadFailed.setValue(true);
@@ -231,7 +240,7 @@ public class WelcomeViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                if(call.isCanceled()) {
+                if (call.isCanceled()) {
                     return;
                 }
                 mDownloadFailed.setValue(true);
@@ -359,6 +368,43 @@ public class WelcomeViewModel extends ViewModel {
         }
     }
 
+    private class FinalizeUpdateTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... avoid) {
+            try {
+                if (shouldUpdateInspection) {
+                    List<String[]> inspectionCsv = Utils.readCSVFromStorage(context, INSPECTION_CSV, Constants.DELIMITER);
+                    Map<String, List<InspectionReport>> inspections = Utils.csvToInspections(inspectionCsv);
+                    InspectionReportsViewModel inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
+                    inspectionReportsViewModel.add(inspections);
+                    inspectionReportsViewModel.save();
+                    Utils.deleteFileFromStorage(context, INSPECTION_CSV);
+                }
+                if (shouldUpdateRestaurants) {
+                    List<String[]> restaurantsCsv = Utils.readCSVFromStorage(context, RESTAURANT_CSV, Constants.DELIMITER);
+                    Map<String, Restaurant> restaurants = Utils.csvToRestaurants(restaurantsCsv);
+                    RestaurantsViewModel restaurantsViewModel = RestaurantsViewModel.getInstance();
+                    restaurantsViewModel.add(restaurants);
+                    restaurantsViewModel.save();
+                    Utils.deleteFileFromStorage(context, RESTAURANT_CSV);
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            preferenceRepository.savePreference(Constants.LAST_UPDATE_INSPECTION, mLastModifiedInspections.getValue());
+            preferenceRepository.savePreference(Constants.LAST_UPDATE_RESTAURANT, mLastModifiedRestaurants.getValue());
+            preferenceRepository.savePreference(Constants.LAST_UPDATE, updateTime.toString());
+            mUpdateDone.setValue(true);
+        }
+    }
 
     private void saveOnDisk(ResponseBody body, String fileName) {
         File destinationFile = new File(this.context.getFilesDir(), fileName);
@@ -381,23 +427,22 @@ public class WelcomeViewModel extends ViewModel {
             this.doSendProgressUpdate(fileName, 100, 100L);
 
         } catch (IOException e) {
-            if(!this.mIsCancelled.getValue()) {
+            if (!this.mIsCancelled.getValue()) {
                 e.printStackTrace();
                 this.doSendProgressUpdate(fileName, -1, -1L);
             }
         }
     }
 
-
     private void doSendProgressUpdate(String fileName, int progress, long total) {
         Pair<Integer, Long> pair = new Pair<>(progress, total);
 
         if (RESTAURANT_CSV.equals(fileName)) {
-            ((DownloadRestaurantTask)this.currentTask).doProgress(pair);
+            ((DownloadRestaurantTask) this.currentTask).doProgress(pair);
             return;
         }
 
-        ((DownloadInspectionTask)this.currentTask).doProgress(pair);
+        ((DownloadInspectionTask) this.currentTask).doProgress(pair);
     }
 
     private void doProgressUpdate(double current, long total, String type) {

@@ -21,6 +21,7 @@ import com.group11.cmpt276_project.service.repository.impl.JsonInspectionReportR
 import com.group11.cmpt276_project.service.repository.impl.JsonRestaurantRepository;
 import com.group11.cmpt276_project.service.repository.impl.JsonViolationRepository;
 import com.group11.cmpt276_project.service.repository.impl.SharedPreferenceRepository;
+import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
@@ -122,7 +123,7 @@ public class WelcomeActivity extends AppCompatActivity {
         Retrofit surreyApiClient = SurreyApiClient.getInstance();
         GetDataSetService apiService = surreyApiClient.create(GetDataSetService.class);
         DownloadDataSetService downloadService = surreyApiClient.create(DownloadDataSetService.class);
-        IPreferenceRepository preferenceRepository = new SharedPreferenceRepository();
+        IPreferenceRepository preferenceRepository = new SharedPreferenceRepository(getApplicationContext(), Constants.SHARE_PREFERENCES_URL);
         WelcomeViewModelFactory viewModelFactory = new WelcomeViewModelFactory(apiService, downloadService, preferenceRepository, getApplicationContext());
         this.welcomeViewModel = new ViewModelProvider(this, viewModelFactory).get(WelcomeViewModel.class);
 
