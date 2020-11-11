@@ -50,7 +50,7 @@ public class InspectionReportsViewModel {
     }
 
     public void add(Map<String, List<InspectionReport>> newReports) {
-
+        this.reports.putAll(newReports);
     }
 
     public List<InspectionReport> getReports(String trackingNumber) {
