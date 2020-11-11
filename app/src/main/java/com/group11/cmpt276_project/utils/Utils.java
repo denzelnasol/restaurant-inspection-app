@@ -87,7 +87,13 @@ public class Utils {
     }
 
     public static Map<String, Restaurant> csvToRestaurants(List<String[]> csv) {
-        return new HashMap<>();
+        Map<String, Restaurant> updatedMap = new HashMap<>();
+
+        for(String[] row : csv) {
+            Restaurant restaurant = new Restaurant();
+        }
+
+        return updatedMap;
     }
 
     public static Map<String, List<InspectionReport>> csvToInspections(List<String[]> csv) {
