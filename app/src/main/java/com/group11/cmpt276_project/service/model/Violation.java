@@ -28,22 +28,22 @@ public class Violation {
         private String details;
         private String type;
 
-        public ViolationBuilder setId(String id) {
+        public ViolationBuilder withId(String id) {
             this.id = id;
             return this;
         }
 
-        public ViolationBuilder setStatus(String status) {
+        public ViolationBuilder withStatus(String status) {
             this.status = status;
             return this;
         }
 
-        public ViolationBuilder setDetails(String details) {
+        public ViolationBuilder withDetails(String details) {
             this.details = details;
             return this;
         }
 
-        public ViolationBuilder setType(String type) {
+        public ViolationBuilder withType(String type) {
             this.type = type;
             return this;
         }

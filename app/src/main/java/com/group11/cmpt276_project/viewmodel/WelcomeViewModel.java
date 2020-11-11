@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
+import com.group11.cmpt276_project.service.model.Violation;
 import com.group11.cmpt276_project.service.network.endpoints.DownloadDataSetService;
 import com.group11.cmpt276_project.service.network.endpoints.GetDataSetService;
 import com.group11.cmpt276_project.service.repository.IPreferenceRepository;
@@ -374,15 +375,21 @@ public class WelcomeViewModel extends ViewModel {
         protected Void doInBackground(Void... avoid) {
             try {
                 if (shouldUpdateInspection) {
-                    List<String[]> inspectionCsv = Utils.readCSVFromStorage(context, INSPECTION_CSV, Constants.DELIMITER);
-                    Map<String, List<InspectionReport>> inspections = Utils.csvToInspections(inspectionCsv);
+                    List<List<String>> inspectionCsv = Utils.readCSVFromStorage(context, INSPECTION_CSV);
+                    Pair<Map<String, List<InspectionReport>>, Map<String, Violation>> inspections = Utils.csvToInspections(inspectionCsv);
+
                     InspectionReportsViewModel inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
-                    inspectionReportsViewModel.add(inspections);
+                    inspectionReportsViewModel.add(inspections.first);
                     inspectionReportsViewModel.save();
+
+                    ViolationsViewModel violationsViewModel = ViolationsViewModel.getInstance();
+                    violationsViewModel.add(inspections.second);
+                    violationsViewModel.save();
+
                     Utils.deleteFileFromStorage(context, INSPECTION_CSV);
                 }
                 if (shouldUpdateRestaurants) {
-                    List<String[]> restaurantsCsv = Utils.readCSVFromStorage(context, RESTAURANT_CSV, Constants.DELIMITER);
+                    List<List<String>> restaurantsCsv = Utils.readCSVFromStorage(context, RESTAURANT_CSV);
                     Map<String, Restaurant> restaurants = Utils.csvToRestaurants(restaurantsCsv);
                     RestaurantsViewModel restaurantsViewModel = RestaurantsViewModel.getInstance();
                     restaurantsViewModel.add(restaurants);

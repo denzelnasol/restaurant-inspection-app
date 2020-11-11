@@ -54,32 +54,29 @@ public class WelcomeActivity extends AppCompatActivity {
             if (data) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage(R.string.updates)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                welcomeViewModel.startDownload();
-                                dialog.dismiss();
-                            }
+                        .setPositiveButton(R.string.ok, (DialogInterface dialog, int id) -> {
+                            welcomeViewModel.startDownload();
+                            dialog.dismiss();
                         })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                                moveToRestaurantList(250);
-                            }
+                        .setNegativeButton(R.string.cancel, (DialogInterface dialog, int id) -> {
+                            dialog.dismiss();
+                            this.moveToRestaurantList(250);
                         });
 
                 AlertDialog dialog = builder.create();
+                dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
             } else {
                 this.moveToRestaurantList(TIMEOUT);
             }
         });
         this.welcomeViewModel.getUpdateDone().observe(this, (data) -> {
-            if(data) {
+            if (data) {
                 moveToRestaurantList(250);
             }
         });
         this.welcomeViewModel.getDownloadFailed().observe(this, (data) -> {
-            if(data) {
+            if (data) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Download failed")
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -89,11 +86,12 @@ public class WelcomeActivity extends AppCompatActivity {
                         });
 
                 AlertDialog dialog = builder.create();
+                dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
             }
         });
         this.welcomeViewModel.getIsCancelled().observe(this, (data) -> {
-            if(data) {
+            if (data) {
                 this.moveToRestaurantList(500);
             }
         });

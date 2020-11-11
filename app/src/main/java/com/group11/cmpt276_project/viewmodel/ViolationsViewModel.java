@@ -39,6 +39,10 @@ public class ViolationsViewModel {
         }
     }
 
+    public void add(Map<String, Violation> newViolations){
+        violations.putAll(newViolations);
+    }
+
     public Violation get(String id) {
         return violations.getOrDefault(id, new Violation());
     }

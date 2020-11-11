@@ -15,13 +15,13 @@ public class InspectionReport {
     private int numberCritical;
     private int numberNonCritical;
     private String hazardRating;
-    private List<Integer> violLump;
+    private List<String> violLump;
 
     public InspectionReport() {
 
     }
 
-    private InspectionReport(String trackingNumber, String inspectionDate, String inspectionType, int numberCritical, int numberNonCritical, String hazardRating, List<Integer> violLump) {
+    private InspectionReport(String trackingNumber, String inspectionDate, String inspectionType, int numberCritical, int numberNonCritical, String hazardRating, List<String> violLump) {
         this.trackingNumber = trackingNumber;
         this.inspectionDate = inspectionDate;
         this.inspectionType = inspectionType;
@@ -31,46 +31,46 @@ public class InspectionReport {
         this.violLump = violLump;
     }
 
-    public static class InspectionReportBuilter {
+    public static class InspectionReportBuilder {
         private String trackingNumber;
         private String inspectionDate;
         private String inspectionType;
         private int numberCritical;
         private int numberNonCritical;
         private String hazardRating;
-        private List<Integer> violLump;
+        private List<String> violLump;
 
-        public InspectionReportBuilter withTrackingNumber(String trackingNumber) {
+        public InspectionReportBuilder withTrackingNumber(String trackingNumber) {
             this.trackingNumber = trackingNumber;
             return this;
         }
 
-        public InspectionReportBuilter withInspectionDate(String inspectionDate) {
+        public InspectionReportBuilder withInspectionDate(String inspectionDate) {
             this.inspectionDate = inspectionDate;
             return this;
         }
 
-        public InspectionReportBuilter withInspectionType(String inspectionType) {
+        public InspectionReportBuilder withInspectionType(String inspectionType) {
             this.inspectionType = inspectionType;
             return this;
         }
 
-        public InspectionReportBuilter withNumberCritical(int numberCritical) {
+        public InspectionReportBuilder withNumberCritical(int numberCritical) {
             this.numberCritical = numberCritical;
             return this;
         }
 
-        public InspectionReportBuilter withNumberNonCritical(int numberNonCritical) {
+        public InspectionReportBuilder withNumberNonCritical(int numberNonCritical) {
             this.numberNonCritical = numberNonCritical;
             return this;
         }
 
-        public InspectionReportBuilter withHazardRating(String hazardRating) {
+        public InspectionReportBuilder withHazardRating(String hazardRating) {
             this.hazardRating = hazardRating;
             return this;
         }
 
-        public InspectionReportBuilter withViolLump(List<Integer> violLump) {
+        public InspectionReportBuilder withViolLump(List<String> violLump) {
             this.violLump = violLump;
             return this;
         }
@@ -110,7 +110,7 @@ public class InspectionReport {
         return hazardRating;
     }
 
-    public List<Integer> getViolLump() {
+    public List<String> getViolLump() {
         return violLump;
     }
 }
