@@ -1,13 +1,12 @@
 package com.group11.cmpt276_project.view.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.group11.cmpt276_project.R;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.service.repository.impl.JsonInspectionReportRepository;
 import com.group11.cmpt276_project.service.repository.impl.JsonRestaurantRepository;
 import com.group11.cmpt276_project.service.repository.impl.JsonViolationRepository;
@@ -20,7 +19,7 @@ import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private static int TIMEOUT = 6000;
+    private static final int TIMEOUT = 3200;
 
 
     @Override
