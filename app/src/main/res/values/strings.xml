@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">cmpt276_project</string>
+    <string name="app_name">Restaurant Reports</string>
     <string name="res_png">res_png</string>
     <string name="cutlery">cutlery</string>
     <string name="critical_issues">Critical issues -</string>
