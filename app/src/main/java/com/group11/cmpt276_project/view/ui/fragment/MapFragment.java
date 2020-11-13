@@ -111,6 +111,13 @@ public class MapFragment extends Fragment {
 
                 @Override
                 protected Void doInBackground(Void... voids) {
+                    try {
+                        setUpClusters();
+                        addRestaurantMarkers();
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     return null;
                 }
 
