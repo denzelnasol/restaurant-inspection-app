@@ -50,6 +50,11 @@ public class RestaurantsViewModel {
         }
     }
 
+    public void add(Map<String, Restaurant> newRestaurants) {
+        this.restaurants.putAll(newRestaurants);
+        this.mRestaurants.postValue(this.restaurants);
+    }
+
     public Restaurant getByTrackingNumber(String trackingNumber) {
         return this.mRestaurants.getValue().get(trackingNumber);
     }
