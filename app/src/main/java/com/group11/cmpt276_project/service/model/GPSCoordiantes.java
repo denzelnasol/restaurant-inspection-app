@@ -5,23 +5,27 @@ import android.os.Parcelable;
 
 public class GPSCoordiantes implements Parcelable {
 
-    double latitude;
-    double longitude;
+    private double latitude;
+    private double longitude;
+    private String trackingNumber;
 
-    public GPSCoordiantes(double latitude, double longitude) {
+    public GPSCoordiantes(double latitude, double longitude, String trackingNumber) {
         this.latitude = latitude;
         this.longitude = longitude;
+        this.trackingNumber = trackingNumber;
     }
 
     protected GPSCoordiantes(Parcel in) {
         this.latitude = in.readDouble();
         this.longitude = in.readDouble();
+        this.trackingNumber = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeDouble(this.latitude);
         dest.writeDouble(this.longitude);
+        dest.writeString(this.trackingNumber);
     }
 
     @Override
@@ -55,5 +59,13 @@ public class GPSCoordiantes implements Parcelable {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getTrackingNumber() {
+        return trackingNumber;
+    }
+
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
     }
 }
