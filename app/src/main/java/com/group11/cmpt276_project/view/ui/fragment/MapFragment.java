@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,11 +17,13 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import android.os.Looper;
+import android.text.PrecomputedText;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.api.Result;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -35,10 +38,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.FragmentMapBinding;
@@ -53,10 +60,9 @@ import com.group11.cmpt276_project.viewmodel.ClusterRenderer;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-
-import static android.content.ContentValues.TAG;
 
 // Fragment to implement a map including user location and restaurant markers
 public class MapFragment extends Fragment {
@@ -93,6 +99,25 @@ public class MapFragment extends Fragment {
             mGoogleMap = googleMap;
             setUpClusters();
             addRestaurantMarkers();
+
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    try {
+                        setUpClusters();
+                        addRestaurantMarkers();
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                }
+            }.execute();
         }
     };
 
@@ -202,24 +227,27 @@ public class MapFragment extends Fragment {
     private void addRestaurantMarkers() {
         for (Map.Entry<String, Restaurant> entry : this.restaurantsViewModel.get().getValue().entrySet()) {
             // Add marker
+            String name = entry.getValue().getName();
             String address = entry.getValue().getPhysicalAddress();
             String hazardRating;
-            BitmapDescriptor icon;
-            MarkerOptions markerOptions;
-
             String trackingNumber = this.restaurantsViewModel.getByTrackingNumber(entry.getValue().getTrackingNumber()).getTrackingNumber();
+
+            double latitude = entry.getValue().getLatitude();
+            double longitude = entry.getValue().getLongitude();
+            LatLng latLng = new LatLng(latitude, longitude);
+
             InspectionReport inspectionReport = this.inspectionReportsViewModel.getMostRecentReport(trackingNumber);
-            LatLng latLng = new LatLng(entry.getValue().getLatitude(), entry.getValue().getLongitude());
+            BitmapDescriptor icon;
 
 //            // Set hazard rating string for each marker
             if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.MODERATE)) {
-                hazardRating = Constants.MODERATE;
+                hazardRating = "Moderate";
             }
             else if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.CRITICAL)){
-                hazardRating = Constants.CRITICAL;
+                hazardRating = "Critical";
             }
             else {
-                hazardRating = Constants.LOW;
+                hazardRating = "Low";
             }
 //
 //            // Set icon for each marker
@@ -234,8 +262,7 @@ public class MapFragment extends Fragment {
             }
 
             // Add marker to cluster
-            markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(address + " - Hazardous Rating: " + hazardRating).title(entry.getValue().getName());
-            ClusterItem clusterItem = new ClusterItem(markerOptions);
+            ClusterItem clusterItem = new ClusterItem(latitude, longitude, name, address + " - Hazardous Rating: " + hazardRating, icon);
             clusterManager.addItem(clusterItem);
 
 
@@ -253,11 +280,20 @@ public class MapFragment extends Fragment {
     }
 
     private void setUpClusters() {
-        clusterManager = new ClusterManager<>(this.getContext(), mGoogleMap);
+        clusterManager = new ClusterManager<>(this.getActivity(), mGoogleMap);
         clusterRenderer = new ClusterRenderer(this.getActivity(), mGoogleMap, clusterManager);
 
         mGoogleMap.setOnCameraIdleListener(clusterManager);
-        //mGoogleMap.setOnMarkerClickListener(clusterManager);
+        mGoogleMap.setOnMarkerClickListener(clusterManager);
+        clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener() {
+            @Override
+            public boolean onClusterItemClick(com.google.maps.android.clustering.ClusterItem item) {
+                Log.d("TEST", "HERE");
+                return false;
+            }
+        });
+
+
 
         // Change Activity on info window click
         clusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<ClusterItem>() {
@@ -273,6 +309,7 @@ public class MapFragment extends Fragment {
             }
         });
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

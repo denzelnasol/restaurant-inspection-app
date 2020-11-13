@@ -11,11 +11,11 @@ public class ClusterItem implements com.google.maps.android.clustering.ClusterIt
     private String snippet;
     private BitmapDescriptor icon;
 
-    public ClusterItem(MarkerOptions markerOptions) {
-        position = markerOptions.getPosition();
-        this.title = markerOptions.getTitle();
-        this.snippet = markerOptions.getSnippet();
-        this.icon = markerOptions.getIcon();
+    public ClusterItem(double lat, double lng, String title, String snippet, BitmapDescriptor icon) {
+        position = new LatLng(lat, lng);
+        this.title = title;
+        this.snippet = snippet;
+        this.icon = icon;
     }
 
     public LatLng getPosition() {
