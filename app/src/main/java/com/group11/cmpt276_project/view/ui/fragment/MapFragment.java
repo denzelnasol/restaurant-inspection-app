@@ -83,8 +83,6 @@ public class MapFragment extends Fragment {
     private ClusterManager clusterManager;
     private ClusterRenderer clusterRenderer;
     private ProgressBar progressBar;
-    private Dialog dialog;
-
 
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -100,35 +98,35 @@ public class MapFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
-            setUpClusters();
-            addRestaurantMarkers();
+            //setUpClusters();
+            //addRestaurantMarkers();
 
-//            new AsyncTask<Void, Void, Void>() {
-//                @Override
-//                protected void onPreExecute() {
-//                    super.onPreExecute();
-//                    progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
-//                    progressBar.setVisibility(View.VISIBLE);
-//                }
-//
-//                @Override
-//                protected Void doInBackground(Void... voids) {
-//                    try {
-//                        setUpClusters();
-//                        addRestaurantMarkers();
-//                    }
-//                    catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    return null;
-//                }
-//
-//                @Override
-//                protected void onPostExecute(Void aVoid) {
-//                    super.onPostExecute(aVoid);
-//                    progressBar.setVisibility(View.INVISIBLE);
-//                }
-//            }.execute();
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+                    progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                    try {
+                        setUpClusters();
+                        addRestaurantMarkers();
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+            }.execute();
         }
     };
 
