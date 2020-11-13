@@ -2,6 +2,7 @@ package com.group11.cmpt276_project.view.ui.fragment;
 
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -22,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -80,6 +82,8 @@ public class MapFragment extends Fragment {
     private GoogleMap mGoogleMap;
     private ClusterManager clusterManager;
     private ClusterRenderer clusterRenderer;
+    private ProgressBar progressBar;
+    private Dialog dialog;
 
 
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -99,19 +103,32 @@ public class MapFragment extends Fragment {
             setUpClusters();
             addRestaurantMarkers();
 
-            /*new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    setUpClusters();
-                    addRestaurantMarkers();
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void aVoid) {
-                    super.onPostExecute(aVoid);
-                }
-            }.execute();*/
+//            new AsyncTask<Void, Void, Void>() {
+//                @Override
+//                protected void onPreExecute() {
+//                    super.onPreExecute();
+//                    progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
+//                    progressBar.setVisibility(View.VISIBLE);
+//                }
+//
+//                @Override
+//                protected Void doInBackground(Void... voids) {
+//                    try {
+//                        setUpClusters();
+//                        addRestaurantMarkers();
+//                    }
+//                    catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    return null;
+//                }
+//
+//                @Override
+//                protected void onPostExecute(Void aVoid) {
+//                    super.onPostExecute(aVoid);
+//                    progressBar.setVisibility(View.INVISIBLE);
+//                }
+//            }.execute();
         }
     };
 
@@ -257,11 +274,9 @@ public class MapFragment extends Fragment {
             }
 
             // Add marker to cluster
-            markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(address + " - Hazardous Rating: " + hazardRating).title(entry.getValue().getName());
+            markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(address + " - Hazardous Rating: " + hazardRating).title(name);
             ClusterItem clusterItem = new ClusterItem(markerOptions);
             clusterManager.addItem(clusterItem);
-
-
         }
     }
 
@@ -296,7 +311,7 @@ public class MapFragment extends Fragment {
             }
         });
     }
-    
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) {
