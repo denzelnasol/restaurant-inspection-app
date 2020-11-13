@@ -60,7 +60,6 @@ import com.group11.cmpt276_project.viewmodel.ClusterRenderer;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,16 +99,11 @@ public class MapFragment extends Fragment {
             setUpClusters();
             addRestaurantMarkers();
 
-            new AsyncTask<Void, Void, Void>() {
+            /*new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... voids) {
-                    try {
-                        setUpClusters();
-                        addRestaurantMarkers();
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    setUpClusters();
+                    addRestaurantMarkers();
                     return null;
                 }
 
@@ -117,7 +111,7 @@ public class MapFragment extends Fragment {
                 protected void onPostExecute(Void aVoid) {
                     super.onPostExecute(aVoid);
                 }
-            }.execute();
+            }.execute();*/
         }
     };
 
@@ -235,6 +229,7 @@ public class MapFragment extends Fragment {
             double latitude = entry.getValue().getLatitude();
             double longitude = entry.getValue().getLongitude();
             LatLng latLng = new LatLng(latitude, longitude);
+            MarkerOptions markerOptions;
 
             InspectionReport inspectionReport = this.inspectionReportsViewModel.getMostRecentReport(trackingNumber);
             BitmapDescriptor icon;
@@ -262,7 +257,8 @@ public class MapFragment extends Fragment {
             }
 
             // Add marker to cluster
-            ClusterItem clusterItem = new ClusterItem(latitude, longitude, name, address + " - Hazardous Rating: " + hazardRating, icon);
+            markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(address + " - Hazardous Rating: " + hazardRating).title(entry.getValue().getName());
+            ClusterItem clusterItem = new ClusterItem(markerOptions);
             clusterManager.addItem(clusterItem);
 
 
@@ -280,20 +276,11 @@ public class MapFragment extends Fragment {
     }
 
     private void setUpClusters() {
-        clusterManager = new ClusterManager<>(this.getActivity(), mGoogleMap);
+        clusterManager = new ClusterManager<>(this.getContext(), mGoogleMap);
         clusterRenderer = new ClusterRenderer(this.getActivity(), mGoogleMap, clusterManager);
 
         mGoogleMap.setOnCameraIdleListener(clusterManager);
         mGoogleMap.setOnMarkerClickListener(clusterManager);
-        clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener() {
-            @Override
-            public boolean onClusterItemClick(com.google.maps.android.clustering.ClusterItem item) {
-                Log.d("TEST", "HERE");
-                return false;
-            }
-        });
-
-
 
         // Change Activity on info window click
         clusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<ClusterItem>() {
@@ -309,8 +296,7 @@ public class MapFragment extends Fragment {
             }
         });
     }
-
-
+    
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) {

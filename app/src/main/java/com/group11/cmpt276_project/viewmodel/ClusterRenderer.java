@@ -4,13 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.group11.cmpt276_project.R;
@@ -28,10 +25,12 @@ public class ClusterRenderer extends DefaultClusterRenderer<ClusterItem> {
 
     @Override
     protected void onBeforeClusterItemRendered(ClusterItem clusterItem, MarkerOptions markerOptions) {
-        markerOptions.icon(clusterItem.getIcon()); //Here you retrieve BitmapDescriptor from ClusterItem and set it as marker icon
-        markerOptions.snippet(clusterItem.getSnippet());
-        markerOptions.title(clusterItem.getTitle());
+        if (clusterItem.getIcon() != null) {
+            markerOptions.icon(clusterItem.getIcon()); //Here you retrieve BitmapDescriptor from ClusterItem and set it as marker icon
+            markerOptions.snippet(clusterItem.getSnippet());
+            markerOptions.title(clusterItem.getTitle());
+
+        }
         markerOptions.visible(true);
     }
-
 }
