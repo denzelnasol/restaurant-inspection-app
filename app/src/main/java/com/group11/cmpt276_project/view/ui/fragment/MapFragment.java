@@ -121,13 +121,6 @@ public class MapFragment extends Fragment {
                 @Override
                 protected void onPostExecute(Void aVoid) {
                     super.onPostExecute(aVoid);
-                    try {
-                        setUpClusters();
-                        addClusterItemsToMap();
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }.execute();
