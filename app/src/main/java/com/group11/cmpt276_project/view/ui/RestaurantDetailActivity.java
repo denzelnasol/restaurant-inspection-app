@@ -48,7 +48,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = MainPageActivity.startActivity(this, false, null);
+        Intent intent = MainPageActivity.startActivity(this, null);
         startActivity(intent);
     }
 
@@ -86,13 +86,13 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
         GPSCoordiantes coordiantes = new GPSCoordiantes(latitude, longitude, this.trackingNumber);
 
-        Intent intent = MainPageActivity.startActivity(this, false, coordiantes);
+        Intent intent = MainPageActivity.startActivity(this, coordiantes);
         MainPageViewModel.getInstance().setSelectedTabTab(0);
         startActivity(intent);
     }
 
     public void onBackClick() {
-        Intent intent = MainPageActivity.startActivity(this, false, null);
+        Intent intent = MainPageActivity.startActivity(this, null);
         startActivity(intent);
     }
 

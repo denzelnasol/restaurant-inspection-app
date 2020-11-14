@@ -57,6 +57,11 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.11.3'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
+    // retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.9.0'
+
+
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     // LiveData
@@ -64,4 +69,6 @@ dependencies {
     // Lifecycles only (without ViewModel or LiveData)
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
     testImplementation 'junit:junit:4.13.1'
+
+    compile 'org.apache.commons:commons-csv:1.8'
 }

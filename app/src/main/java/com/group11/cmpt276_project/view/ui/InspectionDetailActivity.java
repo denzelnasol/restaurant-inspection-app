@@ -83,7 +83,7 @@ public class InspectionDetailActivity extends AppCompatActivity {
 
         InspectionReport inspectionReport = this.inspectionReportsViewModel.getByIndexAndTrackingNumbe(trackingNumber, index);
 
-        InspectionReportViewModelFactory inspectionReportViewModelFactory = new InspectionReportViewModelFactory(inspectionReport.getViolLump().length);
+        InspectionReportViewModelFactory inspectionReportViewModelFactory = new InspectionReportViewModelFactory(inspectionReport.getViolLump().size());
         this.inspectionReportDetailViewModel = new ViewModelProvider(this, inspectionReportViewModelFactory).get(InspectionReportDetailViewModel.class);
 
         this.violationList = this.getViolationList(inspectionReport.getViolLump());
@@ -104,10 +104,10 @@ public class InspectionDetailActivity extends AppCompatActivity {
         });
     }
 
-    private List<Violation> getViolationList(int[] violationIds){
+    private List<Violation> getViolationList(List<String> violationIds){
         List<Violation> violationList = new ArrayList<>();
 
-        for(int id: violationIds) {
+        for(String id: violationIds) {
             violationList.add(this.violationsViewModel.get(String.valueOf(id)));
         }
 

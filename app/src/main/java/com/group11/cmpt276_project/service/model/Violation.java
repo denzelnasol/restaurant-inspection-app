@@ -10,13 +10,47 @@ public class Violation {
     private String details;
     private String type;
 
-    public Violation() {};
+    public Violation() {
+    }
 
-    public Violation(String id, String status, String details, String type) {
+    ;
+
+    private Violation(String id, String status, String details, String type) {
         this.id = id;
         this.status = status;
         this.details = details;
         this.type = type;
+    }
+
+    public static class ViolationBuilder {
+        private String id;
+        private String status;
+        private String details;
+        private String type;
+
+        public ViolationBuilder withId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public ViolationBuilder withStatus(String status) {
+            this.status = status;
+            return this;
+        }
+
+        public ViolationBuilder withDetails(String details) {
+            this.details = details;
+            return this;
+        }
+
+        public ViolationBuilder withType(String type) {
+            this.type = type;
+            return this;
+        }
+
+        public Violation build() {
+            return new Violation(this.id, this.status, this.details, this.type);
+        }
     }
 
     public String getId() {
