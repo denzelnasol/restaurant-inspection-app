@@ -95,8 +95,6 @@ public class MapFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
-/*            setUpClusters();
-            addClusterItemsToMap();*/
 
             new AsyncTask<Void, Void, Void>() {
                 @Override
@@ -108,19 +106,20 @@ public class MapFragment extends Fragment {
 
                 @Override
                 protected Void doInBackground(Void... voids) {
-                    try {
-                        setUpClusters();
-                        addClusterItemsToMap();
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
                     return null;
                 }
 
                 @Override
                 protected void onPostExecute(Void aVoid) {
                     super.onPostExecute(aVoid);
+                    try {
+                        setUpClusters();
+                        addClusterItemsToMap();
+                        zoomToUserLocation();
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }.execute();
@@ -158,13 +157,11 @@ public class MapFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(callback);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         createLocationRequest();
-        zoomToUserLocation();
 
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             checkSettingAndStartLocationUpdates();
