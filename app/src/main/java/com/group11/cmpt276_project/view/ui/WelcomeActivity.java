@@ -11,9 +11,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.google.android.gms.maps.MapsInitializer;
 import com.group11.cmpt276_project.R;
 
 import com.group11.cmpt276_project.databinding.ActivityWelcomeBinding;
+import com.group11.cmpt276_project.service.model.ClusterItem;
 import com.group11.cmpt276_project.service.model.Violation;
 import com.group11.cmpt276_project.service.network.SurreyApiClient;
 import com.group11.cmpt276_project.service.network.endpoints.DownloadDataSetService;
@@ -25,6 +27,7 @@ import com.group11.cmpt276_project.service.repository.impl.JsonViolationReposito
 import com.group11.cmpt276_project.service.repository.impl.SharedPreferenceRepository;
 import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.utils.Utils;
+import com.group11.cmpt276_project.viewmodel.ClusterItemViewModel;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
@@ -125,6 +128,7 @@ public class WelcomeActivity extends AppCompatActivity {
         InspectionReportsViewModel.getInstance().init(jsonInspectionReportRepository);
         JsonViolationRepository jsonViolationRepository = new JsonViolationRepository(getApplicationContext());
         ViolationsViewModel.getInstance().init(jsonViolationRepository);
+        ClusterItemViewModel.getInstance().init(getApplicationContext());
     }
 
     private void bind() {

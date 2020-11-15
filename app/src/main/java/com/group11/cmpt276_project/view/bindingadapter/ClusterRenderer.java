@@ -1,4 +1,4 @@
-package com.group11.cmpt276_project.viewmodel;
+package com.group11.cmpt276_project.view.bindingadapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;

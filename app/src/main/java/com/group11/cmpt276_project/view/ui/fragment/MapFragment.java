@@ -4,10 +4,7 @@ package com.group11.cmpt276_project.view.ui.fragment;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -34,12 +31,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.ClusterManager;
@@ -47,17 +39,14 @@ import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.FragmentMapBinding;
 import com.group11.cmpt276_project.service.model.ClusterItem;
 import com.group11.cmpt276_project.service.model.GPSCoordiantes;
-import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
-import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.view.ui.MainPageActivity;
 import com.group11.cmpt276_project.view.ui.RestaurantDetailActivity;
-import com.group11.cmpt276_project.viewmodel.ClusterRenderer;
+import com.group11.cmpt276_project.viewmodel.ClusterItemViewModel;
+import com.group11.cmpt276_project.view.bindingadapter.ClusterRenderer;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 // Fragment to implement a map including user location and restaurant markers
@@ -70,6 +59,7 @@ public class MapFragment extends Fragment {
 
     private RestaurantsViewModel restaurantsViewModel;
     private InspectionReportsViewModel inspectionReportsViewModel;
+    private ClusterItemViewModel clusterItemViewModel;
 
     private GPSCoordiantes selected;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -78,8 +68,6 @@ public class MapFragment extends Fragment {
     private ClusterManager clusterManager;
     private ClusterRenderer clusterRenderer;
     private ProgressBar progressBar;
-    private HashMap<String, ClusterItem> visibleClusterItems = new HashMap<String, ClusterItem>();
-    private List<ClusterItem> listClusterItems;
 
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -95,34 +83,9 @@ public class MapFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
-
-            new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected void onPreExecute() {
-                    super.onPreExecute();
-                    progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void aVoid) {
-                    super.onPostExecute(aVoid);
-                    try {
-                        setUpClusters();
-                        addClusterItemsToMap();
-                        zoomToUserLocation();
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-            }.execute();
+            setUpClusters();
+            addClusterItemsToMap();
+            zoomToUserLocation();
         }
     };
 
@@ -152,6 +115,7 @@ public class MapFragment extends Fragment {
         this.inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
         MainPageActivity activity = (MainPageActivity) getActivity();
         this.selected = activity.getGpsCoordinates();
+        this.clusterItemViewModel = ClusterItemViewModel.getInstance();
     }
 
     @Override
@@ -250,80 +214,11 @@ public class MapFragment extends Fragment {
     }
 
     private void addClusterItemsToMap() {
-        if (this.mGoogleMap != null) {
-            LatLngBounds bounds = this.mGoogleMap.getProjection().getVisibleRegion().latLngBounds;
-            for (Map.Entry<String, Restaurant> entry : this.restaurantsViewModel.get().getValue().entrySet()) {
-                // Add marker
-                String name = entry.getValue().getName();
-                String address = entry.getValue().getPhysicalAddress();
-                String hazardRating;
-                String trackingNumber = this.restaurantsViewModel.getByTrackingNumber(entry.getValue().getTrackingNumber()).getTrackingNumber();
-                double latitude = entry.getValue().getLatitude();
-                double longitude = entry.getValue().getLongitude();
-                LatLng latLng = new LatLng(latitude, longitude);
-                MarkerOptions markerOptions;
-                BitmapDescriptor icon;
-
-                // Set hazard rating string for each marker
-                hazardRating = setHazardRating(entry);
-
-                // Set icon for each marker
-                icon = setIcon(entry);
-
-                // Add marker to cluster
-                markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(address + " - Hazardous Rating: " + hazardRating).title(name);
-                ClusterItem clusterItem = new ClusterItem(markerOptions);
-                clusterManager.addItem(clusterItem);
+            for (int i = 0; i < ClusterItemViewModel.getInstance().get().size(); i++) {
+                ClusterItem entry = ClusterItemViewModel.getInstance().get().get(i);
+                clusterManager.addItem(entry);
             }
-        }
     }
-
-    private String setHazardRating(Map.Entry<String, Restaurant> entry) {
-        String hazardRating;
-        String trackingNumber = this.restaurantsViewModel.getByTrackingNumber(entry.getValue().getTrackingNumber()).getTrackingNumber();
-        InspectionReport inspectionReport = this.inspectionReportsViewModel.getMostRecentReport(trackingNumber);
-
-        if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.MODERATE)) {
-            hazardRating = "Moderate";
-        }
-        else if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.CRITICAL)){
-            hazardRating = "Critical";
-        }
-        else {
-            hazardRating = "Low";
-        }
-
-        return hazardRating;
-    }
-
-    private BitmapDescriptor setIcon(Map.Entry<String, Restaurant> entry) {
-        BitmapDescriptor icon;
-        String trackingNumber = this.restaurantsViewModel.getByTrackingNumber(entry.getValue().getTrackingNumber()).getTrackingNumber();
-        InspectionReport inspectionReport = this.inspectionReportsViewModel.getMostRecentReport(trackingNumber);
-
-        if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.MODERATE)) {
-            icon = BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.neutral));
-        }
-        else if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.CRITICAL)){
-            icon = BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.sad));
-        }
-        else {
-            icon = BitmapDescriptorFactory.fromBitmap(changeMarker(R.drawable.happy));
-        }
-
-        return icon;
-    }
-
-    private Bitmap changeMarker(int drawable) {
-        int height = 100;
-        int width = 100;
-
-        Bitmap b = BitmapFactory.decodeResource(getResources(), drawable);
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-
-        return smallMarker;
-    }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
