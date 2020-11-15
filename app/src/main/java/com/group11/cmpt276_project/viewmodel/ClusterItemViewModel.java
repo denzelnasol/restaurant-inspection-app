@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -16,6 +16,7 @@ import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,14 +25,10 @@ public class ClusterItemViewModel {
     private RestaurantsViewModel restaurantsViewModel;
     private InspectionReportsViewModel inspectionReportsViewModel;
 
-    BitmapDescriptor happyBitMap;
-    BitmapDescriptor sadBitMap;
-    BitmapDescriptor neutralBitMap;
+    private Map<String, BitmapDescriptor> bitmapDescriptorMap;
+    private BitmapDescriptor happyBitMap;
 
     private ClusterItemViewModel() {
-        restaurantsViewModel = RestaurantsViewModel.getInstance();
-        inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
-        clusterItems = new ArrayList<>();
     }
 
     private static class ClusterItemViewModelHolder {
@@ -42,23 +39,44 @@ public class ClusterItemViewModel {
         return ClusterItemViewModelHolder.INSTANCE;
     }
 
-    //public void init(Context context, Map<String, Restaurant> restaurants, Map<String, List<InspectionReport>> inspections)
-    public void init(Context context) {
-/*        happyBitMap = BitmapDescriptorFactory.fromBitmap(setIconAndSize(R.drawable.happy, context));
-        sadBitMap = BitmapDescriptorFactory.fromBitmap(setIconAndSize(R.drawable.sad, context));
-        neutralBitMap = BitmapDescriptorFactory.fromBitmap(setIconAndSize(R.drawable.neutral, context));*/
+    public void init(Context context, RestaurantsViewModel restaurantsViewModel, InspectionReportsViewModel inspectionReportsViewModel) {
+
+        MapsInitializer.initialize(context);
+
+        if(this.clusterItems != null) {
+            return;
+        }
+
+        this.clusterItems = new ArrayList<>();
+
+        this.inspectionReportsViewModel = inspectionReportsViewModel;
+        this.restaurantsViewModel = restaurantsViewModel;
+
+        this.happyBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.happy, context));
+        BitmapDescriptor sadBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.sad, context));
+        BitmapDescriptor neutralBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.neutral, context));
+
+        this.bitmapDescriptorMap = new HashMap<String, BitmapDescriptor>(){{
+            put(Constants.HIGH, sadBitMap);
+            put(Constants.LOW, happyBitMap);
+            put(Constants.MODERATE, neutralBitMap);
+        }};
+
         for (Map.Entry<String, Restaurant> entry : this.restaurantsViewModel.get().getValue().entrySet()) {
-            String name = entry.getValue().getName();
-            String address = entry.getValue().getPhysicalAddress();
-            String hazardRating = setHazardRating(entry);
 
-            double latitude = entry.getValue().getLatitude();
-            double longitude = entry.getValue().getLongitude();
+            Restaurant restaurant = entry.getValue();
+
+            String trackingNumber = restaurant.getTrackingNumber();
+            String name = restaurant.getName();
+            String address = restaurant.getPhysicalAddress();
+            String hazardRating = getHazardRating(trackingNumber);
+
+            double latitude = restaurant.getLatitude();
+            double longitude = restaurant.getLongitude();
             LatLng latLng = new LatLng(latitude, longitude);
-            MarkerOptions markerOptions;
-            BitmapDescriptor icon = setIcon(entry);
+            BitmapDescriptor icon = getIcon(trackingNumber);
 
-            markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(address + " - Hazardous Rating: " + hazardRating).title(name);
+            MarkerOptions  markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(address + " - Hazardous Rating: " + hazardRating).title(name);
             ClusterItem clusterItem = new ClusterItem(markerOptions);
             this.clusterItems.add(clusterItem);
         }
@@ -69,47 +87,36 @@ public class ClusterItemViewModel {
         return this.clusterItems;
     }
 
-    private Bitmap setIconAndSize(int drawable, Context context) {
+    private Bitmap getBitmap(int drawable, Context context) {
         int height = 100;
         int width = 100;
 
         Bitmap b = BitmapFactory.decodeResource(context.getResources(), drawable);
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+        Bitmap bitMap = Bitmap.createScaledBitmap(b, width, height, false);
 
-        return smallMarker;
+        return bitMap;
     }
 
-    private BitmapDescriptor setIcon(Map.Entry<String, Restaurant> entry) {
-        BitmapDescriptor icon;
-        String trackingNumber = this.restaurantsViewModel.getByTrackingNumber(entry.getValue().getTrackingNumber()).getTrackingNumber();
-        InspectionReport inspectionReport = this.inspectionReportsViewModel.getMostRecentReport(trackingNumber);
+    private BitmapDescriptor getIcon(String trackingNumber) {
 
-        if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.MODERATE)) {
-            icon = neutralBitMap;
-        }
-        else if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.CRITICAL)){
-            icon = sadBitMap;
-        }
-        else {
-            icon = happyBitMap;
+        InspectionReport mostRecent = this.inspectionReportsViewModel.getMostRecentReport(trackingNumber);
+
+        String hazardRating = "";
+
+        if (mostRecent != null) {
+            hazardRating = mostRecent.getHazardRating();
         }
 
-        return icon;
+        return this.bitmapDescriptorMap.getOrDefault(hazardRating, happyBitMap);
     }
 
-    private String setHazardRating(Map.Entry<String, Restaurant> entry) {
-        String hazardRating;
-        String trackingNumber = this.restaurantsViewModel.getByTrackingNumber(entry.getValue().getTrackingNumber()).getTrackingNumber();
-        InspectionReport inspectionReport = this.inspectionReportsViewModel.getMostRecentReport(trackingNumber);
+    private String getHazardRating(String trackingNumber) {
+        String hazardRating = "";
 
-        if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.MODERATE)) {
-            hazardRating = "Moderate";
-        }
-        else if (inspectionReport != null && inspectionReportsViewModel.getReports(entry.getValue().getTrackingNumber()).get(0).getHazardRating().equals(Constants.CRITICAL)){
-            hazardRating = "Critical";
-        }
-        else {
-            hazardRating = "Low";
+        InspectionReport mostRecent =  inspectionReportsViewModel.getMostRecentReport(trackingNumber);
+
+        if (mostRecent != null) {
+            hazardRating = mostRecent.getHazardRating();
         }
 
         return hazardRating;

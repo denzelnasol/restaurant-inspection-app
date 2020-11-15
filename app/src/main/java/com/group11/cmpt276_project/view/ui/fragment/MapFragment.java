@@ -47,6 +47,7 @@ import com.group11.cmpt276_project.view.bindingadapter.ClusterRenderer;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
+import java.util.List;
 import java.util.Map;
 
 // Fragment to implement a map including user location and restaurant markers
@@ -214,10 +215,8 @@ public class MapFragment extends Fragment {
     }
 
     private void addClusterItemsToMap() {
-            for (int i = 0; i < ClusterItemViewModel.getInstance().get().size(); i++) {
-                ClusterItem entry = ClusterItemViewModel.getInstance().get().get(i);
-                clusterManager.addItem(entry);
-            }
+        List<ClusterItem> clusterItems = ClusterItemViewModel.getInstance().get();
+        this.clusterManager.addItems(clusterItems);
     }
 
     @Override

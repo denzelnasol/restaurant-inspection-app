@@ -123,12 +123,17 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void init() {
         JsonRestaurantRepository jsonRestaurantRepository = new JsonRestaurantRepository(getApplicationContext());
-        RestaurantsViewModel.getInstance().init(jsonRestaurantRepository);
+        RestaurantsViewModel restaurantsViewModel = RestaurantsViewModel.getInstance();
+        restaurantsViewModel.init(jsonRestaurantRepository);
+
         JsonInspectionReportRepository jsonInspectionReportRepository = new JsonInspectionReportRepository(getApplicationContext());
-        InspectionReportsViewModel.getInstance().init(jsonInspectionReportRepository);
+        InspectionReportsViewModel inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
+        inspectionReportsViewModel.init(jsonInspectionReportRepository);
+
         JsonViolationRepository jsonViolationRepository = new JsonViolationRepository(getApplicationContext());
         ViolationsViewModel.getInstance().init(jsonViolationRepository);
-        ClusterItemViewModel.getInstance().init(getApplicationContext());
+
+        ClusterItemViewModel.getInstance().init(getApplicationContext(), restaurantsViewModel, inspectionReportsViewModel);
     }
 
     private void bind() {
