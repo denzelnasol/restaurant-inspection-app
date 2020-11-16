@@ -13,6 +13,8 @@ public class Violation {
     public Violation() {
     }
 
+    ;
+
     private Violation(String id, String status, String details, String type) {
         this.id = id;
         this.status = status;

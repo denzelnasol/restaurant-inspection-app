@@ -8,7 +8,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class SurreyApiClient {
 
     private static class SurreyApiClientHolder {
-        private static final Retrofit INSTANCE = new Retrofit.Builder()
+        private static Retrofit INSTANCE = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();

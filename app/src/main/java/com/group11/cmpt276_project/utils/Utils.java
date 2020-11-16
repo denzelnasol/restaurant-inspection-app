@@ -31,13 +31,13 @@ Various utility functions that are useful such as loading json
  */
 public class Utils {
 
-    public static boolean isNetworkAvailable(Context context) {
+    public static boolean isNetworkAvailable(Context context){
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return connectivityManager.getActiveNetwork() != null;
     }
 
     public static boolean isConnected(Context context) {
-        if (isNetworkAvailable(context)) {
+        if(isNetworkAvailable(context)) {
             try {
                 HttpURLConnection connection = (HttpURLConnection) new URL(Constants.CONNECTION_TEST_URL).openConnection();
                 connection.setRequestProperty("User-Agent", "ConnectionTest");
@@ -68,7 +68,7 @@ public class Utils {
     public static void writeJSONToStorage(Context context, String fileName, String toWrite) throws IOException {
         File file = new File(context.getFilesDir(), fileName);
         try (FileWriter fileWriter = new FileWriter(file);
-             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);) {
             bufferedWriter.write(toWrite);
         }
     }
@@ -93,16 +93,16 @@ public class Utils {
     public static List<List<String>> readCSVFromStorage(Context context, String fileName) throws IOException {
         File file = new File(context.getFilesDir(), fileName);
 
-        try (FileReader fileReader = new FileReader(file)) {
+        try (FileReader fileReader = new FileReader(file);){
             List<List<String>> rows = new ArrayList<>();
             Iterable<CSVRecord> records = CSVFormat.DEFAULT
                     .withFirstRecordAsHeader()
                     .parse(fileReader);
 
-            for (CSVRecord record : records) {
+            for(CSVRecord record: records) {
                 List<String> row = new ArrayList<>();
 
-                for (int i = 0; i < record.size(); i++) {
+                for(int i = 0; i < record.size(); i++) {
                     row.add(record.get(i));
                 }
 
@@ -121,7 +121,7 @@ public class Utils {
     public static Map<String, Restaurant> csvToRestaurants(List<List<String>> csv) {
         Map<String, Restaurant> updatedMap = new HashMap<>();
 
-        for (List<String> row : csv) {
+        for(List<String> row : csv) {
             Restaurant restaurant = new Restaurant.RestaurantBuilder()
                     .withTrackingNumber(row.get(0))
                     .withName(row.get(1))
@@ -142,10 +142,10 @@ public class Utils {
         Map<String, Violation> newViolations = new HashMap<>();
         Map<String, List<InspectionReport>> newInspections = new HashMap<>();
 
-        for (List<String> row : csv) {
+        for(List<String> row : csv) {
             String trackingNumber = row.get(0);
 
-            if (trackingNumber == null | trackingNumber.isEmpty()) {
+            if(trackingNumber == null | trackingNumber.isEmpty()) {
                 continue;
             }
 
@@ -153,10 +153,10 @@ public class Utils {
 
             List<String> violations = new ArrayList<>();
 
-            for (String viol : violLump) {
+            for(String viol : violLump) {
                 String[] split = viol.split(",");
 
-                if (split.length < 4) {
+                if(split.length < 4) {
                     continue;
                 }
 
@@ -187,7 +187,7 @@ public class Utils {
             newInspections.computeIfAbsent(trackingNumber, (k) -> new ArrayList<>()).add(inspectionReport);
         }
 
-        for (Map.Entry<String, List<InspectionReport>> entry : newInspections.entrySet()) {
+        for(Map.Entry<String, List<InspectionReport>> entry : newInspections.entrySet()) {
             Collections.sort(entry.getValue(), (InspectionReport A, InspectionReport B) -> Integer.parseInt(B.getInspectionDate()) - Integer.parseInt(A.getInspectionDate()));
         }
 

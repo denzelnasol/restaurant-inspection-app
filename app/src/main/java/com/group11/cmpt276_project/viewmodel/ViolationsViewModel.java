@@ -20,7 +20,7 @@ public class ViolationsViewModel {
     }
 
     private static class ViolationsViewModelHolder {
-        private static final ViolationsViewModel INSTANCE = new ViolationsViewModel();
+        private static ViolationsViewModel INSTANCE = new ViolationsViewModel();
     }
 
     public static ViolationsViewModel getInstance() {
@@ -39,7 +39,7 @@ public class ViolationsViewModel {
         }
     }
 
-    public void add(Map<String, Violation> newViolations) {
+    public void add(Map<String, Violation> newViolations){
         violations.putAll(newViolations);
     }
 

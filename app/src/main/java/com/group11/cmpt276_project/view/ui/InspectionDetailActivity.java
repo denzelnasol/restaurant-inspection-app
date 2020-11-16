@@ -104,10 +104,10 @@ public class InspectionDetailActivity extends AppCompatActivity {
         });
     }
 
-    private List<Violation> getViolationList(List<String> violationIds) {
+    private List<Violation> getViolationList(List<String> violationIds){
         List<Violation> violationList = new ArrayList<>();
 
-        for (String id : violationIds) {
+        for(String id: violationIds) {
             violationList.add(this.violationsViewModel.get(String.valueOf(id)));
         }
 

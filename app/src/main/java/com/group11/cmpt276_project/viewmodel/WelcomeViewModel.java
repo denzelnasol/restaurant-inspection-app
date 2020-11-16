@@ -102,7 +102,7 @@ public class WelcomeViewModel extends ViewModel {
 
         this.mUpdateDone = new MediatorLiveData<>();
         this.mUpdateDone.addSource(this.mDownloadDone, (data) -> {
-            if (data) {
+            if(data) {
                 this.finalizeUpdate();
             }
         });
@@ -298,9 +298,7 @@ public class WelcomeViewModel extends ViewModel {
         }
     }
 
-    public LiveData<Boolean> getHasInternetConnection() {
-        return this.mHasInternetConnection;
-    }
+    public LiveData<Boolean> getHasInternetConnection() { return this.mHasInternetConnection; }
 
     public MediatorLiveData<Boolean> getShouldUpdate() {
         return this.mShouldUpdate;
@@ -438,7 +436,7 @@ public class WelcomeViewModel extends ViewModel {
         try (InputStream inputStream = body.byteStream();
              OutputStream outputStream = new FileOutputStream(destinationFile)) {
 
-            byte[] data = new byte[4096];
+            byte data[] = new byte[4096];
             int bytesRead;
             int progress = 0;
             long fileSize = body.contentLength() == -1 ? this.contentRangeFileSize : body.contentLength();
