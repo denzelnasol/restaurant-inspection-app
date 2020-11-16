@@ -59,6 +59,7 @@ import static android.content.ContentValues.TAG;
 public class MapFragment extends Fragment {
 
     private static final float DEFAULT_ZOOM = 12f;
+    private static final int LOCATION_PERMISSION_CODE = 100;
 
     private FragmentMapBinding binding;
     private SupportMapFragment mapFragment;
@@ -73,7 +74,6 @@ public class MapFragment extends Fragment {
     private GoogleMap mGoogleMap;
     private ClusterManager clusterManager;
     private ClusterRenderer clusterRenderer;
-    private ProgressBar progressBar;
 
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -91,7 +91,7 @@ public class MapFragment extends Fragment {
             mGoogleMap = googleMap;
             setUpClusters();
             addClusterItemsToMap();
-            if(selected!=null)
+            if(selected != null)
                 zoomToCoordinates();
             else
                 zoomToUserLocation();
@@ -139,7 +139,7 @@ public class MapFragment extends Fragment {
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             checkSettingAndStartLocationUpdates();
         } else {
-            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
         }
     }
 
@@ -152,8 +152,8 @@ public class MapFragment extends Fragment {
 
     private void createLocationRequest() {
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(20000);
-        locationRequest.setFastestInterval(15000);
+        locationRequest.setInterval(2000);
+        locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
@@ -182,17 +182,18 @@ public class MapFragment extends Fragment {
         String trackingNumber = selected.getTrackingNumber();
         ClusterItem item = this.clusterItemViewModel.get().get(trackingNumber);
         Marker marker = this.clusterRenderer.getMarker(item);
-        if(marker!=null)
+        if (marker != null) {
             marker.showInfoWindow();
+        }
     }
     private void zoomToUserLocation() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
             return;
         }
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
-
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
@@ -238,7 +239,7 @@ public class MapFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 1) {
+        if (requestCode == LOCATION_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 checkSettingAndStartLocationUpdates();
             }
