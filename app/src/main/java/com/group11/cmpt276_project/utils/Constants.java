@@ -16,6 +16,12 @@ public class Constants {
     public static final String TRACKING_NUMBER = "trackingNumber";
     public static final String INDEX = "index";
     public static final String PARENT = "parent";
+    public static final String LAST_UPDATE_INSPECTION = "lastUpdateInspection";
+    public static final String LAST_UPDATE_RESTAURANT = "lastUpdateRestaurant";
+    public static final String LAST_UPDATE = "lastUpdate";
+    public static final String BASE_URL = "https://data.surrey.ca/";
+    public static final String SHARE_PREFERENCES_URL = "restaurantInspectionPreferences";
+    public static final String CONNECTION_TEST_URL = "https://www.google.com";
     public static final String SEVEN_ELEVEN = "7-Eleven";
     public static final String AW = "A&W";
     public static final String BOOSTER_JUICE = "Booster Juice";
@@ -35,5 +41,4 @@ public class Constants {
     public static final String TIM_HORTONS = "Tim Hortons";
     public static final String WALMART = "Wal-mart";
     public static final String WENDYS = "Wendy's";
-
 }

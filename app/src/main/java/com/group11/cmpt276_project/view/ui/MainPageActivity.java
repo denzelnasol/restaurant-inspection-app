@@ -1,12 +1,12 @@
 package com.group11.cmpt276_project.view.ui;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -33,12 +33,10 @@ public class MainPageActivity extends FragmentActivity {
     private MainPageViewModel mainPageViewModel;
     private ActivityMainPageBinding binding;
 
-    private boolean shouldUpdate;
     private GPSCoordiantes gpsCoordinates;
 
-    public static Intent startActivity(Context context, boolean shouldUpdate, GPSCoordiantes gpsCoordiantes) {
+    public static Intent startActivity(Context context, GPSCoordiantes gpsCoordiantes) {
         Intent intent = new Intent(context, MainPageActivity.class);
-        intent.putExtra(SHOULD_UPDATE, shouldUpdate);
         intent.putExtra(GPS_COORDINATES, gpsCoordiantes);
         return intent;
     }
@@ -71,7 +69,6 @@ public class MainPageActivity extends FragmentActivity {
 
         Intent intent = getIntent();
 
-        this.shouldUpdate = intent.getBooleanExtra(SHOULD_UPDATE, false);
         this.gpsCoordinates = intent.getParcelableExtra(GPS_COORDINATES);
     }
 
