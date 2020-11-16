@@ -89,6 +89,7 @@ public class MapFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
+            enableUserLocation();
             setUpClusters();
             addClusterItemsToMap();
             if(selected != null)
@@ -199,13 +200,6 @@ public class MapFragment extends Fragment {
             public void onSuccess(Location location) {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
-
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                        PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                mGoogleMap.setMyLocationEnabled(true);
             }
         });
     }
@@ -235,6 +229,10 @@ public class MapFragment extends Fragment {
     private void addClusterItemsToMap() {
         List<ClusterItem> clusterItems = new ArrayList<>(this.clusterItemViewModel.get().values());
         this.clusterManager.addItems(clusterItems);
+    }
+
+    public void enableUserLocation() {
+        mGoogleMap.setMyLocationEnabled(true);
     }
 
     @Override
