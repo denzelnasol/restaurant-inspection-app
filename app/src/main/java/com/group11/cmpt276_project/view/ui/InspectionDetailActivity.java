@@ -65,8 +65,7 @@ public class InspectionDetailActivity extends AppCompatActivity {
     }
 
     public void onBackClicked() {
-        Intent intent = RestaurantDetailActivity.startActivity(this, this.parent);
-        startActivity(intent);
+       finish();
     }
 
     private void bind() {

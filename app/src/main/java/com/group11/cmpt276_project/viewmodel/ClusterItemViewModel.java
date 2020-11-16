@@ -27,6 +27,9 @@ public class ClusterItemViewModel {
 
     private Map<String, BitmapDescriptor> bitmapDescriptorMap;
     private BitmapDescriptor happyBitMap;
+    private BitmapDescriptor sadBitMap;
+    private BitmapDescriptor neutralBitMap;
+
 
     private ClusterItemViewModel() {
     }
@@ -53,8 +56,8 @@ public class ClusterItemViewModel {
         this.restaurantsViewModel = restaurantsViewModel;
 
         this.happyBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.happy, context));
-        BitmapDescriptor sadBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.sad, context));
-        BitmapDescriptor neutralBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.neutral, context));
+        this.sadBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.sad, context));
+        this.neutralBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.neutral, context));
 
         this.bitmapDescriptorMap = new HashMap<String, BitmapDescriptor>(){{
             put(Constants.HIGH, sadBitMap);
@@ -76,7 +79,7 @@ public class ClusterItemViewModel {
             LatLng latLng = new LatLng(latitude, longitude);
             BitmapDescriptor icon = getIcon(trackingNumber);
 
-            MarkerOptions  markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(address + " - Hazardous Rating: " + hazardRating).title(name);
+            MarkerOptions  markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(context.getString(R.string.hazard_text, address, hazardRating)).title(name);
             ClusterItem clusterItem = new ClusterItem(markerOptions);
             this.clusterItems.put(trackingNumber, clusterItem);
         }
