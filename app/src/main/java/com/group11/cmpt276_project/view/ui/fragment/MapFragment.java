@@ -47,6 +47,7 @@ import com.group11.cmpt276_project.view.bindingadapter.ClusterRenderer;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -215,7 +216,7 @@ public class MapFragment extends Fragment {
     }
 
     private void addClusterItemsToMap() {
-        List<ClusterItem> clusterItems = ClusterItemViewModel.getInstance().get();
+        List<ClusterItem> clusterItems = new ArrayList<>(this.clusterItemViewModel.get().values());
         this.clusterManager.addItems(clusterItems);
     }
 

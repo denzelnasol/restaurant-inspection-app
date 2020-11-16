@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ClusterItemViewModel {
-    private List<ClusterItem> clusterItems;
+    private Map<String, ClusterItem> clusterItems;
     private RestaurantsViewModel restaurantsViewModel;
     private InspectionReportsViewModel inspectionReportsViewModel;
 
@@ -47,7 +47,7 @@ public class ClusterItemViewModel {
             return;
         }
 
-        this.clusterItems = new ArrayList<>();
+        this.clusterItems = new HashMap<>();
 
         this.inspectionReportsViewModel = inspectionReportsViewModel;
         this.restaurantsViewModel = restaurantsViewModel;
@@ -78,12 +78,12 @@ public class ClusterItemViewModel {
 
             MarkerOptions  markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(address + " - Hazardous Rating: " + hazardRating).title(name);
             ClusterItem clusterItem = new ClusterItem(markerOptions);
-            this.clusterItems.add(clusterItem);
+            this.clusterItems.put(trackingNumber, clusterItem);
         }
 
     }
 
-    public List<ClusterItem> get() {
+    public Map<String, ClusterItem> get() {
         return this.clusterItems;
     }
 
