@@ -29,7 +29,6 @@ public class ClusterRenderer extends DefaultClusterRenderer<ClusterItem> {
             markerOptions.icon(clusterItem.getIcon());
             markerOptions.snippet(clusterItem.getSnippet());
             markerOptions.title(clusterItem.getTitle());
-
         }
         markerOptions.visible(true);
     }
