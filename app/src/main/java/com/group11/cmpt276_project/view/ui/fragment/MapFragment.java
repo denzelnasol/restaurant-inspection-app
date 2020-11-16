@@ -89,7 +89,10 @@ public class MapFragment extends Fragment {
             mGoogleMap = googleMap;
             setUpClusters();
             addClusterItemsToMap();
-            zoomToUserLocation();
+            if(selected!=null)
+                zoomToCoordinates();
+            else
+                zoomToUserLocation();
         }
     };
 
@@ -171,6 +174,10 @@ public class MapFragment extends Fragment {
         });
     }
 
+    private void zoomToCoordinates(){
+        LatLng latLng = new LatLng((selected.getLatitude()),selected.getLongitude());
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20f));
+    }
     private void zoomToUserLocation() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED &&
@@ -183,13 +190,7 @@ public class MapFragment extends Fragment {
             @Override
             public void onSuccess(Location location) {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                if(selected!=null) {
-                    latLng = new LatLng((selected.getLatitude()),selected.getLongitude());
-                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20f));
-                   
-                }
-                else
-                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
 
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                         PackageManager.PERMISSION_GRANTED &&
