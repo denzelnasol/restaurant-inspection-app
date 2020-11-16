@@ -33,6 +33,7 @@
             android:id="@+id/restaurant_icon"
             android:layout_width="0dp"
             android:layout_height="159dp"
+            android:layout_marginTop="16dp"
             android:contentDescription="@string/res_png"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -44,12 +45,12 @@
             android:id="@+id/res_detail_recycler"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:background="@color/grey_300"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@id/res_detail_coordinates" />
 
         <TextView
             android:id="@+id/res_detail_name"
@@ -65,10 +66,11 @@
 
         <TextView
             android:id="@+id/res_detail_address"
-            android:text="@{String.format(@string/address, restaurant.physicalAddress, restaurant.physicalCity)}"
             android:layout_width="296dp"
             android:layout_height="23dp"
             android:layout_marginTop="4dp"
+            app:fontFamily="sans-serif-light"
+            android:text="@{String.format(@string/address, restaurant.physicalAddress, restaurant.physicalCity)}"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/res_detail_name"
             app:layout_constraintStart_toStartOf="@+id/res_detail_name"
@@ -85,21 +87,6 @@
             app:layout_constraintEnd_toEndOf="@+id/res_detail_address"
             app:layout_constraintStart_toStartOf="@+id/res_detail_address"
             app:layout_constraintTop_toBottomOf="@+id/res_detail_address" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="sans-serif-black"
-            android:text="@string/inspections"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/res_detail_coordinates" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -136,13 +123,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/ac_res_datil_title"
+                android:id="@+id/ac_res_detail_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="sans-serif-medium"
                 android:text="@string/inspections"
                 android:textSize="18sp"
+                app:fontFamily="sans-serif-light"
                 app:layout_constraintBottom_toBottomOf="@+id/toolbar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
