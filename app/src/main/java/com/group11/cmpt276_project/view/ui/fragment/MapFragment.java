@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,8 @@ import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
 import java.util.List;
 import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 // Fragment to implement a map including user location and restaurant markers
 public class MapFragment extends Fragment {
@@ -86,7 +89,10 @@ public class MapFragment extends Fragment {
             mGoogleMap = googleMap;
             setUpClusters();
             addClusterItemsToMap();
-            zoomToUserLocation();
+            if(selected!=null)
+                zoomToCoordinates();
+            else
+                zoomToUserLocation();
         }
     };
 
@@ -168,6 +174,10 @@ public class MapFragment extends Fragment {
         });
     }
 
+    private void zoomToCoordinates(){
+        LatLng latLng = new LatLng((selected.getLatitude()),selected.getLongitude());
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20f));
+    }
     private void zoomToUserLocation() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED &&
