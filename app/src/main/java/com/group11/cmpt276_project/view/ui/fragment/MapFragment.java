@@ -33,6 +33,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.ClusterManager;
@@ -178,6 +179,11 @@ public class MapFragment extends Fragment {
     private void zoomToCoordinates(){
         LatLng latLng = new LatLng((selected.getLatitude()),selected.getLongitude());
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20f));
+        String trackingNumber = selected.getTrackingNumber();
+        ClusterItem item = this.clusterItemViewModel.get().get(trackingNumber);
+        Marker marker = this.clusterRenderer.getMarker(item);
+        if(marker!=null)
+            marker.showInfoWindow();
     }
     private void zoomToUserLocation() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
