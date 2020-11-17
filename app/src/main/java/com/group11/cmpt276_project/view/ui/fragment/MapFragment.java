@@ -54,7 +54,7 @@ import java.util.List;
 import java.util.Map;
 
 // Fragment to implement a map including user location and restaurant markers
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private static final float DEFAULT_ZOOM = 12f;
     private static final int LOCATION_PERMISSION_CODE = 100;
@@ -72,8 +72,8 @@ public class MapFragment extends Fragment {
     private GoogleMap mGoogleMap;
     private ClusterManager clusterManager;
     private ClusterRenderer clusterRenderer;
+    private Location currentLocation;
 
-    private final OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
          * Manipulates the map once available.
          * This callback is triggered when the map is ready to be used.
@@ -87,6 +87,8 @@ public class MapFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
+            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
             enableUserLocation();
             setUpClusters();
             addClusterItemsToMap();
@@ -96,7 +98,6 @@ public class MapFragment extends Fragment {
                 zoomToUserLocation();
             }
         }
-    };
 
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
@@ -130,16 +131,31 @@ public class MapFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(callback);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        fetchLastLocation();
         createLocationRequest();
 
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             checkSettingAndStartLocationUpdates();
         } else {
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+        }
+    }
+
+    private void fetchLastLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Task<Location> task = fusedLocationProviderClient.getLastLocation();
+            task.addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        currentLocation = location;
+                        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+                        mapFragment.getMapAsync(MapFragment.this::onMapReady);
+                    }
+                }
+            });
         }
     }
 
@@ -182,8 +198,7 @@ public class MapFragment extends Fragment {
     }
 
     private void zoomToUserLocation() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED &&
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
             return;
@@ -235,10 +250,12 @@ public class MapFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == LOCATION_PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                checkSettingAndStartLocationUpdates();
-            }
+        switch (requestCode) {
+            case LOCATION_PERMISSION_CODE:
+                if  (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    fetchLastLocation();
+                }
+                break;
         }
     }
 }
