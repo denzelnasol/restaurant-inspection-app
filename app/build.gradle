@@ -38,6 +38,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.1.0'
+    implementation 'com.google.maps.android:android-maps-utils:2.1.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     def lottieVersion = "3.4.4"
 
@@ -56,6 +59,11 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.11.3'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
+    // retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.9.0'
+
+
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     // LiveData
@@ -63,4 +71,6 @@ dependencies {
     // Lifecycles only (without ViewModel or LiveData)
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
     testImplementation 'junit:junit:4.13.1'
+
+    compile 'org.apache.commons:commons-csv:1.8'
 }

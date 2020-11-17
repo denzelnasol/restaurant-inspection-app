@@ -2,13 +2,9 @@ package com.group11.cmpt276_project.view.ui.fragment;
 
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,10 +14,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -36,34 +32,47 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.clustering.ClusterManager;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.FragmentMapBinding;
+import com.group11.cmpt276_project.service.model.ClusterItem;
 import com.group11.cmpt276_project.service.model.GPSCoordiantes;
+import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.view.ui.MainPageActivity;
+import com.group11.cmpt276_project.view.ui.RestaurantDetailActivity;
+import com.group11.cmpt276_project.viewmodel.ClusterItemViewModel;
+import com.group11.cmpt276_project.view.adapter.ClusterRenderer;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
-public class MapFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-    private static final float DEFAULT_ZOOM = 15f;
+// Fragment to implement a map including user location and restaurant markers
+public class MapFragment extends Fragment implements OnMapReadyCallback {
+
+    private static final float DEFAULT_ZOOM = 12f;
+    private static final int LOCATION_PERMISSION_CODE = 100;
 
     private FragmentMapBinding binding;
     private SupportMapFragment mapFragment;
 
     private RestaurantsViewModel restaurantsViewModel;
     private InspectionReportsViewModel inspectionReportsViewModel;
+    private ClusterItemViewModel clusterItemViewModel;
 
     private GPSCoordiantes selected;
-
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationRequest locationRequest;
     private GoogleMap mGoogleMap;
-
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+    private ClusterManager clusterManager;
+    private ClusterRenderer clusterRenderer;
+    private Location currentLocation;
 
         /**
          * Manipulates the map once available.
@@ -78,22 +87,22 @@ public class MapFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
-
+            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            enableUserLocation();
+            setUpClusters();
+            addClusterItemsToMap();
+            if (selected != null) {
+                zoomToCoordinates();
+            } else {
+                zoomToUserLocation();
+            }
         }
-    };
 
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
-
-            if (locationResult == null) {
-                return;
-            }
-            for (Location location : locationResult.getLocations()) {
-                zoomToUserLocation();
-                Log.d("TEST", "onLocationResult: " + location.toString());
-            }
         }
     };
 
@@ -115,23 +124,38 @@ public class MapFragment extends Fragment {
         this.restaurantsViewModel = RestaurantsViewModel.getInstance();
         this.inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
         MainPageActivity activity = (MainPageActivity) getActivity();
-        this.selected = activity.getGpsCoordiantes();
+        this.selected = activity.getGpsCoordinates();
+        this.clusterItemViewModel = ClusterItemViewModel.getInstance();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(callback);
-
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        fetchLastLocation();
         createLocationRequest();
 
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             checkSettingAndStartLocationUpdates();
         } else {
-            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+        }
+    }
+
+    private void fetchLastLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Task<Location> task = fusedLocationProviderClient.getLastLocation();
+            task.addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        currentLocation = location;
+                        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+                        mapFragment.getMapAsync(MapFragment.this::onMapReady);
+                    }
+                }
+            });
         }
     }
 
@@ -144,8 +168,8 @@ public class MapFragment extends Fragment {
 
     private void createLocationRequest() {
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(4000);
-        locationRequest.setFastestInterval(2000);
+        locationRequest.setInterval(2000);
+        locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
@@ -158,29 +182,80 @@ public class MapFragment extends Fragment {
             @Override
             public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
                 // Starts location updates
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
                 fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
             }
         });
     }
 
+    private void zoomToCoordinates() {
+        LatLng latLng = new LatLng((selected.getLatitude()), selected.getLongitude());
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20f));
+    }
+
     private void zoomToUserLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+            return;
+        }
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
-                mGoogleMap.setMyLocationEnabled(true);
             }
         });
     }
 
+    private void setUpClusters() {
+        clusterManager = new ClusterManager<>(this.getContext(), mGoogleMap);
+
+        LatLng selectedCoord = null;
+
+        if (selected != null) {
+            selectedCoord = new LatLng(this.selected.getLatitude(), this.selected.getLongitude());
+        }
+
+        clusterRenderer = new ClusterRenderer(this.getActivity(), mGoogleMap, clusterManager, selectedCoord);
+
+        mGoogleMap.setOnCameraIdleListener(clusterManager);
+        mGoogleMap.setOnMarkerClickListener(clusterManager);
+
+        // Change Activity on info window click
+        clusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<ClusterItem>() {
+            @Override
+            public void onClusterItemInfoWindowClick(ClusterItem item) {
+                Restaurant restaurant = clusterItemViewModel.getRestaurantFromCoords(item.getPosition());
+                Intent intent = RestaurantDetailActivity.startActivity(getActivity(), restaurant.getTrackingNumber());
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void addClusterItemsToMap() {
+        List<ClusterItem> clusterItems = new ArrayList<>(this.clusterItemViewModel.get().values());
+        this.clusterManager.addItems(clusterItems);
+        this.clusterManager.cluster();
+    }
+
+    public void enableUserLocation() {
+        mGoogleMap.setMyLocationEnabled(true);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 1) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                checkSettingAndStartLocationUpdates();
-            }
+        switch (requestCode) {
+            case LOCATION_PERMISSION_CODE:
+                if  (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    fetchLastLocation();
+                }
+                break;
         }
     }
 }

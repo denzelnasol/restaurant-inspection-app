@@ -22,10 +22,10 @@ import java.util.Map;
  **/
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>{
 
-    private Map<String,Restaurant> restaurants;
-    private List<String> trackingNumbers;
-    private  Map<String, InspectionReport> inspectionReports;
-    private IItemOnClickTrackingNumber onRestaurantItemClick;
+    private final Map<String,Restaurant> restaurants;
+    private final List<String> trackingNumbers;
+    private final Map<String, InspectionReport> inspectionReports;
+    private final IItemOnClickTrackingNumber onRestaurantItemClick;
 
     public RestaurantAdapter(Map<String,Restaurant> restaurants, Map<String, InspectionReport> inspectionReports, IItemOnClickTrackingNumber onRestaurantItemClick) {
         this.restaurants = restaurants;
@@ -35,7 +35,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
             Restaurant aRestaurant = restaurants.get(a);
             Restaurant bRestaurant = restaurants.get(b);
 
-            return aRestaurant.getName().compareTo(bRestaurant.getName());
+            return aRestaurant.getName().toLowerCase().compareTo(bRestaurant.getName().toLowerCase());
         });
 
         this.inspectionReports = inspectionReports;
@@ -69,7 +69,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
 
     class RestaurantViewHolder extends RecyclerView.ViewHolder {
 
-        private RestaurantItemBinding binding;
+        private final RestaurantItemBinding binding;
 
         public RestaurantViewHolder(RestaurantItemBinding binding, IItemOnClickTrackingNumber onRestaurantItemClick) {
             super(binding.getRoot());

@@ -17,8 +17,7 @@ import com.group11.cmpt276_project.service.model.Violation;
 import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.view.adapter.ViolationAdapter;
 import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickIndex;
-import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickTrackingNumber;
-import com.group11.cmpt276_project.viewmodel.InspectionReportViewModel;
+import com.group11.cmpt276_project.viewmodel.InspectionReportDetailViewModel;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
@@ -48,7 +47,7 @@ public class InspectionDetailActivity extends AppCompatActivity {
     private ViolationsViewModel violationsViewModel;
     private InspectionReportsViewModel inspectionReportsViewModel;
     private RestaurantsViewModel restaurantsViewModel;
-    private InspectionReportViewModel inspectionReportViewModel;
+    private InspectionReportDetailViewModel inspectionReportDetailViewModel;
 
     private  List<Violation> violationList;
     private RecyclerView recyclerView;
@@ -66,8 +65,7 @@ public class InspectionDetailActivity extends AppCompatActivity {
     }
 
     public void onBackClicked() {
-        Intent intent = RestaurantDetailActivity.startActivity(this, this.parent);
-        startActivity(intent);
+       finish();
     }
 
     private void bind() {
@@ -84,8 +82,8 @@ public class InspectionDetailActivity extends AppCompatActivity {
 
         InspectionReport inspectionReport = this.inspectionReportsViewModel.getByIndexAndTrackingNumbe(trackingNumber, index);
 
-        InspectionReportViewModelFactory inspectionReportViewModelFactory = new InspectionReportViewModelFactory(inspectionReport.getViolLump().length);
-        this.inspectionReportViewModel = new ViewModelProvider(this, inspectionReportViewModelFactory).get(InspectionReportViewModel.class);
+        InspectionReportViewModelFactory inspectionReportViewModelFactory = new InspectionReportViewModelFactory(inspectionReport.getViolLump().size());
+        this.inspectionReportDetailViewModel = new ViewModelProvider(this, inspectionReportViewModelFactory).get(InspectionReportDetailViewModel.class);
 
         this.violationList = this.getViolationList(inspectionReport.getViolLump());
 
@@ -98,17 +96,17 @@ public class InspectionDetailActivity extends AppCompatActivity {
 
     private void observeVisibility() {
 
-        this.inspectionReportViewModel.getIsVisibleData().observe(this, (data) -> {
+        this.inspectionReportDetailViewModel.getIsVisibleData().observe(this, (data) -> {
             ViolationAdapter violationAdapter = new ViolationAdapter(violationList, data, new ViolationItemOnClickTrackingNumber());
             this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
             this.recyclerView.setAdapter(violationAdapter);
         });
     }
 
-    private List<Violation> getViolationList(int[] violationIds){
+    private List<Violation> getViolationList(List<String> violationIds){
         List<Violation> violationList = new ArrayList<>();
 
-        for(int id: violationIds) {
+        for(String id: violationIds) {
             violationList.add(this.violationsViewModel.get(String.valueOf(id)));
         }
 
@@ -119,7 +117,7 @@ public class InspectionDetailActivity extends AppCompatActivity {
 
         @Override
         public void onItemClick(int position) {
-            inspectionReportViewModel.setIsVisible(position);
+            inspectionReportDetailViewModel.setIsVisible(position);
         }
     }
 }

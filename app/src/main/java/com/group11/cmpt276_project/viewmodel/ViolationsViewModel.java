@@ -1,9 +1,10 @@
 package com.group11.cmpt276_project.viewmodel;
 
+import com.group11.cmpt276_project.exception.RepositoryReadError;
+import com.group11.cmpt276_project.exception.RepositoryWriteError;
 import com.group11.cmpt276_project.service.model.Violation;
-import com.group11.cmpt276_project.service.repository.ViolationRepository;
+import com.group11.cmpt276_project.service.repository.IViolationRepository;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,9 +14,10 @@ import java.util.Map;
  */
 public class ViolationsViewModel {
     private Map<String, Violation> violations;
-    private ViolationRepository violationRepository;
+    private IViolationRepository violationRepository;
 
-    private ViolationsViewModel() {}
+    private ViolationsViewModel() {
+    }
 
     private static class ViolationsViewModelHolder {
         private static ViolationsViewModel INSTANCE = new ViolationsViewModel();
@@ -25,20 +27,31 @@ public class ViolationsViewModel {
         return ViolationsViewModelHolder.INSTANCE;
     }
 
-    public void init(ViolationRepository violationRepository) {
+    public void init(IViolationRepository jsonViolationRepository) {
         if (this.violationRepository == null) {
-            this.violationRepository = violationRepository;
+            this.violationRepository = jsonViolationRepository;
 
             try {
-                this.violations = this.violationRepository.getFromAssets();
-            }
-            catch (IOException e) {
+                this.violations = this.violationRepository.getViolations();
+            } catch (RepositoryReadError e) {
                 this.violations = new HashMap<>();
             }
         }
     }
 
+    public void add(Map<String, Violation> newViolations){
+        violations.putAll(newViolations);
+    }
+
     public Violation get(String id) {
-        return violations.get(id);
+        return violations.getOrDefault(id, new Violation());
+    }
+
+    public void save() {
+        try {
+            this.violationRepository.saveViolations(this.violations);
+        } catch (RepositoryWriteError repositoryWriteError) {
+            repositoryWriteError.printStackTrace();
+        }
     }
 }

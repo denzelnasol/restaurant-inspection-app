@@ -1,14 +1,14 @@
 package com.group11.cmpt276_project.view.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -18,7 +18,10 @@ import com.group11.cmpt276_project.service.model.GPSCoordiantes;
 import com.group11.cmpt276_project.view.adapter.TabAdapter;
 import com.group11.cmpt276_project.view.ui.fragment.MapFragment;
 import com.group11.cmpt276_project.view.ui.fragment.RestaurantListFragment;
+import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
+import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
+import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
 
 public class MainPageActivity extends FragmentActivity {
 
@@ -32,12 +35,10 @@ public class MainPageActivity extends FragmentActivity {
     private MainPageViewModel mainPageViewModel;
     private ActivityMainPageBinding binding;
 
-    private boolean shouldUpdate;
-    private GPSCoordiantes gpsCoordiantes;
+    private GPSCoordiantes gpsCoordinates;
 
-    public static Intent startActivity(Context context, boolean shouldUpdate, GPSCoordiantes gpsCoordiantes) {
+    public static Intent startActivity(Context context, GPSCoordiantes gpsCoordiantes) {
         Intent intent = new Intent(context, MainPageActivity.class);
-        intent.putExtra(SHOULD_UPDATE, shouldUpdate);
         intent.putExtra(GPS_COORDINATES, gpsCoordiantes);
         return intent;
     }
@@ -45,20 +46,22 @@ public class MainPageActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        RestaurantsViewModel.getInstance().save();
+        InspectionReportsViewModel.getInstance().save();
+        ViolationsViewModel.getInstance().save();
         this.finishAffinity();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_page);
         this.bind();
         this.setUpViewPager();
         this.setUpTabs();
     }
 
-    public GPSCoordiantes getGpsCoordiantes() {
-        return this.gpsCoordiantes;
+    public GPSCoordiantes getGpsCoordinates() {
+        return this.gpsCoordinates;
     }
 
     private void bind() {
@@ -67,8 +70,7 @@ public class MainPageActivity extends FragmentActivity {
 
         Intent intent = getIntent();
 
-        this.shouldUpdate = intent.getBooleanExtra(SHOULD_UPDATE, false);
-        this.gpsCoordiantes = intent.getParcelableExtra(GPS_COORDINATES);
+        this.gpsCoordinates = intent.getParcelableExtra(GPS_COORDINATES);
     }
 
     private void setUpViewPager() {
