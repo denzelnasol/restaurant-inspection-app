@@ -57,6 +57,7 @@ import java.util.Map;
 public class MapFragment extends Fragment {
 
     private static final float DEFAULT_ZOOM = 12f;
+    private static final int LOCATION_PERMISSION_CODE = 100;
 
     private FragmentMapBinding binding;
     private SupportMapFragment mapFragment;
@@ -71,7 +72,6 @@ public class MapFragment extends Fragment {
     private GoogleMap mGoogleMap;
     private ClusterManager clusterManager;
     private ClusterRenderer clusterRenderer;
-    private ProgressBar progressBar;
 
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
@@ -87,13 +87,12 @@ public class MapFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
-
+            enableUserLocation();
             setUpClusters();
             addClusterItemsToMap();
-            if(selected!=null) {
+            if (selected != null) {
                 zoomToCoordinates();
-            }
-            else {
+            } else {
                 zoomToUserLocation();
             }
         }
@@ -140,7 +139,7 @@ public class MapFragment extends Fragment {
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             checkSettingAndStartLocationUpdates();
         } else {
-            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
         }
     }
 
@@ -153,8 +152,8 @@ public class MapFragment extends Fragment {
 
     private void createLocationRequest() {
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(20000);
-        locationRequest.setFastestInterval(15000);
+        locationRequest.setInterval(2000);
+        locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
@@ -177,34 +176,24 @@ public class MapFragment extends Fragment {
         });
     }
 
-    private void zoomToCoordinates(){
-        LatLng latLng = new LatLng((selected.getLatitude()),selected.getLongitude());
+    private void zoomToCoordinates() {
+        LatLng latLng = new LatLng((selected.getLatitude()), selected.getLongitude());
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20f));
-
-        //String trackingNumber = selected.getTrackingNumber();
-        //ClusterItem item = this.clusterItemViewModel.get().get(trackingNumber);
-
     }
+
     private void zoomToUserLocation() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
             return;
         }
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
-
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
-
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                        PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                mGoogleMap.setMyLocationEnabled(true);
             }
         });
     }
@@ -214,7 +203,7 @@ public class MapFragment extends Fragment {
 
         LatLng selectedCoord = null;
 
-        if(selected != null) {
+        if (selected != null) {
             selectedCoord = new LatLng(this.selected.getLatitude(), this.selected.getLongitude());
         }
 
@@ -228,7 +217,7 @@ public class MapFragment extends Fragment {
             @Override
             public void onClusterItemInfoWindowClick(ClusterItem item) {
                 Restaurant restaurant = clusterItemViewModel.getRestaurantFromCoords(item.getPosition());
-                Intent intent = RestaurantDetailActivity.startActivity(getActivity(),restaurant.getTrackingNumber());
+                Intent intent = RestaurantDetailActivity.startActivity(getActivity(), restaurant.getTrackingNumber());
                 startActivity(intent);
             }
         });
@@ -240,9 +229,13 @@ public class MapFragment extends Fragment {
         this.clusterManager.cluster();
     }
 
+    public void enableUserLocation() {
+        mGoogleMap.setMyLocationEnabled(true);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 1) {
+        if (requestCode == LOCATION_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 checkSettingAndStartLocationUpdates();
             }
