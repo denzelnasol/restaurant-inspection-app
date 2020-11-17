@@ -7,16 +7,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.google.android.gms.maps.MapsInitializer;
 import com.group11.cmpt276_project.R;
 
 import com.group11.cmpt276_project.databinding.ActivityWelcomeBinding;
-import com.group11.cmpt276_project.service.model.ClusterItem;
-import com.group11.cmpt276_project.service.model.Violation;
 import com.group11.cmpt276_project.service.network.SurreyApiClient;
 import com.group11.cmpt276_project.service.network.endpoints.DownloadDataSetService;
 import com.group11.cmpt276_project.service.network.endpoints.GetDataSetService;
@@ -26,7 +22,6 @@ import com.group11.cmpt276_project.service.repository.impl.JsonRestaurantReposit
 import com.group11.cmpt276_project.service.repository.impl.JsonViolationRepository;
 import com.group11.cmpt276_project.service.repository.impl.SharedPreferenceRepository;
 import com.group11.cmpt276_project.utils.Constants;
-import com.group11.cmpt276_project.utils.Utils;
 import com.group11.cmpt276_project.viewmodel.ClusterItemViewModel;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
@@ -46,6 +41,9 @@ public class WelcomeActivity extends AppCompatActivity {
     private WelcomeViewModel welcomeViewModel;
     private ActivityWelcomeBinding binding;
 
+    private InspectionReportsViewModel inspectionReportsViewModel;
+    private RestaurantsViewModel restaurantsViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +58,7 @@ public class WelcomeActivity extends AppCompatActivity {
             if(data) {
                 welcomeViewModel.checkForUpdates();
             } else {
-                moveToRestaurantList(TIMEOUT);
+                loadClusterAndMoveToMainActivity(TIMEOUT);
             }
         });
         this.welcomeViewModel.getShouldUpdate().observe(this, (data) -> {
@@ -73,19 +71,19 @@ public class WelcomeActivity extends AppCompatActivity {
                         })
                         .setNegativeButton(R.string.cancel, (DialogInterface dialog, int id) -> {
                             dialog.dismiss();
-                            this.moveToRestaurantList(250);
+                            this.loadClusterAndMoveToMainActivity(250);
                         });
 
                 AlertDialog dialog = builder.create();
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
             } else {
-                this.moveToRestaurantList(TIMEOUT);
+                this.loadClusterAndMoveToMainActivity(TIMEOUT);
             }
         });
         this.welcomeViewModel.getUpdateDone().observe(this, (data) -> {
             if (data) {
-                moveToRestaurantList(250);
+                loadClusterAndMoveToMainActivity(250);
             }
         });
         this.welcomeViewModel.getDownloadFailed().observe(this, (data) -> {
@@ -105,7 +103,7 @@ public class WelcomeActivity extends AppCompatActivity {
         });
         this.welcomeViewModel.getIsCancelled().observe(this, (data) -> {
             if (data) {
-                this.moveToRestaurantList(500);
+                this.loadClusterAndMoveToMainActivity(500);
             }
         });
     }
@@ -114,7 +112,8 @@ public class WelcomeActivity extends AppCompatActivity {
         this.welcomeViewModel.cancelDownload();
     }
 
-    private void moveToRestaurantList(int timeOut) {
+    private void loadClusterAndMoveToMainActivity(int timeOut) {
+        ClusterItemViewModel.getInstance().init(getApplicationContext(), restaurantsViewModel, inspectionReportsViewModel);
         new Handler().postDelayed(() -> {
             Intent intent = MainPageActivity.startActivity(this, null);
             startActivity(intent);
@@ -123,17 +122,15 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void init() {
         JsonRestaurantRepository jsonRestaurantRepository = new JsonRestaurantRepository(getApplicationContext());
-        RestaurantsViewModel restaurantsViewModel = RestaurantsViewModel.getInstance();
-        restaurantsViewModel.init(jsonRestaurantRepository);
+        this.restaurantsViewModel = RestaurantsViewModel.getInstance();
+        this.restaurantsViewModel.init(jsonRestaurantRepository);
 
         JsonInspectionReportRepository jsonInspectionReportRepository = new JsonInspectionReportRepository(getApplicationContext());
-        InspectionReportsViewModel inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
-        inspectionReportsViewModel.init(jsonInspectionReportRepository);
+        this.inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
+        this.inspectionReportsViewModel.init(jsonInspectionReportRepository);
 
         JsonViolationRepository jsonViolationRepository = new JsonViolationRepository(getApplicationContext());
         ViolationsViewModel.getInstance().init(jsonViolationRepository);
-
-        ClusterItemViewModel.getInstance().init(getApplicationContext(), restaurantsViewModel, inspectionReportsViewModel);
     }
 
     private void bind() {

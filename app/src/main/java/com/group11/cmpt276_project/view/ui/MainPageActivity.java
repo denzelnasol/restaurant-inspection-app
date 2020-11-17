@@ -55,7 +55,6 @@ public class MainPageActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_page);
         this.bind();
         this.setUpViewPager();
         this.setUpTabs();

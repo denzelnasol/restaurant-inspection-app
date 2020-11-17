@@ -14,7 +14,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +33,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.ClusterManager;
@@ -45,15 +45,13 @@ import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.view.ui.MainPageActivity;
 import com.group11.cmpt276_project.view.ui.RestaurantDetailActivity;
 import com.group11.cmpt276_project.viewmodel.ClusterItemViewModel;
-import com.group11.cmpt276_project.view.bindingadapter.ClusterRenderer;
+import com.group11.cmpt276_project.view.adapter.ClusterRenderer;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static android.content.ContentValues.TAG;
 
 // Fragment to implement a map including user location and restaurant markers
 public class MapFragment extends Fragment {
@@ -89,12 +87,15 @@ public class MapFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
+
             setUpClusters();
             addClusterItemsToMap();
-            if(selected!=null)
+            if(selected!=null) {
                 zoomToCoordinates();
-            else
+            }
+            else {
                 zoomToUserLocation();
+            }
         }
     };
 
@@ -179,11 +180,10 @@ public class MapFragment extends Fragment {
     private void zoomToCoordinates(){
         LatLng latLng = new LatLng((selected.getLatitude()),selected.getLongitude());
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20f));
-        String trackingNumber = selected.getTrackingNumber();
-        ClusterItem item = this.clusterItemViewModel.get().get(trackingNumber);
-        Marker marker = this.clusterRenderer.getMarker(item);
-        if(marker!=null)
-            marker.showInfoWindow();
+
+        //String trackingNumber = selected.getTrackingNumber();
+        //ClusterItem item = this.clusterItemViewModel.get().get(trackingNumber);
+
     }
     private void zoomToUserLocation() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -211,7 +211,14 @@ public class MapFragment extends Fragment {
 
     private void setUpClusters() {
         clusterManager = new ClusterManager<>(this.getContext(), mGoogleMap);
-        clusterRenderer = new ClusterRenderer(this.getActivity(), mGoogleMap, clusterManager);
+
+        LatLng selectedCoord = null;
+
+        if(selected != null) {
+            selectedCoord = new LatLng(this.selected.getLatitude(), this.selected.getLongitude());
+        }
+
+        clusterRenderer = new ClusterRenderer(this.getActivity(), mGoogleMap, clusterManager, selectedCoord);
 
         mGoogleMap.setOnCameraIdleListener(clusterManager);
         mGoogleMap.setOnMarkerClickListener(clusterManager);
@@ -220,13 +227,9 @@ public class MapFragment extends Fragment {
         clusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<ClusterItem>() {
             @Override
             public void onClusterItemInfoWindowClick(ClusterItem item) {
-                for (Map.Entry<String, Restaurant> entry : restaurantsViewModel.get().getValue().entrySet()) {
-                    LatLng tempLatLng = new LatLng(entry.getValue().getLatitude(), entry.getValue().getLongitude());
-                    if (item.getPosition().equals(tempLatLng)) {
-                        Intent intent = RestaurantDetailActivity.startActivity(getActivity(), entry.getValue().getTrackingNumber());
-                        startActivity(intent);
-                    }
-                }
+                Restaurant restaurant = clusterItemViewModel.getRestaurantFromCoords(item.getPosition());
+                Intent intent = RestaurantDetailActivity.startActivity(getActivity(),restaurant.getTrackingNumber());
+                startActivity(intent);
             }
         });
     }
@@ -234,6 +237,7 @@ public class MapFragment extends Fragment {
     private void addClusterItemsToMap() {
         List<ClusterItem> clusterItems = new ArrayList<>(this.clusterItemViewModel.get().values());
         this.clusterManager.addItems(clusterItems);
+        this.clusterManager.cluster();
     }
 
     @Override
