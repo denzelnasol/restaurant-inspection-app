@@ -7,7 +7,6 @@ import com.group11.cmpt276_project.exception.RepositoryReadError;
 import com.group11.cmpt276_project.exception.RepositoryWriteError;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.service.repository.IRestaurantRepository;
-import com.group11.cmpt276_project.service.repository.impl.JsonRestaurantRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +28,7 @@ public class RestaurantsViewModel {
     }
 
     private static class RestaurantsViewModelHolder {
-        private static RestaurantsViewModel INSTANCE = new RestaurantsViewModel();
+        private static final RestaurantsViewModel INSTANCE = new RestaurantsViewModel();
     }
 
     public static RestaurantsViewModel getInstance() {

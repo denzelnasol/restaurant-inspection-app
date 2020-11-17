@@ -4,7 +4,6 @@ import com.group11.cmpt276_project.exception.RepositoryReadError;
 import com.group11.cmpt276_project.exception.RepositoryWriteError;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.repository.IInspectionReportRepository;
-import com.group11.cmpt276_project.service.repository.impl.JsonInspectionReportRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +25,7 @@ public class InspectionReportsViewModel {
     }
 
     private static class InspectionReportsViewModelHolder {
-        private static InspectionReportsViewModel INSTANCE = new InspectionReportsViewModel();
+        private static final InspectionReportsViewModel INSTANCE = new InspectionReportsViewModel();
     }
 
     public static InspectionReportsViewModel getInstance() {
@@ -40,7 +39,7 @@ public class InspectionReportsViewModel {
             try {
                 this.reports = this.inspectionReportRepository.getInspections();
 
-                for(Map.Entry<String, List<InspectionReport>> entry : this.reports.entrySet()) {
+                for (Map.Entry<String, List<InspectionReport>> entry : this.reports.entrySet()) {
                     Collections.sort(entry.getValue(), (InspectionReport A, InspectionReport B) -> Integer.parseInt(B.getInspectionDate()) - Integer.parseInt(A.getInspectionDate()));
                 }
             } catch (RepositoryReadError e) {
@@ -58,7 +57,7 @@ public class InspectionReportsViewModel {
     }
 
     public InspectionReport getMostRecentReport(String trackingNumber) {
-        if(!this.reports.containsKey(trackingNumber)) {
+        if (!this.reports.containsKey(trackingNumber)) {
             return null;
         }
 

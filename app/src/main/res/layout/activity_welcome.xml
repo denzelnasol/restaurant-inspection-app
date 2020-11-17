@@ -17,7 +17,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/welcomescreen_bg"
+        android:background="#A4D2D8"
         android:clickable="true"
         tools:context=".view.ui.WelcomeActivity">
 
@@ -25,7 +25,9 @@
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="150dp"
             android:alpha="@{welcomeViewModel.mCanCancel ? 1.0f : 0.50f}"
             android:background="@drawable/round_btn"
             android:clickable="@{welcomeViewModel.mCanCancel}"
@@ -37,37 +39,19 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="228dp"
-            android:layout_height="48dp"
-            app:constraint_referenced_tags="title"
-            app:layout_constraintEnd_toEndOf="@+id/imageView2"
-            app:layout_constraintStart_toStartOf="@+id/imageView2"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2"
-            app:srcCompat="@drawable/app_title_" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="332dp"
-            android:layout_height="76dp"
-            android:layout_marginTop="16dp"
-            android:outlineAmbientShadowColor="#121010"
-            app:constraint_referenced_tags="title"
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="160dp"
+            android:layout_height="170dp"
+            android:orientation="vertical"
+            android:translationX="0dp"
+            android:translationY="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/app_title" />
-
-        <LinearLayout
-            android:layout_width="111dp"
-            android:layout_height="123dp"
-            android:layout_marginStart="24dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/linearLayout3">
+            app:layout_constraintVertical_bias="0.46">
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/welcomeAnimRepo"
@@ -77,62 +61,38 @@
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/welcomescreen_report" />
+
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="205dp"
-            android:layout_height="187dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3">
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/welcomeAnimBurger"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="false"
-                app:lottie_rawRes="@raw/welcomescreen_burger" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="302dp"
-            android:layout_height="291dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/app_name"
+            android:textSize="20sp"
+            app:fontFamily="sans-serif"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.55" />
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/welcome_animLaptop"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/welcomescreen_stack_anim" />
-
-        </LinearLayout>
 
         <ProgressBar
             android:id="@+id/progress_bar"
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_height="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="50dp"
             android:max="100"
             android:progress="@{welcomeViewModel.mProgress}"
             android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/progressBar"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_name" />
 
         <TextView
             android:id="@+id/progress_text"
@@ -141,7 +101,8 @@
             android:layout_marginBottom="8dp"
             android:maxHeight="50dp"
             android:text="@{welcomeViewModel.mDownloadText}"
-            android:textSize="18sp"
+            android:textSize="16sp"
+            app:fontFamily="sans-serif-light"
             android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toTopOf="@+id/progress_bar"
             app:layout_constraintEnd_toStartOf="@+id/button2"
@@ -152,10 +113,15 @@
             style="@android:style/Widget.ProgressBar.Large"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             android:indeterminate="true"
             android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
             app:layout_constraintEnd_toStartOf="@+id/button2"
-            app:layout_constraintTop_toTopOf="@+id/progress_bar" />
+            app:layout_constraintStart_toEndOf="@+id/progress_bar"
+            app:layout_constraintTop_toTopOf="@+id/progress_bar"
+            app:layout_constraintVertical_bias="0.47" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
