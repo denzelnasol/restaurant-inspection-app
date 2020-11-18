@@ -26,7 +26,7 @@
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginStart="20dp"
             android:layout_marginBottom="150dp"
             android:alpha="@{welcomeViewModel.mCanCancel ? 1.0f : 0.50f}"
             android:background="@drawable/round_btn"
@@ -36,8 +36,10 @@
             android:text="@string/cancel"
             android:textColor="#EDE6E6"
             android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/progress_bar"
+            app:layout_constraintStart_toEndOf="@+id/progress_bar"
+            app:layout_constraintTop_toTopOf="@id/progress_bar"
+            app:layout_constraintVertical_bias="0.079" />
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -82,17 +84,17 @@
         <ProgressBar
             android:id="@+id/progress_bar"
             style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_width="216dp"
+            android:layout_width="250dp"
             android:layout_height="12dp"
             android:layout_marginStart="32dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="180dp"
             android:max="100"
             android:progress="@{welcomeViewModel.mProgress}"
             android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/app_name" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/progress_text"
@@ -102,10 +104,10 @@
             android:maxHeight="50dp"
             android:text="@{welcomeViewModel.mDownloadText}"
             android:textSize="16sp"
-            app:fontFamily="sans-serif-light"
             android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
+            app:fontFamily="sans-serif-light"
             app:layout_constraintBottom_toTopOf="@+id/progress_bar"
-            app:layout_constraintEnd_toStartOf="@+id/button2"
+            app:layout_constraintEnd_toStartOf="@+id/progressBar"
             app:layout_constraintStart_toStartOf="@+id/progress_bar" />
 
         <ProgressBar
@@ -113,14 +115,11 @@
             style="@android:style/Widget.ProgressBar.Large"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:indeterminate="true"
             android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toTopOf="@+id/button2"
-            app:layout_constraintEnd_toStartOf="@+id/button2"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/progress_text" />
+            app:layout_constraintBottom_toTopOf="@+id/progress_bar"
+            app:layout_constraintEnd_toEndOf="@+id/progress_bar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
