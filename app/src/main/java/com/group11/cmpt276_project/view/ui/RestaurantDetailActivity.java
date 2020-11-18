@@ -1,14 +1,14 @@
 package com.group11.cmpt276_project.view.ui;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.ActivityRestuarantDetailBinding;
@@ -18,7 +18,6 @@ import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.view.adapter.InspectionAdapter;
 import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickIndex;
-import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickTrackingNumber;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
@@ -99,7 +98,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
     private class InspectionOnClickTrackingNumber implements IItemOnClickIndex {
 
-        private String parent;
+        private final String parent;
 
         public InspectionOnClickTrackingNumber(String trackingNUmber) {
             this.parent = trackingNUmber;
