@@ -107,7 +107,6 @@
             android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
             app:fontFamily="sans-serif-light"
             app:layout_constraintBottom_toTopOf="@+id/progress_bar"
-            app:layout_constraintEnd_toStartOf="@+id/progressBar"
             app:layout_constraintStart_toStartOf="@+id/progress_bar" />
 
         <ProgressBar
