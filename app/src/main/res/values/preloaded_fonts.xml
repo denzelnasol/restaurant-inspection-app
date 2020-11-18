@@ -2,6 +2,5 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/almendra_bold</item>
-        <item>@font/amatic_sc</item>
     </array>
 </resources>
