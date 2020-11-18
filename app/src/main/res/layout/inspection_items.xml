@@ -37,7 +37,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:scaleType="fitXY"
-                app:hazard="@{report != null ? report.hazardRating: @string/low}"
+                app:hazardIcon="@{report != null ? report.hazardRating: @string/low}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

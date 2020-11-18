@@ -51,7 +51,7 @@
                     android:layout_height="25dp"
                     android:layout_marginTop="4dp"
                     android:scaleType="fitXY"
-                    app:hazard="@{report != null ? report.hazardRating: @string/low}"
+                    app:hazardIcon="@{report != null ? report.hazardRating: @string/low}"
                     app:layout_constraintStart_toStartOf="@+id/restaurant_item_name"
                     app:layout_constraintTop_toBottomOf="@+id/restaurant_item_name" />
 

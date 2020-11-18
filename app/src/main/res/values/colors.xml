@@ -11,5 +11,8 @@
     <color name="light_blue">#A4D2D8</color>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorLow">#ff1aeb1a</color>
+    <color name="colorMedium">#FFffc10e</color>
+    <color name="colorHigh">#ffeb1a1a</color>
     <color name="colorAccent">#03DAC5</color>
 </resources>

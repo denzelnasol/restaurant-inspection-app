@@ -23,7 +23,7 @@
             android:layout_height="75dp"
             android:layout_marginStart="16dp"
             android:scaleType="fitXY"
-            app:hazard="@{report != null ? report.hazardRating: @string/low}"
+            app:hazardIcon="@{report != null ? report.hazardRating: @string/low}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/inspection_type" />
 
@@ -118,7 +118,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{report.hazardRating}"
+            app:hazardText="@{report.hazardRating}"
             android:textAlignment="center"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="@+id/inspection_item_hazard"
