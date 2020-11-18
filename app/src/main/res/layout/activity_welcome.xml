@@ -17,7 +17,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#A4D2D8"
+        android:background="@color/light_blue"
         android:clickable="true"
         tools:context=".view.ui.WelcomeActivity">
 
@@ -26,8 +26,7 @@
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="150dp"
+            android:layout_marginEnd="16dp"
             android:alpha="@{welcomeViewModel.mCanCancel ? 1.0f : 0.50f}"
             android:background="@drawable/round_btn"
             android:clickable="@{welcomeViewModel.mCanCancel}"
@@ -36,8 +35,9 @@
             android:text="@string/cancel"
             android:textColor="#EDE6E6"
             android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/progress_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/progress_bar" />
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -83,29 +83,31 @@
             android:id="@+id/progress_bar"
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="0dp"
-            android:layout_height="8dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginBottom="50dp"
+            android:layout_height="12dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="180dp"
             android:max="100"
             android:progress="@{welcomeViewModel.mProgress}"
             android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/progressBar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/app_name" />
+            app:layout_constraintEnd_toStartOf="@+id/button2"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/progress_text"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:maxHeight="50dp"
             android:text="@{welcomeViewModel.mDownloadText}"
+            android:textAlignment="center"
             android:textSize="16sp"
-            app:fontFamily="sans-serif-light"
             android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
+            app:fontFamily="sans-serif-light"
             app:layout_constraintBottom_toTopOf="@+id/progress_bar"
-            app:layout_constraintEnd_toStartOf="@+id/button2"
+            app:layout_constraintEnd_toStartOf="@+id/progressBarSpinner"
             app:layout_constraintStart_toStartOf="@+id/progress_bar" />
 
         <ProgressBar
@@ -113,15 +115,11 @@
             style="@android:style/Widget.ProgressBar.Large"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="4dp"
             android:indeterminate="true"
             android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
-            app:layout_constraintEnd_toStartOf="@+id/button2"
-            app:layout_constraintStart_toEndOf="@+id/progress_bar"
-            app:layout_constraintTop_toTopOf="@+id/progress_bar"
-            app:layout_constraintVertical_bias="0.47" />
+            app:layout_constraintBottom_toTopOf="@+id/progress_bar"
+            app:layout_constraintEnd_toEndOf="@+id/progress_bar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
