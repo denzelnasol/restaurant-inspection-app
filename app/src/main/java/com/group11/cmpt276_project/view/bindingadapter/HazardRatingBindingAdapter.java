@@ -1,6 +1,7 @@
 package com.group11.cmpt276_project.view.bindingadapter;
 
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
 
@@ -11,19 +12,45 @@ import com.group11.cmpt276_project.utils.Constants;
  **/
 public class HazardRatingBindingAdapter {
 
-    @BindingAdapter("hazard")
+    @BindingAdapter("hazardIcon")
     public static void setHazardImage(ImageView imageView, String hazard){
 
         if(hazard == null || hazard.isEmpty()) {
             return;
         }
 
+
+        int resId = 0;
+
         if(Constants.LOW.equals(hazard)) {
-            imageView.setImageResource(R.drawable.ic_smiling);
+            resId = R.drawable.ic_smiling;
         } else if(Constants.MODERATE.equals(hazard)) {
-            imageView.setImageResource(R.drawable.ic_neutral);
+            resId = R.drawable.ic_neutral;
         } else {
-            imageView.setImageResource(R.drawable.ic_sad);
+            resId = R.drawable.ic_sad;
         }
+
+        imageView.setImageResource(resId);
     }
-}
+
+    @BindingAdapter("hazardText")
+    public static void setHazardText(TextView textView, String hazard) {
+        if(hazard == null || hazard.isEmpty()) {
+            return;
+        }
+
+        textView.setText(hazard);
+
+        int color = 0;
+
+        if(Constants.LOW.equals(hazard)) {
+            color = R.color.colorLow;
+        } else if(Constants.MODERATE.equals(hazard)) {
+            color = R.color.colorMedium;
+        } else {
+            color = R.color.colorHigh;
+        }
+
+        textView.setTextColor(textView.getContext().getColor(color));
+    }
+ }
