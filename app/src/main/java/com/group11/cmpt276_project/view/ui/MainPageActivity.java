@@ -55,7 +55,6 @@ public class MainPageActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_page);
         this.bind();
         this.setUpViewPager();
         this.setUpTabs();
@@ -80,6 +79,7 @@ public class MainPageActivity extends FragmentActivity {
         tabAdapter.addFragment(new MapFragment());
         tabAdapter.addFragment(new RestaurantListFragment());
 
+        this.viewPager.setUserInputEnabled(false);
         this.viewPager.setAdapter(tabAdapter);
         this.viewPager.setCurrentItem(mainPageViewModel.getSelectedTab());
         this.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {

@@ -24,6 +24,7 @@
     <string name="date">%s %d</string>
     <string name="address">%s, %s</string>
     <string name="coord">%s, %s</string>
+    <string name="hazard_text">%s, - Hazardous Rating: %s</string>
     <string name="violations">Violations</string>
     <string name="map">Map</string>
     <string name="list">List</string>
