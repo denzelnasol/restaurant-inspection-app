@@ -23,6 +23,7 @@ import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
 
+//The main page of the app. It contains tabs for the map and list. On startup the map will be shown
 public class MainPageActivity extends FragmentActivity {
 
     private static final String SHOULD_UPDATE = "shouldUpdate";

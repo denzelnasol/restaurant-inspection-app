@@ -220,13 +220,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private void setUpClusters() {
         clusterManager = new ClusterManager<>(this.getContext(), mGoogleMap);
 
-        LatLng selectedCoord = null;
-
-        if (selected != null) {
-            selectedCoord = new LatLng(this.selected.getLatitude(), this.selected.getLongitude());
-        }
-
-        clusterRenderer = new ClusterRenderer(this.getActivity(), mGoogleMap, clusterManager, selectedCoord);
+        clusterRenderer = new ClusterRenderer(this.getActivity(), mGoogleMap, clusterManager, this.selected);
 
         mGoogleMap.setOnCameraIdleListener(clusterManager);
         mGoogleMap.setOnMarkerClickListener(clusterManager);
@@ -235,8 +229,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         clusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<ClusterItem>() {
             @Override
             public void onClusterItemInfoWindowClick(ClusterItem item) {
-                Restaurant restaurant = clusterItemViewModel.getRestaurantFromCoords(item.getPosition());
-                Intent intent = RestaurantDetailActivity.startActivity(getActivity(), restaurant.getTrackingNumber());
+                Intent intent = RestaurantDetailActivity.startActivity(getActivity(), item.getTrackingNumber());
                 startActivity(intent);
             }
         });

@@ -5,6 +5,7 @@ import com.group11.cmpt276_project.utils.Constants;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+//Singleton that holds the Retrofit instance for surrey api
 public class SurreyApiClient {
 
     private static class SurreyApiClientHolder {

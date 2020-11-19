@@ -20,9 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//Singleton that holds a map that
 public class ClusterItemViewModel {
     private Map<String, ClusterItem> clusterItems;
-    private Map<LatLng, Restaurant> latLngRestaurantMap;
 
     private RestaurantsViewModel restaurantsViewModel;
     private InspectionReportsViewModel inspectionReportsViewModel;
@@ -53,7 +53,6 @@ public class ClusterItemViewModel {
         }
 
         this.clusterItems = new HashMap<>();
-        this.latLngRestaurantMap = new HashMap<>();
 
         this.inspectionReportsViewModel = inspectionReportsViewModel;
         this.restaurantsViewModel = restaurantsViewModel;
@@ -83,9 +82,8 @@ public class ClusterItemViewModel {
             BitmapDescriptor icon = getIcon(trackingNumber);
 
             MarkerOptions  markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(context.getString(R.string.hazard_text, address, hazardRating)).title(name);
-            ClusterItem clusterItem = new ClusterItem(markerOptions);
+            ClusterItem clusterItem = new ClusterItem(markerOptions, trackingNumber);
             this.clusterItems.put(trackingNumber, clusterItem);
-            this.latLngRestaurantMap.put(latLng, restaurant);
         }
 
     }
@@ -94,9 +92,6 @@ public class ClusterItemViewModel {
         return this.clusterItems;
     }
 
-    public Restaurant getRestaurantFromCoords(LatLng latLng) {
-        return latLngRestaurantMap.get(latLng);
-    }
 
     private Bitmap getBitmap(int drawable, Context context) {
         int height = 100;

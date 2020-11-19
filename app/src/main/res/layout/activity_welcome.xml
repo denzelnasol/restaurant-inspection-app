@@ -43,15 +43,11 @@
             android:id="@+id/linearLayout2"
             android:layout_width="160dp"
             android:layout_height="170dp"
+            android:layout_marginBottom="16dp"
             android:orientation="vertical"
-            android:translationX="0dp"
-            android:translationY="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.46">
+            app:layout_constraintBottom_toTopOf="@+id/app_name"
+            app:layout_constraintEnd_toEndOf="@+id/app_name"
+            app:layout_constraintStart_toStartOf="@+id/app_name">
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/welcomeAnimRepo"
@@ -68,15 +64,13 @@
             android:id="@+id/app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginBottom="180dp"
             android:text="@string/app_name"
             android:textSize="20sp"
             app:fontFamily="sans-serif"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/progress_text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.55" />
+            app:layout_constraintStart_toStartOf="parent" />
 
 
         <ProgressBar
@@ -115,11 +109,11 @@
             style="@android:style/Widget.ProgressBar.Large"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginBottom="4dp"
             android:indeterminate="true"
             android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toTopOf="@+id/progress_bar"
-            app:layout_constraintEnd_toEndOf="@+id/progress_bar" />
+            app:layout_constraintBottom_toBottomOf="@+id/progress_text"
+            app:layout_constraintEnd_toEndOf="@+id/progress_bar"
+            app:layout_constraintTop_toTopOf="@+id/progress_text" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

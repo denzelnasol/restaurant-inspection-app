@@ -16,16 +16,19 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.service.model.ClusterItem;
+import com.group11.cmpt276_project.service.model.GPSCoordiantes;
 
 // This is a class that renders markers icons before the cluster is rendered
 public class ClusterRenderer extends DefaultClusterRenderer<ClusterItem> {
 
-    private LatLng toFocus;
+    private GPSCoordiantes toFocus;
+    private boolean showed;
 
-    public ClusterRenderer(Context context, GoogleMap map, ClusterManager<ClusterItem> clusterManager, LatLng toFocus) {
+    public ClusterRenderer(Context context, GoogleMap map, ClusterManager<ClusterItem> clusterManager, GPSCoordiantes toFocus) {
         super(context, map, clusterManager);
         clusterManager.setRenderer(this);
         this.toFocus = toFocus;
+        this.showed = false;
     }
 
 
@@ -42,8 +45,10 @@ public class ClusterRenderer extends DefaultClusterRenderer<ClusterItem> {
     @Override
     protected void onClusterItemRendered(@NonNull ClusterItem clusterItem, @NonNull Marker marker) {
         super.onClusterItemRendered(clusterItem, marker);
-        if(this.toFocus != null && clusterItem.getPosition().equals(this.toFocus)) {
+
+        if (this.toFocus != null && !showed && clusterItem.getTrackingNumber().equals(this.toFocus.getTrackingNumber())) {
             marker.showInfoWindow();
+            this.showed = true;
         }
     }
 }

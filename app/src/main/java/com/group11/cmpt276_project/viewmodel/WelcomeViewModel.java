@@ -37,6 +37,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * This is a view model that manages the state of the welcome activity.
+ * The states are checking for if there is an internet connection, checking for downloads, downloading,
+ * finalizing the updates
+ */
 public class WelcomeViewModel extends ViewModel {
 
     private final String RESTAURANT_CSV = "restaurant.csv";

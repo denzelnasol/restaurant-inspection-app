@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.group11.cmpt276_project.service.repository.IPreferenceRepository;
 
+//Class to manage reading and writing from saved preferences
 public class SharedPreferenceRepository implements IPreferenceRepository {
 
     private final SharedPreferences sharedPreferences;

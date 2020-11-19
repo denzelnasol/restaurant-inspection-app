@@ -13,7 +13,10 @@ import com.group11.cmpt276_project.viewmodel.WelcomeViewModel;
 
 import java.io.File;
 
-
+/**
+ * This factory is used to create a WelcomeViewModel. It is is needed because the constructor
+ * has arguments
+ */
 public class WelcomeViewModelFactory implements ViewModelProvider.Factory {
 
     private final GetDataSetService apiService;
