@@ -8,6 +8,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ This class is an adapter for the restaurant list and map
+ **/
 public class TabAdapter extends FragmentStateAdapter {
 
     private List<Fragment> fragmentList;

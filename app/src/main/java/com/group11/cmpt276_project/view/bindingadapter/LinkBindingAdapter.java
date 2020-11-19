@@ -7,6 +7,9 @@ import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
 
+/**
+ This class is a binding adapter to make text into a link
+ **/
 public class LinkBindingAdapter {
 
     @BindingAdapter("link")

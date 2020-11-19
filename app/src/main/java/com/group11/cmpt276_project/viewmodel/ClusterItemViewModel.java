@@ -18,7 +18,7 @@ import com.group11.cmpt276_project.utils.Constants;
 import java.util.HashMap;
 import java.util.Map;
 
-//Singleton that holds a map that
+//Singleton that holds a map of all restaurant markers and gives each one a unique coordinate
 public class ClusterItemViewModel {
     private Map<String, ClusterItem> clusterItems;
 
@@ -58,9 +58,9 @@ public class ClusterItemViewModel {
         this.inspectionReportsViewModel = inspectionReportsViewModel;
         this.restaurantsViewModel = restaurantsViewModel;
 
-        this.happyBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.happy, context));
-        this.sadBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.sad, context));
-        this.neutralBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.neutral, context));
+        this.happyBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.low_hazard_marker, context));
+        this.sadBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.high_hazard_marker, context));
+        this.neutralBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.medium_hazard_marker, context));
 
         this.bitmapDescriptorMap = new HashMap<String, BitmapDescriptor>(){{
             put(Constants.HIGH, sadBitMap);
