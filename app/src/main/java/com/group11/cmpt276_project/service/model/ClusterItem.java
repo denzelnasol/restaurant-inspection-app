@@ -10,16 +10,18 @@ public class ClusterItem implements com.google.maps.android.clustering.ClusterIt
     private String title;
     private String snippet;
     private BitmapDescriptor icon;
+    private String trackingNumber;
 
     public ClusterItem() {
 
     }
 
-    public ClusterItem(MarkerOptions markerOptions) {
+    public ClusterItem(MarkerOptions markerOptions, String trackingNumber) {
         position = markerOptions.getPosition();
         this.title = markerOptions.getTitle();
         this.snippet = markerOptions.getSnippet();
         this.icon = markerOptions.getIcon();
+        this.trackingNumber = trackingNumber;
     }
 
     public LatLng getPosition() {
@@ -40,5 +42,9 @@ public class ClusterItem implements com.google.maps.android.clustering.ClusterIt
 
     public void setIcon(BitmapDescriptor icon) {
         this.icon = icon;
+    }
+
+    public String getTrackingNumber() {
+        return trackingNumber;
     }
 }

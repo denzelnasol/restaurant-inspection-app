@@ -83,9 +83,9 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
     public void onCoordinateClicked(double latitude, double longitude) {
 
-        GPSCoordiantes coordiantes = new GPSCoordiantes(latitude, longitude, this.trackingNumber);
+        GPSCoordiantes coordinates = new GPSCoordiantes(latitude, longitude, this.trackingNumber);
 
-        Intent intent = MainPageActivity.startActivity(this, coordiantes);
+        Intent intent = MainPageActivity.startActivity(this, coordinates);
         MainPageViewModel.getInstance().setSelectedTabTab(0);
         startActivity(intent);
     }

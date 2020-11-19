@@ -3,6 +3,7 @@ package com.group11.cmpt276_project.service.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+//Class that represents the gps coordinates that will be used to render the coordinates clicked on in the restaurant detail
 public class GPSCoordiantes implements Parcelable {
 
     private double latitude;

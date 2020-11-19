@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This activity displays the restaurant list
+ * This fragment displays the restaurant list
  */
 public class RestaurantListFragment extends Fragment {
 
