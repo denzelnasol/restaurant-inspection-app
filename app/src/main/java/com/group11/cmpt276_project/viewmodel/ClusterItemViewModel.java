@@ -60,7 +60,7 @@ public class ClusterItemViewModel {
 
         this.happyBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.low_hazard_marker, context));
         this.sadBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.high_hazard_marker, context));
-        this.neutralBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.medium_hazard_marker, context));
+        this.neutralBitMap = BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.neutral, context));
 
         this.bitmapDescriptorMap = new HashMap<String, BitmapDescriptor>(){{
             put(Constants.HIGH, sadBitMap);

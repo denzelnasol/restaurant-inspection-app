@@ -91,9 +91,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
-            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-            enableUserLocation();
+            if (currentLocation != null) {
+                LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                mGoogleMap.setMyLocationEnabled(true);
+            }
             setUpClusters();
             addClusterItemsToMap();
             if (selected != null) {
@@ -136,14 +138,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(MapFragment.this::onMapReady);
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         fetchLastLocation();
+
+
         createLocationRequest();
 
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             checkSettingAndStartLocationUpdates();
-        } else {
-            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
         }
     }
 
@@ -155,8 +160,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 public void onSuccess(Location location) {
                     if (location != null) {
                         currentLocation = location;
-                        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-                        mapFragment.getMapAsync(MapFragment.this::onMapReady);
                     }
                 }
             });
@@ -202,17 +205,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void zoomToUserLocation() {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
-            return;
-        }
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
+                if (location != null) {
+                    mGoogleMap.setMyLocationEnabled(true);
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
+                }
             }
         });
     }
@@ -241,9 +242,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         this.clusterManager.cluster();
     }
 
-    public void enableUserLocation() {
+/*    public void enableUserLocation() {
         mGoogleMap.setMyLocationEnabled(true);
-    }
+    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
