@@ -15,12 +15,8 @@ import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.utils.Constants;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 //Singleton that holds a map that
 public class ClusterItemViewModel {
@@ -34,7 +30,7 @@ public class ClusterItemViewModel {
     private BitmapDescriptor sadBitMap;
     private BitmapDescriptor neutralBitMap;
 
-    private float COORDINATE_OFFSET = 0.0002f;
+    private final double DEFAULT_COORDINATE_OFFSET = 0.00002;
 
 
     private ClusterItemViewModel() {
@@ -51,7 +47,7 @@ public class ClusterItemViewModel {
     public void init(Context context, RestaurantsViewModel restaurantsViewModel, InspectionReportsViewModel inspectionReportsViewModel) {
         MapsInitializer.initialize(context);
 
-        Set<LatLng> existingCoords = new HashSet<>();
+        HashMap<LatLng, Double> existingCoords = new HashMap<>();
 
         if(this.clusterItems != null) {
             return;
@@ -85,21 +81,17 @@ public class ClusterItemViewModel {
             LatLng latLng = new LatLng(latitude, longitude);
             BitmapDescriptor icon = getIcon(trackingNumber);
 
-
-            if (!existingCoords.contains(latLng)) {
-                existingCoords.add(latLng);
-                MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(context.getString(R.string.hazard_text, address, hazardRating)).title(name);
-                ClusterItem clusterItem = new ClusterItem(markerOptions, trackingNumber);
-                this.clusterItems.put(trackingNumber, clusterItem);
+            if (existingCoords.containsKey(latLng)) {
+                double offset = existingCoords.get(latLng);
+                latLng = new LatLng(latLng.latitude + 0.00001, latLng.longitude + 0.00001);
+                existingCoords.put(latLng, offset + 0.00001);
             }
             else {
-                latLng = new LatLng(latitude + COORDINATE_OFFSET, longitude + COORDINATE_OFFSET);
-                COORDINATE_OFFSET += 0.00002;
-                existingCoords.add(latLng);
-                MarkerOptions  markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(context.getString(R.string.hazard_text, address, hazardRating)).title(name);
-                ClusterItem clusterItem = new ClusterItem(markerOptions, trackingNumber);
-                this.clusterItems.put(trackingNumber, clusterItem);
+                existingCoords.put(latLng, DEFAULT_COORDINATE_OFFSET);
             }
+            MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(icon).snippet(context.getString(R.string.hazard_text, address, hazardRating)).title(name);
+            ClusterItem clusterItem = new ClusterItem(markerOptions, trackingNumber);
+            this.clusterItems.put(trackingNumber, clusterItem);
         }
 
     }
