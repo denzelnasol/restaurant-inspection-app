@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.ClusterManager;
@@ -93,7 +95,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             mGoogleMap = googleMap;
             if (currentLocation != null) {
                 LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                 mGoogleMap.setMyLocationEnabled(true);
             }
             setUpClusters();
@@ -109,9 +111,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
-            fetchLastLocation();
+            Task<Location> task = fusedLocationProviderClient.getLastLocation();
+            task.addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    currentLocation = location;
+                    if (selected == null) {
+                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
+                    }
+                }
+            });
 
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
+            Log.d("TEST", "TEST");
         }
     };
 
@@ -147,7 +158,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         fetchLastLocation();
 
-
         createLocationRequest();
 
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -163,6 +173,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 public void onSuccess(Location location) {
                     if (location != null) {
                         currentLocation = location;
+                        mGoogleMap.setMyLocationEnabled(true);
                     }
                 }
             });
@@ -174,6 +185,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onStop() {
         super.onStop();
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkSettingAndStartLocationUpdates();
     }
 
     private void createLocationRequest() {
