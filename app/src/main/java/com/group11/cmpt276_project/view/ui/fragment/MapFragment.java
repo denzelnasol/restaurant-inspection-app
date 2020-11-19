@@ -50,6 +50,7 @@ import com.group11.cmpt276_project.service.model.GPSCoordiantes;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.view.ui.MainPageActivity;
 import com.group11.cmpt276_project.view.ui.RestaurantDetailActivity;
+import com.group11.cmpt276_project.view.ui.layout.OnDragConstraintLayout;
 import com.group11.cmpt276_project.viewmodel.ClusterItemViewModel;
 import com.group11.cmpt276_project.view.adapter.ClusterRenderer;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
@@ -64,6 +65,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private static final float DEFAULT_ZOOM = 12f;
     private static final int LOCATION_PERMISSION_CODE = 100;
+
+    private boolean shouldFollow;
 
     private FragmentMapBinding binding;
     private SupportMapFragment mapFragment;
@@ -93,6 +96,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mGoogleMap = googleMap;
+            mGoogleMap.setOnMyLocationButtonClickListener(() -> {
+                selected = null;
+                shouldFollow = true;
+                return false;
+            });
             if (currentLocation != null) {
                 LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -116,7 +124,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 @Override
                 public void onSuccess(Location location) {
                     currentLocation = location;
-                    if (selected == null) {
+                    if (selected == null && shouldFollow) {
                         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
                     }
                 }
@@ -132,6 +140,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.shouldFollow = true;
         // Inflate the layout for this fragment
         this.binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false);
         this.bind();
@@ -149,6 +158,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        this.binding.dragConstraintLayout.setDragCallBack(() -> shouldFollow = false);
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapFragment.this::onMapReady);

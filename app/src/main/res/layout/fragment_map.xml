@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.group11.cmpt276_project.view.ui.layout.OnDragConstraintLayout
+        android:id="@+id/drag_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -28,6 +29,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:context=".view.ui.fragment.MapFragment" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.group11.cmpt276_project.view.ui.layout.OnDragConstraintLayout>
 
 </layout>
