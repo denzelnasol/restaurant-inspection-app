@@ -121,8 +121,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     }
                 }
             });
-
-            Log.d("TEST", "TEST");
         }
     };
 
