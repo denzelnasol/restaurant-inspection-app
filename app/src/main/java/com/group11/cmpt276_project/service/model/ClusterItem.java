@@ -6,6 +6,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 // A cluster item model that represents a restaurant marker
 public class ClusterItem implements com.google.maps.android.clustering.ClusterItem {
+
     private LatLng position;
     private String title;
     private String snippet;
@@ -26,6 +27,10 @@ public class ClusterItem implements com.google.maps.android.clustering.ClusterIt
 
     public LatLng getPosition() {
         return position;
+    }
+
+    public void setPosition(LatLng position) {
+        this.position = position;
     }
 
     public String getTitle() {
