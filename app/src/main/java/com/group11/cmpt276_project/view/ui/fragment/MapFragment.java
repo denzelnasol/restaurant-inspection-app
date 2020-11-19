@@ -109,6 +109,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
+            fetchLastLocation();
+
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
         }
     };
 
@@ -175,8 +178,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void createLocationRequest() {
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(2000);
-        locationRequest.setFastestInterval(1000);
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(8000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
