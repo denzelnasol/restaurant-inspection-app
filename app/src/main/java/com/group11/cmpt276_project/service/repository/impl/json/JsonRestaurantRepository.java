@@ -104,6 +104,7 @@ public class JsonRestaurantRepository implements IRestaurantRepository {
                 updates.add(restaurant);
             }
 
+            this.restaurants.postValue(updates);
         } catch (IOException e) {
             throw new RepositoryWriteError(e.getMessage());
         }
