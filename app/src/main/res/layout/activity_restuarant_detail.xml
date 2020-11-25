@@ -146,7 +146,7 @@
             app:layout_constraintEnd_toEndOf="@+id/toolbar"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/btn_star"
-            android:onClick="@{()->activity.onBackPressed()}"/>
+            android:onClick="@{()->activity.toggleFavouriteButton()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

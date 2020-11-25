@@ -4,8 +4,10 @@ package com.group11.cmpt276_project.view.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +36,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private Restaurant restaurant;
 
     private String trackingNumber;
+    private boolean isOn = false;
 
     private ActivityRestuarantDetailBinding binding;
 
@@ -108,6 +111,18 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         public void onItemClick(int position) {
             Intent intent = InspectionDetailActivity.startActivity(RestaurantDetailActivity.this, position, this.parent);
             startActivity(intent);
+        }
+    }
+
+    public void toggleFavouriteButton() {
+        ImageButton btn = (ImageButton)findViewById(R.id.favouriteImageButton);
+        if (!isOn) {
+            btn.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
+            isOn = true;
+        }
+        else {
+            btn.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_off));
+            isOn = false;
         }
     }
 }
