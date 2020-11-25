@@ -1,12 +1,16 @@
 package com.group11.cmpt276_project.viewmodel;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.group11.cmpt276_project.exception.RepositoryReadError;
 import com.group11.cmpt276_project.exception.RepositoryWriteError;
+import com.group11.cmpt276_project.service.dto.InspectionReportDto;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.repository.IInspectionReportRepository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +21,8 @@ a Map to allow quick access without searching. The data is sorted in descending 
  */
 public class InspectionReportsViewModel {
 
-    private Map<String, List<InspectionReport>> reports;
+    private MediatorLiveData<Map<String, List<InspectionReport>>> mReports;
+    private LiveData<List<InspectionReport>> mData;
     private IInspectionReportRepository inspectionReportRepository;
 
     private InspectionReportsViewModel() {
@@ -37,44 +42,50 @@ public class InspectionReportsViewModel {
             this.inspectionReportRepository = jsonInspectionReportRepository;
 
             try {
-                this.reports = this.inspectionReportRepository.getInspections();
-
-                for (Map.Entry<String, List<InspectionReport>> entry : this.reports.entrySet()) {
-                    Collections.sort(entry.getValue(), (InspectionReport A, InspectionReport B) -> Integer.parseInt(B.getInspectionDate()) - Integer.parseInt(A.getInspectionDate()));
-                }
+                this.mData = this.inspectionReportRepository.getInspections();
             } catch (RepositoryReadError e) {
-                this.reports = new HashMap<>();
+                this.mData = new MutableLiveData<>();
             }
+
+            this.mReports = new MediatorLiveData<>();
+            this.mReports.addSource(this.mData, (data) -> {
+
+                if(data == null) return;
+
+                Map<String, List<InspectionReport>> inspectionReports = new HashMap<>();
+
+                for(InspectionReport inspectionReport : data) {
+                    inspectionReports.computeIfAbsent(inspectionReport.getTrackingNumber(), (key) -> new ArrayList<>()).add(inspectionReport);
+                }
+
+                this.mReports.setValue(inspectionReports);
+            });
         }
     }
 
-    public void add(Map<String, List<InspectionReport>> newReports) {
-        this.reports.putAll(newReports);
+    public LiveData<Map<String, List<InspectionReport>>> getReports() {
+        return this.mReports;
     }
 
-    public List<InspectionReport> getReports(String trackingNumber) {
-        return this.reports.getOrDefault(trackingNumber, new ArrayList<>());
-    }
-
-    public InspectionReport getMostRecentReport(String trackingNumber) {
-        if (!this.reports.containsKey(trackingNumber)) {
-            return null;
-        }
-
-        return this.reports.get(trackingNumber).get(0);
-    }
-
-    public InspectionReport getByIndexAndTrackingNumbe(String trackingNumber, int index) {
-        if(!this.reports.containsKey(trackingNumber)) {
-            return null;
-        }
-
-        return this.reports.get(trackingNumber).get(index);
-    }
-
-    public void save() {
+    public void save(List<InspectionReportDto> newReports) {
         try {
-            this.inspectionReportRepository.saveInspections(this.reports);
+            List<InspectionReport> toAdd = new ArrayList<>();
+
+            for(InspectionReportDto dto : newReports) {
+                InspectionReport report = new InspectionReport.InspectionReportBuilder()
+                        .withTrackingNumber(dto.getTrackingNumber())
+                        .withHazardRating(dto.getHazardRating())
+                        .withInspectionDate(dto.getInspectionDate())
+                        .withInspectionType(dto.getInspectionType())
+                        .withNumberCritical(dto.getNumberCritical())
+                        .withNumberNonCritical(dto.getNumberNonCritical())
+                        .withViolLump(dto.getViolLump())
+                        .build();
+
+                toAdd.add(report);
+            }
+
+            this.inspectionReportRepository.saveInspections(toAdd);
         } catch (RepositoryWriteError repositoryWriteError) {
             repositoryWriteError.printStackTrace();
         }

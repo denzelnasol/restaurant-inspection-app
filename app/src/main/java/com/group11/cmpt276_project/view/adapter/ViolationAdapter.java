@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.group11.cmpt276_project.databinding.ViolationItemBinding;
 import com.group11.cmpt276_project.service.model.Violation;
-import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickIndex;
 
 import java.util.List;
 /**
@@ -19,9 +18,9 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.Viol
 
     private final List<Violation> violations;
     private final boolean[] isVisibleData;
-    private final IItemOnClickIndex onViolationItemClick;
+    private final IViolationItemOnClick onViolationItemClick;
 
-    public ViolationAdapter(List<Violation> violations, boolean[] isVisibleData, IItemOnClickIndex onViolationItemClick) {
+    public ViolationAdapter(List<Violation> violations, boolean[] isVisibleData, IViolationItemOnClick onViolationItemClick) {
         this.violations = violations;
         this.isVisibleData = isVisibleData;
         this.onViolationItemClick = onViolationItemClick;
@@ -51,7 +50,7 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.Viol
 
         private final ViolationItemBinding binding;
 
-        public ViolationViewHolder(ViolationItemBinding binding, IItemOnClickIndex onViolationItemClick) {
+        public ViolationViewHolder(ViolationItemBinding binding, IViolationItemOnClick onViolationItemClick) {
             super(binding.getRoot());
             this.binding = binding;
             this.binding.getRoot().setOnClickListener((View view) -> {
@@ -64,5 +63,9 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.Viol
             this.binding.executePendingBindings();
             this.binding.setIsVisible(isVisible);
         }
+    }
+
+    public interface IViolationItemOnClick {
+        void onItemClick(int position);
     }
 }

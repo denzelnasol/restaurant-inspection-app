@@ -12,6 +12,9 @@ import androidx.lifecycle.ViewModel;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.group11.cmpt276_project.R;
+import com.group11.cmpt276_project.service.dto.InspectionReportDto;
+import com.group11.cmpt276_project.service.dto.RestaurantDto;
+import com.group11.cmpt276_project.service.dto.ViolationDto;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.service.model.Violation;
@@ -398,24 +401,22 @@ public class WelcomeViewModel extends ViewModel {
             try {
                 if (shouldUpdateInspection) {
                     List<List<String>> inspectionCsv = Utils.readCSVFromStorage(context, INSPECTION_CSV);
-                    Pair<Map<String, List<InspectionReport>>, Map<String, Violation>> inspections = Utils.csvToInspections(inspectionCsv);
+                    Pair<List<InspectionReportDto>, List<ViolationDto>> inspections = Utils.csvToInspections(inspectionCsv);
 
                     InspectionReportsViewModel inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
-                    inspectionReportsViewModel.add(inspections.first);
-                    inspectionReportsViewModel.save();
+
+                    inspectionReportsViewModel.save(inspections.first);
 
                     ViolationsViewModel violationsViewModel = ViolationsViewModel.getInstance();
-                    violationsViewModel.add(inspections.second);
-                    violationsViewModel.save();
+                    violationsViewModel.save(inspections.second);
 
                     Utils.deleteFileFromStorage(context, INSPECTION_CSV);
                 }
                 if (shouldUpdateRestaurants) {
                     List<List<String>> restaurantsCsv = Utils.readCSVFromStorage(context, RESTAURANT_CSV);
-                    Map<String, Restaurant> restaurants = Utils.csvToRestaurants(restaurantsCsv);
+                    List<RestaurantDto> restaurants = Utils.csvToRestaurants(restaurantsCsv);
                     RestaurantsViewModel restaurantsViewModel = RestaurantsViewModel.getInstance();
-                    restaurantsViewModel.add(restaurants);
-                    restaurantsViewModel.save();
+                    restaurantsViewModel.save(restaurants);
                     Utils.deleteFileFromStorage(context, RESTAURANT_CSV);
 
                 }

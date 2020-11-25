@@ -1,6 +1,9 @@
-package com.group11.cmpt276_project.service.repository.impl;
+package com.group11.cmpt276_project.service.repository.impl.json;
 
 import android.content.Context;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -13,6 +16,7 @@ import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.utils.Utils;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -25,13 +29,20 @@ public class JsonInspectionReportRepository implements IInspectionReportReposito
     private final Context context;
     private final ObjectMapper objectMapper;
 
+    private MutableLiveData<List<InspectionReport>> inspectionReports;
+
     public JsonInspectionReportRepository(Context context) {
         this.context = context;
         this.objectMapper = new ObjectMapper();
     }
 
     @Override
-    public Map<String, List<InspectionReport>> getInspections() throws RepositoryReadError {
+    public LiveData<List<InspectionReport>> getInspections() throws RepositoryReadError {
+
+        if(inspectionReports != null) {
+            return inspectionReports;
+        }
+
         String jsonString;
 
         try {
@@ -44,23 +55,28 @@ public class JsonInspectionReportRepository implements IInspectionReportReposito
             }
         }
 
-        TypeReference<Map<String, List<InspectionReport>>> mapTypeReference =
-                new TypeReference<Map<String, List<InspectionReport>>>() {
+        TypeReference<List<InspectionReport>> typeReference =
+                new TypeReference<List<InspectionReport>>() {
                 };
 
         try {
-            return objectMapper.readValue(jsonString, mapTypeReference);
+            List<InspectionReport> reports = objectMapper.readValue(jsonString, typeReference);
+
+            Collections.sort(reports, (InspectionReport A, InspectionReport B) -> Integer.parseInt(B.getInspectionDate()) - Integer.parseInt(A.getInspectionDate()));
+
+            this.inspectionReports = new MutableLiveData<>(reports);
+            return inspectionReports;
         } catch (JsonProcessingException e) {
             throw new RepositoryReadError(e.getMessage());
         }
     }
 
     @Override
-    public Map<String, List<InspectionReport>> saveInspections(Map<String, List<InspectionReport>> inspections) throws RepositoryWriteError {
+    public void saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError {
         try {
             String jsonString = this.objectMapper.writeValueAsString(inspections);
             Utils.writeJSONToStorage(this.context, Constants.INSPECTION_REPORT_FILE, jsonString);
-            return inspections;
+            this.inspectionReports.postValue(inspections);
         } catch (IOException e) {
             throw new RepositoryWriteError(e.getMessage());
         }

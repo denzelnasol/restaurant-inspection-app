@@ -1,34 +1,46 @@
 package com.group11.cmpt276_project.service.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import com.group11.cmpt276_project.service.dto.InspectionReportDto;
+
 import java.util.List;
 
 /**
  * Represent an Inspection Report including the TrackingNumber, InspectionDate, InspectionType,
  * NumCritical, NumNonCritical, HazardRating and ViolLump.
  */
-
+@Entity(primaryKeys = {"tracking_number", "inspection_date"})
 public class InspectionReport {
 
+    @NonNull
+    @ColumnInfo(name = "tracking_number")
     private String trackingNumber;
+
+    @NonNull
+    @ColumnInfo(name = "inspection_date")
     private String inspectionDate;
+
+    @ColumnInfo(name = "inspection_type")
     private String inspectionType;
+
+    @ColumnInfo(name = "number_critical")
     private int numberCritical;
+
+    @ColumnInfo(name = "number_noncritical")
     private int numberNonCritical;
+
+    @ColumnInfo(name = "hazard_rating")
     private String hazardRating;
+
+    @ColumnInfo(name = "viol_lump")
     private List<String> violLump;
 
     public InspectionReport() {
 
-    }
-
-    private InspectionReport(String trackingNumber, String inspectionDate, String inspectionType, int numberCritical, int numberNonCritical, String hazardRating, List<String> violLump) {
-        this.trackingNumber = trackingNumber;
-        this.inspectionDate = inspectionDate;
-        this.inspectionType = inspectionType;
-        this.numberCritical = numberCritical;
-        this.numberNonCritical = numberNonCritical;
-        this.hazardRating = hazardRating;
-        this.violLump = violLump;
     }
 
     public static class InspectionReportBuilder {
@@ -76,15 +88,20 @@ public class InspectionReport {
         }
 
         public InspectionReport build() {
-            return new InspectionReport(this.trackingNumber,
-                    this.inspectionDate,
-                    this.inspectionType,
-                    this.numberCritical,
-                    this.numberNonCritical,
-                    this.hazardRating,
-                    this.violLump);
+            InspectionReport inspectionReport = new InspectionReport();
+
+            inspectionReport.hazardRating = this.hazardRating;
+            inspectionReport.inspectionDate = this.inspectionDate;
+            inspectionReport.inspectionType = this.inspectionType;
+            inspectionReport.numberCritical = this.numberCritical;
+            inspectionReport.numberNonCritical = this.numberNonCritical;
+            inspectionReport.violLump = this.violLump;
+            inspectionReport.trackingNumber = trackingNumber;
+
+            return inspectionReport;
         }
     }
+
 
     public String getTrackingNumber() {
         return trackingNumber;
@@ -113,4 +130,33 @@ public class InspectionReport {
     public List<String> getViolLump() {
         return violLump;
     }
+
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
+    }
+
+    public void setInspectionDate(String inspectionDate) {
+        this.inspectionDate = inspectionDate;
+    }
+
+    public void setInspectionType(String inspectionType) {
+        this.inspectionType = inspectionType;
+    }
+
+    public void setNumberCritical(int numberCritical) {
+        this.numberCritical = numberCritical;
+    }
+
+    public void setNumberNonCritical(int numberNonCritical) {
+        this.numberNonCritical = numberNonCritical;
+    }
+
+    public void setHazardRating(String hazardRating) {
+        this.hazardRating = hazardRating;
+    }
+
+    public void setViolLump(List<String> violLump) {
+        this.violLump = violLump;
+    }
+
 }

@@ -47,9 +47,6 @@ public class MainPageActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        RestaurantsViewModel.getInstance().save();
-        InspectionReportsViewModel.getInstance().save();
-        ViolationsViewModel.getInstance().save();
         this.finishAffinity();
     }
 

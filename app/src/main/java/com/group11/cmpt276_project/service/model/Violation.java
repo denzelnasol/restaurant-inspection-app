@@ -1,25 +1,33 @@
 package com.group11.cmpt276_project.service.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import com.group11.cmpt276_project.service.dto.ViolationDto;
+
 /**
  * Represent a single Violation including the id, status, details, and type.
  */
-
+@Entity
 public class Violation {
+
+    @NonNull
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     private String id;
+
+    @ColumnInfo(name = "status")
     private String status;
+
+    @ColumnInfo(name = "details")
     private String details;
+
+    @ColumnInfo(name = "type")
     private String type;
 
     public Violation() {
-    }
-
-    ;
-
-    private Violation(String id, String status, String details, String type) {
-        this.id = id;
-        this.status = status;
-        this.details = details;
-        this.type = type;
     }
 
     public static class ViolationBuilder {
@@ -49,7 +57,13 @@ public class Violation {
         }
 
         public Violation build() {
-            return new Violation(this.id, this.status, this.details, this.type);
+            Violation violation = new Violation();
+            violation.details = this.details;
+            violation.id = this.id;
+            violation.status = this.status;
+            violation.type = this.type;
+
+            return violation;
         }
     }
 

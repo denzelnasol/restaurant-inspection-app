@@ -1,16 +1,10 @@
 package com.group11.cmpt276_project.service.model;
 
-/*
-This classes represents a restaurant as an object
- */
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
-import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity
-public class Restaurant {
+public class RestaurantUpdate {
 
     @NonNull
     @PrimaryKey
@@ -35,15 +29,12 @@ public class Restaurant {
     @ColumnInfo(name = "longitude")
     private double longitude;
 
-    @ColumnInfo(name = "is_favorite", defaultValue = "0")
-    private boolean isFavorite;
 
-
-    public Restaurant() {
+    public RestaurantUpdate() {
 
     }
 
-    public static class RestaurantBuilder {
+    public static class RestaurantUpdateBuilder {
         private String trackingNumber;
         private String name;
         private String physicalAddress;
@@ -51,50 +42,44 @@ public class Restaurant {
         private String facilityType;
         private double latitude;
         private double longitude;
-        private boolean isFavorite;
 
-        public RestaurantBuilder withTrackingNumber(String trackingNumber) {
+        public RestaurantUpdateBuilder withTrackingNumber(String trackingNumber) {
             this.trackingNumber = trackingNumber;
             return this;
         }
 
-        public RestaurantBuilder withName(String name) {
+        public RestaurantUpdateBuilder withName(String name) {
             this.name = name;
             return this;
         }
 
-        public RestaurantBuilder withPhysicalAddress(String physicalAddress) {
+        public RestaurantUpdateBuilder withPhysicalAddress(String physicalAddress) {
             this.physicalAddress = physicalAddress;
             return this;
         }
 
-        public RestaurantBuilder withPhysicalCity(String physicalCity) {
+        public RestaurantUpdateBuilder withPhysicalCity(String physicalCity) {
             this.physicalCity = physicalCity;
             return this;
         }
 
-        public RestaurantBuilder withFacilityType(String facilityType) {
+        public RestaurantUpdateBuilder withFacilityType(String facilityType) {
             this.facilityType = facilityType;
             return this;
         }
 
-        public RestaurantBuilder withLatitude(double latitude) {
+        public RestaurantUpdateBuilder withLatitude(double latitude) {
             this.latitude = latitude;
             return this;
         }
 
-        public RestaurantBuilder withLongitude(double longitude) {
+        public RestaurantUpdateBuilder withLongitude(double longitude) {
             this.longitude = longitude;
             return this;
         }
 
-        public RestaurantBuilder withIsFavorite(boolean isFavorite) {
-            this.isFavorite = isFavorite;
-            return this;
-        }
-
-        public Restaurant build() {
-            Restaurant restaurant = new Restaurant();
+        public RestaurantUpdate build() {
+            RestaurantUpdate restaurant = new RestaurantUpdate();
 
             restaurant.trackingNumber = this.trackingNumber;
             restaurant.name = this.name;
@@ -103,7 +88,6 @@ public class Restaurant {
             restaurant.facilityType = this.facilityType;
             restaurant.latitude = this.latitude;
             restaurant.longitude = this.longitude;
-            restaurant.isFavorite = this.isFavorite;
             return restaurant;
         }
     }
@@ -162,13 +146,5 @@ public class Restaurant {
 
     public double getLongitude() {
         return longitude;
-    }
-
-    public boolean isFavorite() {
-        return isFavorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
     }
 }

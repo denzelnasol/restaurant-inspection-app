@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.group11.cmpt276_project.databinding.RestaurantItemBinding;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
-import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickTrackingNumber;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,9 +24,9 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
     private final Map<String,Restaurant> restaurants;
     private final List<String> trackingNumbers;
     private final Map<String, InspectionReport> inspectionReports;
-    private final IItemOnClickTrackingNumber onRestaurantItemClick;
+    private final IRestaurantItemOnClick onRestaurantItemClick;
 
-    public RestaurantAdapter(Map<String,Restaurant> restaurants, Map<String, InspectionReport> inspectionReports, IItemOnClickTrackingNumber onRestaurantItemClick) {
+    public RestaurantAdapter(Map<String,Restaurant> restaurants, Map<String, InspectionReport> inspectionReports, IRestaurantItemOnClick onRestaurantItemClick) {
         this.restaurants = restaurants;
         this.trackingNumbers = new ArrayList<>(restaurants.keySet());
 
@@ -71,7 +70,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
 
         private final RestaurantItemBinding binding;
 
-        public RestaurantViewHolder(RestaurantItemBinding binding, IItemOnClickTrackingNumber onRestaurantItemClick) {
+        public RestaurantViewHolder(RestaurantItemBinding binding, IRestaurantItemOnClick onRestaurantItemClick) {
             super(binding.getRoot());
             this.binding = binding;
             this.binding.getRoot().setOnClickListener((View view) -> {
@@ -85,4 +84,9 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
             this.binding.executePendingBindings();
         }
     }
+
+    public interface IRestaurantItemOnClick {
+        void onItemClick(String trackingNumber);
+    }
+
 }

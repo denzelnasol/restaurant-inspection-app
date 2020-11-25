@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.util.Pair;
 
+import com.group11.cmpt276_project.service.dto.InspectionReportDto;
+import com.group11.cmpt276_project.service.dto.RestaurantDto;
+import com.group11.cmpt276_project.service.dto.ViolationDto;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.service.model.Violation;
@@ -118,11 +121,11 @@ public class Utils {
         file.delete();
     }
 
-    public static Map<String, Restaurant> csvToRestaurants(List<List<String>> csv) {
-        Map<String, Restaurant> updatedMap = new HashMap<>();
+    public static List<RestaurantDto> csvToRestaurants(List<List<String>> csv) {
+        List<RestaurantDto> newRestaurants = new ArrayList<>();
 
         for(List<String> row : csv) {
-            Restaurant restaurant = new Restaurant.RestaurantBuilder()
+            RestaurantDto restaurantDto = new RestaurantDto.RestaurantDtoBuilder()
                     .withTrackingNumber(row.get(0))
                     .withName(row.get(1))
                     .withPhysicalAddress(row.get(2))
@@ -131,16 +134,16 @@ public class Utils {
                     .withLatitude(Double.parseDouble(row.get(5)))
                     .withLongitude(Double.parseDouble(row.get(6)))
                     .build();
-            updatedMap.put(row.get(0), restaurant);
+            newRestaurants.add(restaurantDto);
         }
 
-        return updatedMap;
+        return newRestaurants;
     }
 
-    public static Pair<Map<String, List<InspectionReport>>, Map<String, Violation>> csvToInspections(List<List<String>> csv) {
+    public static Pair<List<InspectionReportDto>,List<ViolationDto>> csvToInspections(List<List<String>> csv) {
 
-        Map<String, Violation> newViolations = new HashMap<>();
-        Map<String, List<InspectionReport>> newInspections = new HashMap<>();
+        Map<String, ViolationDto> newViolations = new HashMap<>();
+       List<InspectionReportDto> newInspections = new ArrayList<>();
 
         for(List<String> row : csv) {
             String trackingNumber = row.get(0);
@@ -162,18 +165,18 @@ public class Utils {
 
                 String id = split[0];
 
-                Violation violation = new Violation.ViolationBuilder()
+                ViolationDto violationDto = new ViolationDto.ViolationDtoBuilder()
                         .withId(id)
                         .withStatus(split[1])
                         .withDetails(split[1])
                         .withType(split[2])
                         .build();
 
-                newViolations.put(id, violation);
+                newViolations.put(id, violationDto);
                 violations.add(id);
             }
 
-            InspectionReport inspectionReport = new InspectionReport.InspectionReportBuilder()
+            InspectionReportDto inspectionReportDto = new InspectionReportDto.InspectionReportDtoBuilder()
                     .withTrackingNumber(trackingNumber)
                     .withInspectionDate(row.get(1))
                     .withInspectionType(row.get(2))
@@ -184,13 +187,11 @@ public class Utils {
                     .build();
 
 
-            newInspections.computeIfAbsent(trackingNumber, (k) -> new ArrayList<>()).add(inspectionReport);
+            newInspections.add(inspectionReportDto);
         }
 
-        for(Map.Entry<String, List<InspectionReport>> entry : newInspections.entrySet()) {
-            Collections.sort(entry.getValue(), (InspectionReport A, InspectionReport B) -> Integer.parseInt(B.getInspectionDate()) - Integer.parseInt(A.getInspectionDate()));
-        }
+        Collections.sort(newInspections, (InspectionReportDto A, InspectionReportDto B) -> Integer.parseInt(B.getInspectionDate()) - Integer.parseInt(A.getInspectionDate()));
 
-        return new Pair(newInspections, newViolations);
+        return new Pair(newInspections, new ArrayList(newViolations.values()));
     }
 }

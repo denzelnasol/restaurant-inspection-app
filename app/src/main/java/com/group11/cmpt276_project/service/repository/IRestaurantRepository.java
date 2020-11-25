@@ -1,14 +1,20 @@
 package com.group11.cmpt276_project.service.repository;
 
+import androidx.lifecycle.LiveData;
+
 import com.group11.cmpt276_project.exception.RepositoryReadError;
 import com.group11.cmpt276_project.exception.RepositoryWriteError;
 import com.group11.cmpt276_project.service.model.Restaurant;
+import com.group11.cmpt276_project.service.model.RestaurantUpdate;
 
-import java.util.Map;
+import java.util.List;
 
 //An interface describing what functions a RestaurantRepository should have.
 public interface IRestaurantRepository {
 
-    Map<String,Restaurant>  getRestaurants() throws RepositoryReadError;
-    Map<String,Restaurant> saveRestaurants(Map<String,Restaurant> restaurants) throws RepositoryWriteError;
+    LiveData<List<Restaurant>>  getRestaurants() throws RepositoryReadError;
+    LiveData<List<String>> getFavoriteRestaurants() throws  RepositoryReadError;
+    void saveRestaurants(List<RestaurantUpdate> restaurants) throws RepositoryWriteError;
+    void saveRestaurant(RestaurantUpdate restaurant) throws RepositoryWriteError;
+
 }

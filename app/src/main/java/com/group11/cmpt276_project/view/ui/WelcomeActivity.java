@@ -19,13 +19,15 @@ import com.group11.cmpt276_project.databinding.ActivityWelcomeBinding;
 import com.group11.cmpt276_project.service.network.SurreyApiClient;
 import com.group11.cmpt276_project.service.network.endpoints.DownloadDataSetService;
 import com.group11.cmpt276_project.service.network.endpoints.GetDataSetService;
+import com.group11.cmpt276_project.service.repository.IInspectionReportRepository;
 import com.group11.cmpt276_project.service.repository.IPreferenceRepository;
-import com.group11.cmpt276_project.service.repository.impl.JsonInspectionReportRepository;
-import com.group11.cmpt276_project.service.repository.impl.JsonRestaurantRepository;
-import com.group11.cmpt276_project.service.repository.impl.JsonViolationRepository;
-import com.group11.cmpt276_project.service.repository.impl.SharedPreferenceRepository;
+import com.group11.cmpt276_project.service.repository.IRestaurantRepository;
+import com.group11.cmpt276_project.service.repository.IViolationRepository;
+import com.group11.cmpt276_project.service.repository.impl.json.JsonInspectionReportRepository;
+import com.group11.cmpt276_project.service.repository.impl.json.JsonRestaurantRepository;
+import com.group11.cmpt276_project.service.repository.impl.json.JsonViolationRepository;
+import com.group11.cmpt276_project.service.repository.impl.json.SharedPreferenceRepository;
 import com.group11.cmpt276_project.utils.Constants;
-import com.group11.cmpt276_project.viewmodel.ClusterItemViewModel;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
@@ -62,10 +64,10 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public void observe() {
         this.welcomeViewModel.getHasInternetConnection().observe(this, (data) -> {
-            if(data) {
+            if (data) {
                 welcomeViewModel.checkForUpdates();
             } else {
-                loadClusterAndMoveToMainActivity(TIMEOUT);
+                moveToMainActivity(TIMEOUT);
             }
         });
         this.welcomeViewModel.getShouldUpdate().observe(this, (data) -> {
@@ -78,19 +80,19 @@ public class WelcomeActivity extends AppCompatActivity {
                         })
                         .setNegativeButton(R.string.cancel, (DialogInterface dialog, int id) -> {
                             dialog.dismiss();
-                            this.loadClusterAndMoveToMainActivity(250);
+                            this.moveToMainActivity(250);
                         });
 
                 AlertDialog dialog = builder.create();
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
             } else {
-                this.loadClusterAndMoveToMainActivity(TIMEOUT);
+                this.moveToMainActivity(TIMEOUT);
             }
         });
         this.welcomeViewModel.getUpdateDone().observe(this, (data) -> {
             if (data) {
-                loadClusterAndMoveToMainActivity(250);
+                moveToMainActivity(250);
             }
         });
         this.welcomeViewModel.getDownloadFailed().observe(this, (data) -> {
@@ -110,7 +112,7 @@ public class WelcomeActivity extends AppCompatActivity {
         });
         this.welcomeViewModel.getIsCancelled().observe(this, (data) -> {
             if (data) {
-                this.loadClusterAndMoveToMainActivity(500);
+                this.moveToMainActivity(500);
             }
         });
     }
@@ -119,8 +121,7 @@ public class WelcomeActivity extends AppCompatActivity {
         this.welcomeViewModel.cancelDownload();
     }
 
-    private void loadClusterAndMoveToMainActivity(int timeOut) {
-        ClusterItemViewModel.getInstance().init(getApplicationContext(), restaurantsViewModel, inspectionReportsViewModel);
+    private void moveToMainActivity(int timeOut) {
         new Handler().postDelayed(() -> {
             Intent intent = MainPageActivity.startActivity(this, null);
             startActivity(intent);
@@ -128,16 +129,22 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void init() {
-        JsonRestaurantRepository jsonRestaurantRepository = new JsonRestaurantRepository(getApplicationContext());
+
+        //RestaurantDatabase restaurantDatabase = RestaurantDatabase.getDatabase(getApplicationContext());
+
+        //IRestaurantRepository restaurantRepository = new RoomRestaurantRepository(restaurantDatabase.restaurantDao());
+        IRestaurantRepository restaurantRepository = new JsonRestaurantRepository(getApplicationContext());
         this.restaurantsViewModel = RestaurantsViewModel.getInstance();
-        this.restaurantsViewModel.init(jsonRestaurantRepository);
+        this.restaurantsViewModel.init(restaurantRepository);
 
-        JsonInspectionReportRepository jsonInspectionReportRepository = new JsonInspectionReportRepository(getApplicationContext());
+        //IInspectionReportRepository inspectionReportRepository = new RoomInspectionReportRepository(restaurantDatabase.inspectionReportDao());
+        IInspectionReportRepository inspectionReportRepository = new JsonInspectionReportRepository(getApplicationContext());
         this.inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
-        this.inspectionReportsViewModel.init(jsonInspectionReportRepository);
+        this.inspectionReportsViewModel.init(inspectionReportRepository);
 
-        JsonViolationRepository jsonViolationRepository = new JsonViolationRepository(getApplicationContext());
-        ViolationsViewModel.getInstance().init(jsonViolationRepository);
+        //IViolationRepository violationRepository = new RoomViolationRepository(restaurantDatabase.violationDao());
+        IViolationRepository violationRepository = new JsonViolationRepository(getApplicationContext());
+        ViolationsViewModel.getInstance().init(violationRepository);
     }
 
     private void bind() {
