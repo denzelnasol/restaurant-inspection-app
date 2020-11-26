@@ -135,6 +135,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private void init() {
 
         RestaurantDatabase restaurantDatabase = RestaurantDatabase.getDatabase(getApplicationContext());
+        restaurantDatabase.restaurantDao().getAllRestaurants();
 
         IRestaurantRepository restaurantRepository = new RoomRestaurantRepository(restaurantDatabase.restaurantDao());
         //IRestaurantRepository restaurantRepository = new JsonRestaurantRepository(getApplicationContext());

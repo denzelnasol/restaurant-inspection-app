@@ -130,15 +130,12 @@ public abstract class RestaurantDatabase extends RoomDatabase {
             databaseWriteExecutor.execute(() -> {
 
                 RestaurantDao restaurantDao = INSTANCE.restaurantDao();
-                //restaurantDao.deleteAll();
                 restaurantDao.insertOrUpdate(defaultRestaurants);
 
                 InspectionReportDao inspectionReportDao = INSTANCE.inspectionReportDao();
-                //inspectionReportDao.deleteAll();
                 inspectionReportDao.insertOrUpdate(defaultInspections);
 
                 ViolationDao violationDao = INSTANCE.violationDao();
-                //violationDao.deleteAll();
                 violationDao.insertOrUpdate(defaultViolations);
             });
         }
