@@ -99,6 +99,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
         this.setUpClusters();
         this.mapFragmentViewModel.getClusterItems().observe(this, (data) -> {
+            this.mGoogleMap.clear();
+            this.clusterManager.clearItems();
             this.clusterManager.addItems(data);
             this.clusterManager.cluster();
         });

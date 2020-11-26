@@ -16,6 +16,7 @@ import android.os.Handler;
 import com.group11.cmpt276_project.R;
 
 import com.group11.cmpt276_project.databinding.ActivityWelcomeBinding;
+import com.group11.cmpt276_project.service.db.RestaurantDatabase;
 import com.group11.cmpt276_project.service.network.SurreyApiClient;
 import com.group11.cmpt276_project.service.network.endpoints.DownloadDataSetService;
 import com.group11.cmpt276_project.service.network.endpoints.GetDataSetService;
@@ -23,6 +24,9 @@ import com.group11.cmpt276_project.service.repository.IInspectionReportRepositor
 import com.group11.cmpt276_project.service.repository.IPreferenceRepository;
 import com.group11.cmpt276_project.service.repository.IRestaurantRepository;
 import com.group11.cmpt276_project.service.repository.IViolationRepository;
+import com.group11.cmpt276_project.service.repository.impl.db.RoomInspectionReportRepository;
+import com.group11.cmpt276_project.service.repository.impl.db.RoomRestaurantRepository;
+import com.group11.cmpt276_project.service.repository.impl.db.RoomViolationRepository;
 import com.group11.cmpt276_project.service.repository.impl.json.JsonInspectionReportRepository;
 import com.group11.cmpt276_project.service.repository.impl.json.JsonRestaurantRepository;
 import com.group11.cmpt276_project.service.repository.impl.json.JsonViolationRepository;
@@ -130,7 +134,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void init() {
 
-        //RestaurantDatabase restaurantDatabase = RestaurantDatabase.getDatabase(getApplicationContext());
+       // RestaurantDatabase restaurantDatabase = RestaurantDatabase.getDatabase(getApplicationContext());
 
         //IRestaurantRepository restaurantRepository = new RoomRestaurantRepository(restaurantDatabase.restaurantDao());
         IRestaurantRepository restaurantRepository = new JsonRestaurantRepository(getApplicationContext());

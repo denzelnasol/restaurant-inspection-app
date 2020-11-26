@@ -106,6 +106,8 @@ public class MapFragmentViewModel extends ViewModel {
                 newClusterItems.add(clusterItem);
             }
 
+            System.out.println(newClusterItems.size());
+
             this.mClusterItems.setValue(newClusterItems);
         }
 

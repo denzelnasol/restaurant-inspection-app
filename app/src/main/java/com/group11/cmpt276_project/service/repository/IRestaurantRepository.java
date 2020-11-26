@@ -15,6 +15,6 @@ public interface IRestaurantRepository {
     LiveData<List<Restaurant>>  getRestaurants() throws RepositoryReadError;
     LiveData<List<String>> getFavoriteRestaurants() throws  RepositoryReadError;
     void saveRestaurants(List<RestaurantUpdate> restaurants) throws RepositoryWriteError;
-    void saveRestaurant(RestaurantUpdate restaurant) throws RepositoryWriteError;
+    void saveRestaurant(Restaurant restaurant) throws RepositoryWriteError;
 
 }

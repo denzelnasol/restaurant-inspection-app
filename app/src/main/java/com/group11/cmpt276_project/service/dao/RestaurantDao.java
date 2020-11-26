@@ -36,14 +36,14 @@ public abstract class RestaurantDao {
     @Query("DELETE FROM Restaurant")
     public  abstract void deleteAll();
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE, entity = Restaurant.class)
-    abstract Long insert(RestaurantUpdate obj);
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    abstract Long insert(Restaurant obj);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE, entity = Restaurant.class)
     abstract List<Long> insert(List<RestaurantUpdate> objList);
 
-    @Update(entity = Restaurant.class)
-    abstract void update(RestaurantUpdate obj);
+    @Update
+    abstract void update(Restaurant obj);
 
     @Update(entity = Restaurant.class)
     abstract void update(List<RestaurantUpdate> objList);
@@ -52,7 +52,7 @@ public abstract class RestaurantDao {
     abstract void delete(Restaurant obj);
 
     @Transaction
-    public void insertOrUpdate(RestaurantUpdate obj) {
+    public void insertOrUpdate(Restaurant obj) {
         long rowId = insert(obj);
         if(rowId == -1L) {
             update(obj);

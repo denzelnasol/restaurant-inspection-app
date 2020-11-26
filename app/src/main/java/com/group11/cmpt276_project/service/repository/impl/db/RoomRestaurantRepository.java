@@ -37,13 +37,11 @@ public class RoomRestaurantRepository implements IRestaurantRepository {
 
     @Override
     public void saveRestaurants(List<RestaurantUpdate> restaurants) throws RepositoryWriteError {
-        RestaurantDatabase.databaseWriteExecutor.execute(() -> {
-            this.restaurantDao.insertOrUpdate(restaurants);
-        });
+        this.restaurantDao.insertOrUpdate(restaurants);
     }
 
     @Override
-    public void saveRestaurant(RestaurantUpdate restaurant) throws RepositoryWriteError {
+    public void saveRestaurant(Restaurant restaurant) throws RepositoryWriteError {
         RestaurantDatabase.databaseWriteExecutor.execute(() -> {
             this.restaurantDao.insertOrUpdate(restaurant);
         });

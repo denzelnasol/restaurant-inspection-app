@@ -111,7 +111,7 @@ public class JsonRestaurantRepository implements IRestaurantRepository {
     }
 
     @Override
-    public void saveRestaurant(RestaurantUpdate restaurant) throws RepositoryWriteError {
+    public void saveRestaurant(Restaurant restaurant) throws RepositoryWriteError {
     }
 
 

@@ -400,6 +400,8 @@ public class WelcomeViewModel extends ViewModel {
         protected Void doInBackground(Void... avoid) {
             try {
                 if (shouldUpdateInspection) {
+                    System.out.println("Updating inspections");
+
                     List<List<String>> inspectionCsv = Utils.readCSVFromStorage(context, INSPECTION_CSV);
                     Pair<List<InspectionReportDto>, List<ViolationDto>> inspections = Utils.csvToInspections(inspectionCsv);
 
@@ -413,6 +415,8 @@ public class WelcomeViewModel extends ViewModel {
                     Utils.deleteFileFromStorage(context, INSPECTION_CSV);
                 }
                 if (shouldUpdateRestaurants) {
+                    System.out.println("Updating Restaurants");
+
                     List<List<String>> restaurantsCsv = Utils.readCSVFromStorage(context, RESTAURANT_CSV);
                     List<RestaurantDto> restaurants = Utils.csvToRestaurants(restaurantsCsv);
                     RestaurantsViewModel restaurantsViewModel = RestaurantsViewModel.getInstance();

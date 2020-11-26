@@ -20,7 +20,7 @@ public class RoomViolationRepository implements IViolationRepository {
 
     public RoomViolationRepository(ViolationDao violationDao) {
         this.violationDao = violationDao;
-        this.violations =  this.violationDao.getAllViolations();
+        this.violations = this.violationDao.getAllViolations();
     }
 
     @Override
@@ -30,9 +30,6 @@ public class RoomViolationRepository implements IViolationRepository {
 
     @Override
     public void saveViolations(List<Violation> violations) throws RepositoryWriteError {
-
-        RestaurantDatabase.databaseWriteExecutor.execute(() -> {
-            this.violationDao.insertOrUpdate(violations);
-        });
+        this.violationDao.insertOrUpdate(violations);
     }
 }

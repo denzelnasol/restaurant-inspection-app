@@ -20,6 +20,7 @@ import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -73,7 +74,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         });
 
         this.inspectionReportsViewModel.getReports().observe(this, (data) -> {
-            this.setupRecyclerView(data.get(this.trackingNumber));
+            this.setupRecyclerView(data.getOrDefault(this.trackingNumber, new ArrayList<>()));
         });
     }
 

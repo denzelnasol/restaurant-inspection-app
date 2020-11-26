@@ -25,14 +25,11 @@ public class RoomInspectionReportRepository implements IInspectionReportReposito
 
     @Override
     public LiveData<List<InspectionReport>> getInspections() throws RepositoryReadError {
-        return  this.reports;
+        return this.reports;
     }
 
     @Override
     public void saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError {
-
-        RestaurantDatabase.databaseWriteExecutor.execute(() -> {
-            this.inspectionReportDao.insertOrUpdate(inspections);
-        });
+        this.inspectionReportDao.insertOrUpdate(inspections);
     }
 }
