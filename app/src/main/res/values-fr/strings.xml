@@ -7,8 +7,8 @@
     <string name = "time"> Heure - </string>
     <string name = "number_violations">%d violations détectées lors de l inspection </string>
     <string name = "last_inspect"> La dernière inspection était %s </string>
-    <string name = "days"> il y a %d jours </string>
-    <string name = "month"> le %s %d </string>
+    <string name = "days"> %d il y a quelques jours </string>
+    <string name = "month"> sur %s %d </string>
     <string name = "year"> dans %s %d </string>
     <string name = "empty" />
     <string name = "low"> Faible </string>
@@ -32,8 +32,8 @@
     <string name = "ok"> Télécharger maintenant </string>
     <string name = "updates"> De nouvelles mises à jour sont disponibles </string>
     <string name = "finalize_updates"> Finalisation des mises à jour </string>
-    <string name = "current_downloading"> Téléchargement de %s… %s%% </string>
-    <string name = "start_download"> Démarrage de %s </string>
+    <string name = "current_downloading"> Téléchargement %s… %s%% </string>
+    <string name = "start_download"> Départ %s </string>
     <string name = "hello_blank_fragment"> Bonjour fragment vierge </string>
 
 </resources>
