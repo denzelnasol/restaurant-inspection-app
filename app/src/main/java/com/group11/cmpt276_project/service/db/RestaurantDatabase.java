@@ -129,8 +129,6 @@ public abstract class RestaurantDatabase extends RoomDatabase {
 
             databaseWriteExecutor.execute(() -> {
 
-                System.out.println("Database created");
-
                 RestaurantDao restaurantDao = INSTANCE.restaurantDao();
                 //restaurantDao.deleteAll();
                 restaurantDao.insertOrUpdate(defaultRestaurants);

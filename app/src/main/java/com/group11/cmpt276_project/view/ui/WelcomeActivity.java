@@ -134,20 +134,20 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void init() {
 
-       // RestaurantDatabase restaurantDatabase = RestaurantDatabase.getDatabase(getApplicationContext());
+        RestaurantDatabase restaurantDatabase = RestaurantDatabase.getDatabase(getApplicationContext());
 
-        //IRestaurantRepository restaurantRepository = new RoomRestaurantRepository(restaurantDatabase.restaurantDao());
-        IRestaurantRepository restaurantRepository = new JsonRestaurantRepository(getApplicationContext());
+        IRestaurantRepository restaurantRepository = new RoomRestaurantRepository(restaurantDatabase.restaurantDao());
+        //IRestaurantRepository restaurantRepository = new JsonRestaurantRepository(getApplicationContext());
         this.restaurantsViewModel = RestaurantsViewModel.getInstance();
         this.restaurantsViewModel.init(restaurantRepository);
 
-        //IInspectionReportRepository inspectionReportRepository = new RoomInspectionReportRepository(restaurantDatabase.inspectionReportDao());
-        IInspectionReportRepository inspectionReportRepository = new JsonInspectionReportRepository(getApplicationContext());
+        IInspectionReportRepository inspectionReportRepository = new RoomInspectionReportRepository(restaurantDatabase.inspectionReportDao());
+        //IInspectionReportRepository inspectionReportRepository = new JsonInspectionReportRepository(getApplicationContext());
         this.inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
         this.inspectionReportsViewModel.init(inspectionReportRepository);
 
-        //IViolationRepository violationRepository = new RoomViolationRepository(restaurantDatabase.violationDao());
-        IViolationRepository violationRepository = new JsonViolationRepository(getApplicationContext());
+        IViolationRepository violationRepository = new RoomViolationRepository(restaurantDatabase.violationDao());
+        //IViolationRepository violationRepository = new JsonViolationRepository(getApplicationContext());
         ViolationsViewModel.getInstance().init(violationRepository);
     }
 

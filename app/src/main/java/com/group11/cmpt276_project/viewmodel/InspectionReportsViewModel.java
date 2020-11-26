@@ -85,7 +85,6 @@ public class InspectionReportsViewModel {
                 toAdd.add(report);
             }
 
-            System.out.println("Size to add inspection" + toAdd.size());
 
             this.inspectionReportRepository.saveInspections(toAdd);
         } catch (RepositoryWriteError repositoryWriteError) {

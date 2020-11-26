@@ -53,8 +53,6 @@ public abstract class InspectionReportDao {
     public void insertOrUpdate(List<InspectionReport> objList) {
         List<Long> insertResults = insert(objList);
 
-        System.out.println("Insert results " + insertResults.size());
-        System.out.println("Insert objList " + objList.size());
         List<InspectionReport> updateList = new ArrayList<>();
 
         for(int i = 0; i < insertResults.size(); i++) {
