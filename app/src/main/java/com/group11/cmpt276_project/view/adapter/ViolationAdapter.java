@@ -56,6 +56,9 @@ public class ViolationAdapter extends RecyclerView.Adapter<ViolationAdapter.Viol
             this.binding.getRoot().setOnClickListener((View view) -> {
                 onViolationItemClick.onItemClick(getAdapterPosition());
             });
+            this.binding.arrow.setOnClickListener((View view) -> {
+                onViolationItemClick.onItemClick(getAdapterPosition());
+            });
         }
 
         public void bind(Violation violation, boolean isVisible) {

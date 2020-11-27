@@ -175,6 +175,10 @@ public class MainPageActivity extends FragmentActivity {
         this.applySearch();
     }
 
+    public void noOp() {
+
+    }
+
     public void clearAll() {
         this.mainPageViewModel.clearAll();
         this.restaurantsViewModel.clearSearch();

@@ -32,30 +32,19 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="4dp"
-            android:text="@string/clear_all"
-            android:onClick="@{() -> activity.clearAll()}"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar3"
-            app:layout_constraintEnd_toEndOf="parent" />
-
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="30dp"
             android:layout_height="35dp"
+            android:layout_marginBottom="12dp"
             android:background="@null"
+            android:contentDescription="TODO"
+            android:onClick="@{() -> activity.openFilter()}"
             android:scaleType="fitXY"
             android:src="@drawable/ic_filter"
             android:tint="@color/black"
-            android:onClick="@{() -> activity.openFilter()}"
-            app:layout_constraintBottom_toBottomOf="@+id/button4"
-            app:layout_constraintEnd_toStartOf="@+id/button4"
-            app:layout_constraintTop_toTopOf="@+id/button4"
-            android:contentDescription="TODO" />
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar3"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <SearchView
             android:id="@+id/search_restaurant"
@@ -124,8 +113,19 @@
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
+            android:onClick="@{() -> activity.noOp()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar3">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintGuide_percent="0.51"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/button7"
@@ -155,27 +155,24 @@
                 android:id="@+id/button8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:background="@drawable/btn_no_bg"
-                android:onClick="@{() -> activity.clearAll()}"
+                android:onClick="@{() -> activity.clearFilter()}"
                 android:text="@string/clear"
                 app:layout_constraintBottom_toBottomOf="@+id/button5"
-                app:layout_constraintEnd_toStartOf="@+id/view"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/button5" />
 
             <CheckBox
                 android:id="@+id/checkBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="32dp"
                 android:checked="@={mainPageViewModel.isFavorite}"
                 android:text="@string/show_favorites"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view2" />
+                app:layout_constraintBottom_toBottomOf="@+id/textView2"
+                app:layout_constraintStart_toStartOf="@+id/guideline3"
+                app:layout_constraintTop_toTopOf="@+id/textView2" />
 
             <EditText
                 android:id="@+id/editTextNumber"
@@ -192,7 +189,7 @@
                 android:paddingStart="10dp"
                 android:text="@={mainPageViewModel.number}"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="@+id/textView2"
                 app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
@@ -204,7 +201,7 @@
                 android:layout_marginBottom="16dp"
                 android:checkedButton="@={mainPageViewModel.hazardLevel}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="@+id/textView6"
                 app:layout_constraintTop_toBottomOf="@+id/textView6">
 
@@ -232,9 +229,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
                 android:checkedButton="@={mainPageViewModel.isGrt}"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/editTextNumber"
                 app:layout_constraintStart_toStartOf="@+id/textView2"
                 app:layout_constraintTop_toBottomOf="@+id/textView2">
 
@@ -257,24 +253,27 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/number_of_critical_issues"
                 android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@+id/checkBox"
-                app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view" />
 
             <ImageButton
                 android:id="@+id/clear_issues"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/btn_no_bg"
                 android:onClick="@{() -> activity.clearNumberCritical()}"
+                android:src="@drawable/ic_close"
                 android:tint="#000000"
                 app:layout_constraintBottom_toBottomOf="@+id/textView2"
+                app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toEndOf="@+id/textView2"
-                app:layout_constraintTop_toTopOf="@+id/textView2"
-                android:src="@drawable/ic_close" />
+                app:layout_constraintTop_toTopOf="@+id/textView2" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -292,12 +291,11 @@
                 android:layout_marginStart="8dp"
                 android:background="@drawable/btn_no_bg"
                 android:onClick="@{() -> activity.clearHazardLevel()}"
-                android:backgroundTint="#FFFFFF"
+                android:src="@drawable/ic_close"
                 android:tint="#000000"
                 app:layout_constraintBottom_toBottomOf="@+id/textView6"
                 app:layout_constraintStart_toEndOf="@+id/textView6"
-                app:layout_constraintTop_toTopOf="@+id/textView6"
-                android:src="@drawable/ic_close" />
+                app:layout_constraintTop_toTopOf="@+id/textView6" />
 
             <View
                 android:id="@+id/view2"

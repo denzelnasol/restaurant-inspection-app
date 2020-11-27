@@ -22,7 +22,7 @@
             android:layout_height="41dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
-            android:background="@null"
+            android:background="@drawable/btn_no_bg"
             android:onClick="@{()->activity.onBackPressed()}"
             android:text="@string/backText"
             android:textColor="#FFFFFF"

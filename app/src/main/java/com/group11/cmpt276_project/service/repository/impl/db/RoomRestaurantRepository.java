@@ -62,18 +62,19 @@ public class RoomRestaurantRepository implements IRestaurantRepository {
         }
 
         if(shouldFilterByName) {
+            if(shouldFilterByHazardLevel) {
+                queryBuilder.append("AND ");
+            }
             queryBuilder.append("R.name LIKE ? ");
             queryParameters.add("%" + name + "%");
         }
 
         if(isFavorite) {
-            if(shouldFilterByName) {
+            if(shouldFilterByName || shouldFilterByHazardLevel) {
                 queryBuilder.append("AND ");
             }
             queryBuilder.append("R.is_favorite == 1 ");
         }
-
-        System.out.println(queryBuilder.toString());
 
         SimpleSQLiteQuery query = new SimpleSQLiteQuery(queryBuilder.toString(), queryParameters.toArray());
 

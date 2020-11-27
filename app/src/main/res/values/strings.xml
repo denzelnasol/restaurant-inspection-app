@@ -42,7 +42,7 @@
     <string name="clear">Clear</string>
     <string name="show_favorites">Show Favorites</string>
     <string name="number_of_critical_issues">Number of Critical Issues</string>
-    <string name="hazard_level">Hazard Level</string>
+    <string name="hazard_level">Last Report Hazard Level</string>
     <string name="issues"># Issues</string>
     <string name="moderate">Moderate</string>
     <string name="high">High</string>
