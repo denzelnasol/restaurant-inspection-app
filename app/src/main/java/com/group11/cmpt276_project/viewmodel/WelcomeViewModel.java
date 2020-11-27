@@ -402,14 +402,11 @@ public class WelcomeViewModel extends ViewModel {
                 if (shouldUpdateInspection) {
 
                     List<List<String>> inspectionCsv = Utils.readCSVFromStorage(context, INSPECTION_CSV);
-                    Pair<List<InspectionReportDto>, List<ViolationDto>> inspections = Utils.csvToInspections(inspectionCsv);
+                    List<InspectionReportDto> inspections = Utils.csvToInspections(inspectionCsv);
 
                     InspectionReportsViewModel inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
 
-                    inspectionReportsViewModel.save(inspections.first);
-
-                    ViolationsViewModel violationsViewModel = ViolationsViewModel.getInstance();
-                    violationsViewModel.save(inspections.second);
+                    inspectionReportsViewModel.save(inspections);
 
                     Utils.deleteFileFromStorage(context, INSPECTION_CSV);
                 }

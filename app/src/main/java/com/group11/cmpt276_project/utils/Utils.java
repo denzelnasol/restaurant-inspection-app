@@ -140,9 +140,8 @@ public class Utils {
         return newRestaurants;
     }
 
-    public static Pair<List<InspectionReportDto>,List<ViolationDto>> csvToInspections(List<List<String>> csv) {
+    public static List<InspectionReportDto> csvToInspections(List<List<String>> csv) {
 
-        Map<String, ViolationDto> newViolations = new HashMap<>();
        List<InspectionReportDto> newInspections = new ArrayList<>();
 
         for(List<String> row : csv) {
@@ -165,14 +164,6 @@ public class Utils {
 
                 String id = split[0];
 
-                ViolationDto violationDto = new ViolationDto.ViolationDtoBuilder()
-                        .withId(id)
-                        .withStatus(split[1])
-                        .withDetails(split[1])
-                        .withType(split[2])
-                        .build();
-
-                newViolations.put(id, violationDto);
                 violations.add(id);
             }
 
@@ -192,6 +183,6 @@ public class Utils {
 
         Collections.sort(newInspections, (InspectionReportDto A, InspectionReportDto B) -> Integer.parseInt(B.getInspectionDate()) - Integer.parseInt(A.getInspectionDate()));
 
-        return new Pair(newInspections, new ArrayList(newViolations.values()));
+        return newInspections;
     }
 }

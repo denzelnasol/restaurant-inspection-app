@@ -13,7 +13,7 @@ import java.util.List;
 public interface IRestaurantRepository {
 
     LiveData<List<Restaurant>>  getRestaurants() throws RepositoryReadError;
-    LiveData<List<String>> getFavoriteRestaurants() throws  RepositoryReadError;
+    LiveData<List<Restaurant>> getRestaurantsBySearch(String name, boolean isFavorite, int numberCritical, String hazardLevel) throws  RepositoryReadError;
     void saveRestaurants(List<RestaurantUpdate> restaurants) throws RepositoryWriteError;
     void saveRestaurant(Restaurant restaurant) throws RepositoryWriteError;
 

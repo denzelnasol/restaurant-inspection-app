@@ -92,7 +92,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         GPSCoordiantes coordinates = new GPSCoordiantes(latitude, longitude, this.trackingNumber);
 
         Intent intent = MainPageActivity.startActivity(this, coordinates);
-        MainPageViewModel.getInstance().setSelectedTabTab(0);
+        MainPageViewModel.getInstance().setSelectedTab(0);
         startActivity(intent);
     }
 

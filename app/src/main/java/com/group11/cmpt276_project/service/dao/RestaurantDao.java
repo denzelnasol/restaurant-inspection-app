@@ -7,8 +7,10 @@ import androidx.room.Entity;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.RawQuery;
 import androidx.room.Transaction;
 import androidx.room.Update;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.service.model.RestaurantUpdate;
@@ -22,9 +24,6 @@ public abstract class RestaurantDao {
     @Query("SELECT * FROM Restaurant ORDER BY name")
     public abstract LiveData<List<Restaurant>> getAllRestaurants();
 
-    @Query("SELECT * FROM Restaurant WHERE is_favorite == 1")
-    public abstract LiveData<List<Restaurant>> getFavoriteRestaurants();
-
     @Query("SELECT R.tracking_number, R.physical_city, R.physical_address, R.name, facility_type, latitude, longitude, is_favorite " +
             " FROM Restaurant R" +
             " JOIN InspectionReport I ON  R.tracking_number == I.tracking_number" +
@@ -32,6 +31,8 @@ public abstract class RestaurantDao {
             "WHERE I.hazard_rating == :hazardRating AND R.name LIKE :name AND R.is_favorite == 1 ")
     public abstract LiveData<List<Restaurant>> getRestaurantsWithWithRecentHazardLevel(String hazardRating, String name, int greater,int now);
 
+    @RawQuery(observedEntities = Restaurant.class)
+    public abstract  LiveData<List<Restaurant>> search(SupportSQLiteQuery query);
 
     @Query("DELETE FROM Restaurant")
     public  abstract void deleteAll();

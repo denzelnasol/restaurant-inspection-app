@@ -28,7 +28,7 @@
             android:layout_height="25dp"
             android:layout_marginEnd="16dp"
             android:alpha="@{welcomeViewModel.mCanCancel ? 1.0f : 0.50f}"
-            android:background="@drawable/round_btn"
+            android:background="@drawable/round_btn_download"
             android:clickable="@{welcomeViewModel.mCanCancel}"
             android:enabled="@{welcomeViewModel.mCanCancel}"
             android:onClick="@{()-> activity.onCancelClick()}"

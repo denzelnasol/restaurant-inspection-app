@@ -8,6 +8,7 @@ import com.group11.cmpt276_project.exception.RepositoryReadError;
 import com.group11.cmpt276_project.exception.RepositoryWriteError;
 import com.group11.cmpt276_project.service.dto.RestaurantDto;
 import com.group11.cmpt276_project.service.model.Restaurant;
+import com.group11.cmpt276_project.service.model.RestaurantFilter;
 import com.group11.cmpt276_project.service.model.RestaurantUpdate;
 import com.group11.cmpt276_project.service.repository.IRestaurantRepository;
 
@@ -24,7 +25,11 @@ so anything observing will change accordingly
 public class RestaurantsViewModel {
 
     private LiveData<List<Restaurant>> mData;
+    private LiveData<List<Restaurant>> mSearch;
     private MediatorLiveData<Map<String, Restaurant>> mRestaurants;
+
+    private List<Restaurant> restaurants;
+    private List<Restaurant> searchResult;
 
     private IRestaurantRepository restaurantRepository;
 
@@ -52,17 +57,40 @@ public class RestaurantsViewModel {
 
             this.mRestaurants = new MediatorLiveData<>();
             this.mRestaurants.addSource(this.mData, (data) -> {
-
-                if(data == null) return;
-
-                Map<String, Restaurant> restaurants = new HashMap<>();
-
-                for(Restaurant restaurant : data) {
-                    restaurants.put(restaurant.getTrackingNumber(), restaurant);
-                }
-
-                this.mRestaurants.setValue(restaurants);
+                this.restaurants = data;
+                mergeSource();
             });
+        }
+    }
+
+    public void clearSearch() {
+        if(this.mSearch != null) {
+            this.mRestaurants.removeSource(this.mSearch);
+            this.mSearch = null;
+            this.searchResult = null;
+            this.mergeSource();
+        }
+    }
+
+    public void search(String name, RestaurantFilter restaurantFilter) {
+
+        if(this.mSearch != null) {
+            this.mRestaurants.removeSource(this.mSearch);
+        }
+
+        try {
+            this.mSearch = this.restaurantRepository.getRestaurantsBySearch(
+                    name,
+                    restaurantFilter.isFavorite(),
+                    restaurantFilter.getNumberCritical(),
+                    restaurantFilter.getHazardLevel()
+            );
+            this.mRestaurants.addSource(this.mSearch, (data) -> {
+                this.searchResult = data;
+                mergeSource();
+            });
+        } catch (RepositoryReadError repositoryReadError) {
+            repositoryReadError.printStackTrace();
         }
     }
 
@@ -102,5 +130,22 @@ public class RestaurantsViewModel {
         } catch (RepositoryWriteError repositoryWriteError) {
             repositoryWriteError.printStackTrace();
         }
+    }
+
+    private void mergeSource() {
+
+        if (this.restaurants == null && this.searchResult == null) {
+            return;
+        }
+
+        List<Restaurant> data = this.searchResult != null ? this.searchResult : this.restaurants;
+
+        Map<String, Restaurant> restaurants = new HashMap<>();
+
+        for(Restaurant restaurant : data) {
+            restaurants.put(restaurant.getTrackingNumber(), restaurant);
+        }
+
+        this.mRestaurants.setValue(restaurants);
     }
 }
