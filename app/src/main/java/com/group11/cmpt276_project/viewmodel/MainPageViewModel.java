@@ -122,6 +122,15 @@ public class MainPageViewModel {
         this.isFavorite.setValue(false);
     }
 
+    public void clearHazardLevel() {
+        this.hazardLevel.setValue(null);
+    }
+
+    public void clearNumberCritical() {
+        this.number.setValue(null);
+        this.isGrt.setValue(null);
+    }
+
     public void clearAll() {
         this.number.setValue(null);
         this.isGrt.setValue(null);

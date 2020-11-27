@@ -255,24 +255,49 @@
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/number_of_critical_issues"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@+id/checkBox"
                 app:layout_constraintStart_toStartOf="@+id/checkBox"
                 app:layout_constraintTop_toBottomOf="@+id/checkBox" />
 
+            <ImageButton
+                android:id="@+id/clear_issues"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/btn_no_bg"
+                android:onClick="@{() -> activity.clearNumberCritical()}"
+                android:tint="#000000"
+                app:layout_constraintBottom_toBottomOf="@+id/textView2"
+                app:layout_constraintStart_toEndOf="@+id/textView2"
+                app:layout_constraintTop_toTopOf="@+id/textView2"
+                android:src="@drawable/ic_close" />
+
             <TextView
                 android:id="@+id/textView6"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/hazard_level"
-                app:layout_constraintEnd_toEndOf="@+id/editTextNumber"
                 app:layout_constraintStart_toStartOf="@+id/editTextNumber"
                 app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
+
+            <ImageButton
+                android:id="@+id/clear_hazard_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/btn_no_bg"
+                android:onClick="@{() -> activity.clearHazardLevel()}"
+                android:backgroundTint="#FFFFFF"
+                android:tint="#000000"
+                app:layout_constraintBottom_toBottomOf="@+id/textView6"
+                app:layout_constraintStart_toEndOf="@+id/textView6"
+                app:layout_constraintTop_toTopOf="@+id/textView6"
+                android:src="@drawable/ic_close" />
 
             <View
                 android:id="@+id/view2"

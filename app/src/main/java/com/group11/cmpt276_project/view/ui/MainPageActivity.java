@@ -179,4 +179,14 @@ public class MainPageActivity extends FragmentActivity {
         this.mainPageViewModel.clearAll();
         this.restaurantsViewModel.clearSearch();
     }
+
+    public void clearHazardLevel() {
+        this.mainPageViewModel.clearHazardLevel();
+        this.applySearch();
+    }
+
+    public void clearNumberCritical() {
+        this.mainPageViewModel.clearNumberCritical();
+        this.applySearch();
+    }
 }
