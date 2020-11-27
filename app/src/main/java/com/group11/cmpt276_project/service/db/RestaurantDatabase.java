@@ -25,13 +25,15 @@ import com.group11.cmpt276_project.utils.Utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {InspectionReport.class, Restaurant.class, Violation.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class RestaurantDatabase extends RoomDatabase {
+
+    private static final String FRA = "fra";
+    private static final String ENG = "eng";
 
     public abstract RestaurantDao restaurantDao();
 
@@ -47,7 +49,8 @@ public abstract class RestaurantDatabase extends RoomDatabase {
 
     private static List<RestaurantUpdate> defaultRestaurants;
     private static List<InspectionReport> defaultInspections;
-    private static List<Violation> defaultViolations;
+    private static List<Violation> defaultViolationsEng;
+    private static List<Violation> defaultViolationsFra;
 
     private static ObjectMapper objectMapper;
 
@@ -59,7 +62,8 @@ public abstract class RestaurantDatabase extends RoomDatabase {
 
                     defaultRestaurants = getDefaultRestaurants(context);
                     defaultInspections = getDefaultInspections(context);
-                    defaultViolations = getDefaultViolations(context);
+                    defaultViolationsEng = getDefaultViolations(context, ENG);
+                    defaultViolationsFra = getDefaultViolations(context, FRA);
 
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), RestaurantDatabase.class, DB_NAME)
                             .addCallback(sRoomDatabaseCallback)
@@ -105,9 +109,16 @@ public abstract class RestaurantDatabase extends RoomDatabase {
         return new ArrayList<>();
     }
 
-    private static List<Violation> getDefaultViolations(final Context context) {
+    private static List<Violation> getDefaultViolations(final Context context, String lang) {
+
+        String file = Constants.VIOLATION_FILE_ENG;
+
+        if(FRA.equals(lang)) {
+            file = Constants.VIOLATION_FILE_FRA;
+        }
+
         try {
-            String jsonString = Utils.readJsonFromAssets(context, Constants.VIOLATION_FILE);
+            String jsonString = Utils.readJsonFromAssets(context, file);
             TypeReference<List<Violation>> typeReference =
                     new TypeReference<List<Violation>>() {
                     };
@@ -136,7 +147,8 @@ public abstract class RestaurantDatabase extends RoomDatabase {
                 inspectionReportDao.insertOrUpdate(defaultInspections);
 
                 ViolationDao violationDao = INSTANCE.violationDao();
-                violationDao.insertOrUpdate(defaultViolations);
+                violationDao.insertOrUpdate(defaultViolationsEng);
+                violationDao.insertOrUpdate(defaultViolationsFra);
             });
         }
     };

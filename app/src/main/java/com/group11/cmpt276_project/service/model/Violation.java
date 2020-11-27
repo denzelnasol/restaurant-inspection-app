@@ -10,11 +10,10 @@ import com.group11.cmpt276_project.service.dto.ViolationDto;
 /**
  * Represent a single Violation including the id, status, details, and type.
  */
-@Entity
+@Entity(primaryKeys = {"id", "lang_code"})
 public class Violation {
 
     @NonNull
-    @PrimaryKey
     @ColumnInfo(name = "id")
     private String id;
 
@@ -26,6 +25,10 @@ public class Violation {
 
     @ColumnInfo(name = "type")
     private String type;
+
+    @NonNull
+    @ColumnInfo(name = "lang_code")
+    private String langCode;
 
     public Violation() {
     }
@@ -97,5 +100,13 @@ public class Violation {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getLangCode() {
+        return langCode;
+    }
+
+    public void setLangCode(String langCode) {
+        this.langCode = langCode;
     }
 }

@@ -132,6 +132,19 @@ public class RestaurantsViewModel {
         }
     }
 
+    public void favoriteRestaurant(String trackingNumber) {
+        Restaurant restaurant = this.mRestaurants.getValue().get(trackingNumber);
+
+        if(restaurant != null) {
+            restaurant.setFavorite(!restaurant.isFavorite());
+            try {
+                this.restaurantRepository.saveRestaurant(restaurant);
+            } catch (RepositoryWriteError repositoryWriteError) {
+                repositoryWriteError.printStackTrace();
+            }
+        }
+    }
+
     private void mergeSource() {
 
         if (this.restaurants == null && this.searchResult == null) {

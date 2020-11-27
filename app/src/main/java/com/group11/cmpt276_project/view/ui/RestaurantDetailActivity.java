@@ -19,6 +19,7 @@ import com.group11.cmpt276_project.view.adapter.InspectionAdapter;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
+import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,12 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         intent.putExtra(Constants.TRACKING_NUMBER, trackingNumber);
 
         return intent;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ViolationsViewModel.getInstance().updateLanguage();
     }
 
     @Override

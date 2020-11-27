@@ -21,6 +21,7 @@ import com.group11.cmpt276_project.view.ui.fragment.MapFragment;
 import com.group11.cmpt276_project.view.ui.fragment.RestaurantListFragment;
 import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
+import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
 
 //The main page of the app. It contains tabs for the map and list. On startup the map will be shown
 public class MainPageActivity extends FragmentActivity {
@@ -48,6 +49,12 @@ public class MainPageActivity extends FragmentActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finishAffinity();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ViolationsViewModel.getInstance().updateLanguage();
     }
 
     @Override

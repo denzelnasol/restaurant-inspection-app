@@ -25,7 +25,6 @@
             android:background="@drawable/btn_no_bg"
             android:onClick="@{()->activity.onBackPressed()}"
             android:text="@string/backText"
-            android:textColor="#FFFFFF"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/toolbar" />
 

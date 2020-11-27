@@ -1,0 +1,254 @@
+[
+  {
+    "id": "101",
+    "status": "Non critique",
+    "details": "Plans / construction / modifications non conformes au règlement [s. 3; s. 4]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "102",
+    "status": "Non critique",
+    "details": "Exploitation d'un local alimentaire non approuvé [s. 6 (1)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "103",
+    "status": "Non critique",
+    "details": "Défaut de détenir un permis valide lors de l'exploitation d'un établissement de restauration [s. 8 (1)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "104",
+    "status": "Non critique",
+    "details": "Permis non affiché dans un endroit bien en vue [s. 8 (7)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "201",
+    "status": "Critique",
+    "details": "Aliments contaminés ou impropres à la consommation humaine [s. 13]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "202",
+    "status": "Critique",
+    "details": "Aliments non transformés de manière à les rendre sûrs à manger [s. 14 (1)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "203",
+    "status": "Critique",
+    "details": "Aliments non refroidis d'une manière acceptable [s. 12 (a)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "204",
+    "status": "Critique",
+    "details": "Aliments non cuits ou réchauffés de manière à les rendre sûrs à manger [s. 14(1)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "205",
+    "status": "Critique",
+    "details": "Aliments froids potentiellement dangereux stockés / affichés au-dessus de 4 ° C. [s. 14(2)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "206",
+    "status": "Critique",
+    "details": "Aliments chauds potentiellement dangereux stockés / affichés en dessous de 60 ° C. [s. 14(2)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "208",
+    "status": "Non critique",
+    "details": "Aliments obtenus de sources non approuvées [s. 11]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "209",
+    "status": "Non critique",
+    "details": "Aliments non protégés de la contamination [s. 12(a)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "210",
+    "status": "Non critique",
+    "details": "Aliments non décongelés de manière acceptable [s. 14(2)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "211",
+    "status": "Non critique",
+    "details": "Aliments congelés potentiellement dangereux stockés / affichés au-dessus de -18 ° C. [s. 14(3)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "212",
+    "status": "Non critique",
+    "details": "L'exploitant n'a pas fourni de procédures écrites acceptables de manipulation des aliments [s. 23]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "301",
+    "status": "Critique",
+    "details": "Équipement / ustensiles / surfaces en contact avec les aliments non maintenus dans des conditions sanitaires [s. 17(1)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "302",
+    "status": "Critique",
+    "details": "Équipement / ustensiles / surfaces en contact avec les aliments mal lavés et désinfectés [s. 17(2)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "303",
+    "status": "Critique",
+    "details": "Équipement / installations / eau chaude et froide pour l'entretien sanitaire insuffisant [s. 17(3); s. 4(1)(f)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "304",
+    "status": "Non critique",
+    "details": "Locaux non exempts de parasites [s. 26(a)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "305",
+    "status": "Non critique",
+    "details": "Conditions observées pouvant permettre l'entrée / l'hébergement / la reproduction de ravageurs[s. 26(b)(c)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "306",
+    "status": "Non critique",
+    "details": "Locaux alimentaires non maintenus dans un état sanitaire [s. 17(1)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "307",
+    "status": "Non critique",
+    "details": "L'équipement / les ustensiles / les surfaces en contact avec les aliments ne sont pas de conception / matériau approprié [s. 16; s. 19]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "308",
+    "status": "Non critique",
+    "details": "L'équipement / les ustensiles / les surfaces en contact avec les aliments ne sont pas en bon état de fonctionnement [s. 16(b)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "309",
+    "status": "Non critique",
+    "details": "Nettoyants chimiques et agents similaires stockés ou étiquetés incorrectement [s. 27]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "310",
+    "status": "Non critique",
+    "details": "Les récipients et ustensiles à usage unique sont utilisés plus d'une fois [s. 20]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "311",
+    "status": "Non critique",
+    "details": "Locaux non entretenus selon les plans approuvés [s. 6(1)(b)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "312",
+    "status": "Non critique",
+    "details": "Articles non requis pour l'exploitation des locaux destinés aux aliments stockés dans les locaux [s. 18]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "313",
+    "status": "Non critique",
+    "details": "Animal vivant sur place à l'exclusion des animaux guides dans les zones agréées [s. 25(1)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "314",
+    "status": "Non critique",
+    "details": "L'exploitant n'a pas fourni de procédures d'assainissement écrites acceptables [s. 24]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "315",
+    "status": "Non critique",
+    "details": "Les unités de réfrigération et l'équipement de maintien au chaud manquent de thermomètres précis [s. 19(2)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "401",
+    "status": "Critique",
+    "details": "Stations de lavage des mains adéquates non disponibles pour les employés [s. 21(4)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "402",
+    "status": "Critique",
+    "details": "L'employé ne se lave pas les mains correctement ou à une fréquence adéquate [s. 21(3)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "403",
+    "status": "Non critique",
+    "details": "L'employé n'a pas une bonne hygiène personnelle, des vêtements propres et un contrôle des cheveux [s. 21(1)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "404",
+    "status": "Non critique",
+    "details": "Employé fumant dans les zones de préparation / transformation / stockage des aliments [s. 21(2)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "501",
+    "status": "Non critique",
+    "details": "L'exploitant n'a pas le niveau FOODSAFE 1 ou l'équivalent [s. 10(1)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  },
+  {
+    "id": "502",
+    "status": "Non critique",
+    "details": "En l'absence de l'exploitant, aucun membre du personnel de service n'a le niveau FOODSAFE 1 ou équivalent [s. 10(2)]",
+    "type": "Non Répéter",
+    "langCode": "fra"
+  }
+]

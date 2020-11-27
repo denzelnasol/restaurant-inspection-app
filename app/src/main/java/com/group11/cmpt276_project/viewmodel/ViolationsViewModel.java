@@ -48,15 +48,7 @@ public class ViolationsViewModel {
 
             this.mViolations = new MediatorLiveData<>();
             this.mViolations.addSource(this.mData, (data) -> {
-                if(data == null) return;
-
-                Map<String, Violation> violations = new HashMap<>();
-
-                for(Violation violation : data) {
-                    violations.put(violation.getId(), violation);
-                }
-
-                this.mViolations.setValue(violations);
+                this.createViolationMap(data);
             });
         }
     }
@@ -84,5 +76,29 @@ public class ViolationsViewModel {
         } catch (RepositoryWriteError repositoryWriteError) {
             repositoryWriteError.printStackTrace();
         }
+    }
+
+    public void updateLanguage() {
+        this.mViolations.removeSource(this.mData);
+        try {
+            this.mData = this.violationRepository.getViolations();
+            this.mViolations.addSource(this.mData, (data) -> {
+                this.createViolationMap(data);
+            });
+        } catch (RepositoryReadError repositoryReadError) {
+            repositoryReadError.printStackTrace();
+        }
+    }
+
+    public void createViolationMap(List<Violation> data) {
+        if(data == null) return;
+
+        Map<String, Violation> violations = new HashMap<>();
+
+        for(Violation violation : data) {
+            violations.put(violation.getId(), violation);
+        }
+
+        this.mViolations.setValue(violations);
     }
 }

@@ -38,6 +38,8 @@ import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
 import com.group11.cmpt276_project.viewmodel.WelcomeViewModel;
 import com.group11.cmpt276_project.viewmodel.factory.WelcomeViewModelFactory;
 
+import java.util.Locale;
+
 import retrofit2.Retrofit;
 
 /**
@@ -137,7 +139,7 @@ public class WelcomeActivity extends AppCompatActivity {
         RestaurantDatabase restaurantDatabase = RestaurantDatabase.getDatabase(getApplicationContext());
         restaurantDatabase.restaurantDao().getAllRestaurants();
         restaurantDatabase.inspectionReportDao().getAllInspectionReports();
-        restaurantDatabase.violationDao().getAllViolations();
+        restaurantDatabase.violationDao().getAllViolations(Locale.getDefault().getISO3Language());
 
         IRestaurantRepository restaurantRepository = new RoomRestaurantRepository(restaurantDatabase.restaurantDao());
         //IRestaurantRepository restaurantRepository = new JsonRestaurantRepository(getApplicationContext());

@@ -11,21 +11,20 @@ import com.group11.cmpt276_project.service.repository.IViolationRepository;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class RoomViolationRepository implements IViolationRepository {
 
     private ViolationDao violationDao;
-    private LiveData<List<Violation>> violations;
 
     public RoomViolationRepository(ViolationDao violationDao) {
         this.violationDao = violationDao;
-        this.violations = this.violationDao.getAllViolations();
     }
 
     @Override
     public LiveData<List<Violation>> getViolations() throws RepositoryReadError {
-        return this.violations;
+        return this.violationDao.getAllViolations(Locale.getDefault().getISO3Language());
     }
 
     @Override

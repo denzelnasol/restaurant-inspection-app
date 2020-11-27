@@ -17,8 +17,8 @@ import java.util.List;
 @Dao
 public abstract class ViolationDao  {
 
-    @Query("SELECT * FROM Violation")
-    public abstract LiveData<List<Violation>> getAllViolations();
+    @Query("SELECT * FROM Violation WHERE lang_code == :langCode")
+    public abstract LiveData<List<Violation>> getAllViolations(String langCode);
 
     @Query("SELECT * FROM Violation WHERE id == :id")
     public abstract Violation getViolationById(String id);

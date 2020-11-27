@@ -48,7 +48,11 @@ public class InspectionDetailActivity extends AppCompatActivity {
 
     private ActivityInspectionDetailBinding binding;
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        this.violationsViewModel.updateLanguage();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
