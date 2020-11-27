@@ -36,7 +36,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private Restaurant restaurant;
 
     private String trackingNumber;
-    private boolean isOn = false;
+    private boolean favourite;
+    private ImageButton btn;
 
     private ActivityRestuarantDetailBinding binding;
 
@@ -115,14 +116,14 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     }
 
     public void toggleFavouriteButton() {
-        ImageButton btn = (ImageButton)findViewById(R.id.favouriteImageButton);
-        if (!isOn) {
-            btn.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_on));
-            isOn = true;
+        this.btn = (ImageButton)findViewById(R.id.favouriteImageButton);
+        if (!restaurant.getIsFavourite()) {
+            btn.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.star_big_on));
+            restaurant.setIsFavourite(true);
         }
         else {
-            btn.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.btn_star_big_off));
-            isOn = false;
+            btn.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.star_big_off));
+            restaurant.setIsFavourite(false);
         }
     }
 }

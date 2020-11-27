@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
@@ -55,16 +56,24 @@
                     app:layout_constraintStart_toStartOf="@+id/restaurant_item_name"
                     app:layout_constraintTop_toBottomOf="@+id/restaurant_item_name" />
 
+                <ImageView
+                    android:id="@+id/favouritedImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/restaurant_item_name"
+                    app:layout_constraintTop_toTopOf="@+id/restaurant_item_name"
+                    app:favouriteIcon="@{restaurant.isFavourite}" />
+
                 <TextView
                     android:id="@+id/restaurant_item_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_width="220dp"
+                    android:layout_height="29dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
                     android:text="@{restaurant.name}"
                     android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/restaurant_icon"
                     app:layout_constraintTop_toTopOf="parent" />
 

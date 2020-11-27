@@ -11,12 +11,13 @@ public class Restaurant {
     String facilityType;
     double latitude;
     double longitude;
+    boolean isFavourite;
 
     public Restaurant() {
 
     }
 
-    private Restaurant(String trackingNumber, String name, String physicalAddress, String physicalCity, String facilityType, double latitude, double longitude) {
+    private Restaurant(String trackingNumber, String name, String physicalAddress, String physicalCity, String facilityType, double latitude, double longitude, boolean isFavourite) {
         this.trackingNumber = trackingNumber;
         this.name = name;
         this.physicalAddress = physicalAddress;
@@ -24,6 +25,7 @@ public class Restaurant {
         this.facilityType = facilityType;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.isFavourite = isFavourite;
     }
 
     public static class RestaurantBuilder {
@@ -34,6 +36,7 @@ public class Restaurant {
         String facilityType;
         double latitude;
         double longitude;
+        boolean isFavourite;
 
         public RestaurantBuilder withTrackingNumber(String trackingNumber) {
             this.trackingNumber = trackingNumber;
@@ -70,13 +73,19 @@ public class Restaurant {
             return this;
         }
 
+        public RestaurantBuilder withIsFavourite(boolean isFavourite) {
+            this.isFavourite = isFavourite;
+            return this;
+        }
+
         public Restaurant build() {
             return new Restaurant(this.trackingNumber,
                     this.name, this.physicalAddress,
                     this.physicalCity,
                     this.facilityType,
                     this.latitude,
-                    this.longitude);
+                    this.longitude,
+                    this.isFavourite);
         }
     }
 
@@ -134,6 +143,14 @@ public class Restaurant {
 
     public double getLongitude() {
         return longitude;
+    }
+
+    public boolean getIsFavourite() {
+        return isFavourite;
+    }
+
+    public void setIsFavourite(boolean favourite) {
+        isFavourite = favourite;
     }
 
 }
