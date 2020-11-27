@@ -42,6 +42,7 @@ import com.group11.cmpt276_project.service.model.ClusterItem;
 import com.group11.cmpt276_project.service.model.GPSCoordiantes;
 import com.group11.cmpt276_project.view.ui.MainPageActivity;
 import com.group11.cmpt276_project.view.ui.RestaurantDetailActivity;
+import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.MapFragmentViewModel;
 import com.group11.cmpt276_project.view.adapter.ClusterRenderer;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
@@ -263,6 +264,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         clusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<ClusterItem>() {
             @Override
             public void onClusterItemInfoWindowClick(ClusterItem item) {
+                MainPageViewModel.getInstance().setExpandFilter(false);
                 Intent intent = RestaurantDetailActivity.startActivity(getActivity(), item.getTrackingNumber());
                 startActivity(intent);
             }

@@ -34,12 +34,12 @@ public class RoomRestaurantRepository implements IRestaurantRepository {
     public LiveData<List<Restaurant>> getRestaurantsBySearch(String name, boolean isFavorite, int numberCritical, String hazardLevel) throws RepositoryReadError {
 
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("SELECT R.tracking_number, R.physical_city, R.physical_address, R.name, R.facility_type, R.latitude, R.longitude, R.is_favorite FROM Restaurant R JOIN InspectionReport I ON  R.tracking_number == I.tracking_number ORDER BY " );
+        queryBuilder.append("SELECT R.tracking_number, R.physical_city, R.physical_address, R.name, R.facility_type, R.latitude, R.longitude, R.is_favorite FROM Restaurant R " );
 
         List<Object> queryParameters = new ArrayList<>();
 
         if(numberCritical != 0) {
-            queryBuilder.append(" JOIN (SELECT tracking_number, SUM(number_critical) FROM InspectionReport WHERE SUBSTR(inspection_date, 1, 4) == ? GROUP BY tracking_number HAVING SUM(number_critical) ");
+            queryBuilder.append(" JOIN (SELECT tracking_number FROM InspectionReport WHERE SUBSTR(inspection_date, 1, 4) == ? GROUP BY tracking_number HAVING SUM(number_critical) ");
             LocalDate currentDate = LocalDate.now();
             int currentYear = currentDate.getYear();
             queryParameters.add(String.valueOf(currentYear));
@@ -50,31 +50,30 @@ public class RoomRestaurantRepository implements IRestaurantRepository {
         boolean shouldFilterByName = name != null && !name.isEmpty();
         boolean shouldFilterByHazardLevel = hazardLevel != null && !hazardLevel.isEmpty();
 
-        boolean appendWhere = shouldFilterByName || isFavorite || shouldFilterByHazardLevel;
-
-        if(appendWhere) {
-            queryBuilder.append("WHERE ");
-        }
+        boolean appendWhere = shouldFilterByName || isFavorite;
 
         if(shouldFilterByHazardLevel) {
-            queryBuilder.append("I.hazard_rating == ? ");
+            queryBuilder.append(" JOIN (SELECT tracking_number, hazard_rating, MAX(inspection_date) FROM InspectionReport GROUP BY tracking_number) I ON  R.tracking_number == I.tracking_number WHERE I.hazard_rating == ? ");
             queryParameters.add(hazardLevel);
         }
 
+        if(appendWhere && !shouldFilterByHazardLevel) {
+            queryBuilder.append("WHERE ");
+        }
+
         if(shouldFilterByName) {
-            if(shouldFilterByHazardLevel) {
-                queryBuilder.append("AND ");
-            }
             queryBuilder.append("R.name LIKE ? ");
             queryParameters.add("%" + name + "%");
         }
 
         if(isFavorite) {
-            if(shouldFilterByHazardLevel || shouldFilterByName) {
+            if(shouldFilterByName) {
                 queryBuilder.append("AND ");
             }
             queryBuilder.append("R.is_favorite == 1 ");
         }
+
+        System.out.println(queryBuilder.toString());
 
         SimpleSQLiteQuery query = new SimpleSQLiteQuery(queryBuilder.toString(), queryParameters.toArray());
 

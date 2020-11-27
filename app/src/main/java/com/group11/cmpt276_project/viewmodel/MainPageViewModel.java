@@ -95,8 +95,11 @@ public class MainPageViewModel {
                 case R.id.Moderate:
                     hazardLevel = Constants.MODERATE;
                     break;
-                default:
+                case R.id.High:
                     hazardLevel = Constants.HIGH;
+                    break;
+                default:
+                    hazardLevel = "";
             }
         }
 

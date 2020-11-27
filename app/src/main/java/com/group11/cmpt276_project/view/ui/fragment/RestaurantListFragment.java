@@ -19,6 +19,7 @@ import com.group11.cmpt276_project.databinding.FragmentRestaurantListBinding;
 import com.group11.cmpt276_project.view.adapter.RestaurantAdapter;
 import com.group11.cmpt276_project.view.ui.RestaurantDetailActivity;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
+import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantListFragmentViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.factory.RestaurantListFragmentViewModelFactory;
@@ -91,6 +92,7 @@ public class RestaurantListFragment extends Fragment {
 
         @Override
         public void onItemClick(String trackingNumber) {
+            MainPageViewModel.getInstance().setExpandFilter(false);
             Intent intent = RestaurantDetailActivity.startActivity(getActivity(), trackingNumber);
             startActivity(intent);
         }

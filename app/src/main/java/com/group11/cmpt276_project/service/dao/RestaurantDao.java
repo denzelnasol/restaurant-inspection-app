@@ -24,13 +24,6 @@ public abstract class RestaurantDao {
     @Query("SELECT * FROM Restaurant ORDER BY name")
     public abstract LiveData<List<Restaurant>> getAllRestaurants();
 
-    @Query("SELECT R.tracking_number, R.physical_city, R.physical_address, R.name, facility_type, latitude, longitude, is_favorite " +
-            " FROM Restaurant R" +
-            " JOIN InspectionReport I ON  R.tracking_number == I.tracking_number" +
-            " JOIN (SELECT tracking_number, SUM(number_critical) FROM InspectionReport A WHERE SUBSTR(A.inspection_date, 1, 4) == :now GROUP BY A.tracking_number HAVING SUM(A.number_critical) >= :greater) G ON R.tracking_number == G.tracking_number " +
-            "WHERE I.hazard_rating == :hazardRating AND R.name LIKE :name AND R.is_favorite == 1 ")
-    public abstract LiveData<List<Restaurant>> getRestaurantsWithWithRecentHazardLevel(String hazardRating, String name, int greater,int now);
-
     @RawQuery(observedEntities = Restaurant.class)
     public abstract  LiveData<List<Restaurant>> search(SupportSQLiteQuery query);
 

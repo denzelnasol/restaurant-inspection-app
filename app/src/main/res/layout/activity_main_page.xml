@@ -105,40 +105,27 @@
             app:layout_constraintTop_toBottomOf="@+id/toolbar3" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/backdrop"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0.5"
+            android:background="@color/black"
+            android:onClick="@{() -> activity.closeFilter()}"
+            app:layout_constraintBottom_toBottomOf="@+id/main_page_view_pager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/filter_menu_container">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/filter_menu_container"
             android:layout_width="0dp"
-            android:layout_height="500dp"
+            android:layout_height="wrap_content"
             android:background="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar3">
-
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:checkedButton="@={mainPageViewModel.hazardLevel}"
-                app:layout_constraintStart_toStartOf="@+id/textView6"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" >
-
-                <RadioButton
-                    android:id="@+id/Low"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/low" />
-
-                <RadioButton
-                    android:id="@+id/Moderate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/moderate" />
-
-                <RadioButton
-                    android:id="@+id/High"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/high" />
-            </RadioGroup>
 
             <Button
                 android:id="@+id/button7"
@@ -170,30 +157,84 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/btn_no_bg"
-                android:text="@string/clear"
                 android:onClick="@{() -> activity.clearAll()}"
+                android:text="@string/clear"
                 app:layout_constraintBottom_toBottomOf="@+id/button5"
                 app:layout_constraintEnd_toStartOf="@+id/view"
                 app:layout_constraintTop_toTopOf="@+id/button5" />
 
             <CheckBox
                 android:id="@+id/checkBox"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:checked="@={mainPageViewModel.isFavorite}"
                 android:text="@string/show_favorites"
                 android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view2" />
 
+            <EditText
+                android:id="@+id/editTextNumber"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/edit_text_border"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:hint="@string/issues"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:paddingStart="10dp"
+                android:text="@={mainPageViewModel.number}"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/textView2"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
             <RadioGroup
-                android:id="@+id/radioGroup"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:checkedButton="@={mainPageViewModel.hazardLevel}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/textView6"
+                app:layout_constraintTop_toBottomOf="@+id/textView6">
+
+                <RadioButton
+                    android:id="@+id/Low"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/low" />
+
+                <RadioButton
+                    android:id="@+id/Moderate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/moderate" />
+
+                <RadioButton
+                    android:id="@+id/High"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/high" />
+            </RadioGroup>
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:checkedButton="@={mainPageViewModel.isGrt}"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView2"
                 app:layout_constraintTop_toBottomOf="@+id/textView2">
 
@@ -214,37 +255,22 @@
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/number_of_critical_issues"
                 android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/checkBox"
                 app:layout_constraintStart_toStartOf="@+id/checkBox"
                 app:layout_constraintTop_toBottomOf="@+id/checkBox" />
 
-            <EditText
-                android:id="@+id/editTextNumber"
-                android:layout_width="175dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/edit_text_border"
-                android:ems="10"
-                android:gravity="center_vertical"
-                android:hint="@string/issues"
-                android:inputType="number"
-                android:paddingStart="10dp"
-                android:textSize="14sp"
-                android:text="@={mainPageViewModel.number}"
-                app:layout_constraintStart_toStartOf="@+id/textView2"
-                app:layout_constraintTop_toBottomOf="@+id/radioGroup"
-                android:importantForAutofill="no" />
-
             <TextView
                 android:id="@+id/textView6"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/hazard_level"
+                app:layout_constraintEnd_toEndOf="@+id/editTextNumber"
                 app:layout_constraintStart_toStartOf="@+id/editTextNumber"
                 app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
 
