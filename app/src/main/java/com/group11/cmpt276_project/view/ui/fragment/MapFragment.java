@@ -264,7 +264,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         clusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<ClusterItem>() {
             @Override
             public void onClusterItemInfoWindowClick(ClusterItem item) {
-                MainPageViewModel.getInstance().setExpandFilter(false);
+                MainPageViewModel.getInstance().clearFilter();
                 Intent intent = RestaurantDetailActivity.startActivity(getActivity(), item.getTrackingNumber());
                 startActivity(intent);
             }

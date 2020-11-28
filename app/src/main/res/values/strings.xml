@@ -35,15 +35,15 @@
     <string name="current_downloading">Downloading %s… %s%%</string>
     <string name="start_download">Starting %s</string>
     <string name="find_a_restaurant">Find a restaurant</string>
-    <string name="grte"><![CDATA[>=]]></string>
+    <string name="gte"><![CDATA[>=]]></string>
     <string name="lte"><![CDATA[<=]]></string>
     <string name="apply">Apply</string>
-    <string name="clear_all">Clear All</string>
     <string name="clear">Clear</string>
+    <string name="clear_amount">Clear (%d)</string>
     <string name="show_favorites">Show Favorites</string>
     <string name="number_of_critical_issues">Number of Critical Issues</string>
     <string name="hazard_level">Last Report Hazard Level</string>
-    <string name="issues"># Issues</string>
+    <string name="issues"># Issues within the last year</string>
     <string name="moderate">Moderate</string>
     <string name="high">High</string>
 </resources>

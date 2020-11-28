@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
 
@@ -16,6 +17,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.ActivityMainPageBinding;
 import com.group11.cmpt276_project.service.model.GPSCoordiantes;
+import com.group11.cmpt276_project.service.model.RestaurantFilter;
 import com.group11.cmpt276_project.view.adapter.TabAdapter;
 import com.group11.cmpt276_project.view.ui.fragment.MapFragment;
 import com.group11.cmpt276_project.view.ui.fragment.RestaurantListFragment;
@@ -72,10 +74,42 @@ public class MainPageActivity extends FragmentActivity {
             this.binding.filterMenuContainer.setVisibility(data ? View.VISIBLE : View.GONE);
             this.binding.backdrop.setVisibility(data ? View.VISIBLE : View.GONE);
         });
+        this.mainPageViewModel.getNumberFiltersApplied().observe(this, (data) -> {
+            this.updateClearButtonText(data);
+        });
+        this.mainPageViewModel.getIsLoadingDB().observe(this, (data) -> {
+            if(data) {
+                this.binding.mainPageViewPager.setVisibility(View.VISIBLE);
+                this.binding.mainPageProgressBar.setVisibility(View.GONE);
+                return;
+            }
+
+            this.binding.mainPageViewPager.setVisibility(View.INVISIBLE);
+            this.binding.mainPageProgressBar.setVisibility(View.VISIBLE);
+        });
     }
 
     public GPSCoordiantes getGpsCoordinates() {
         return this.gpsCoordinates;
+    }
+
+    private void updateClearButtonText(int amount) {
+
+        Button clearButton = this.binding.clearAllFilters;
+
+        if(amount != 0) {
+            clearButton.setText(String.format(getString(R.string.clear_amount), amount));
+            clearButton.setAlpha(1);
+            clearButton.setClickable(true);
+            clearButton.setEnabled(true);
+            return;
+        }
+
+
+        clearButton.setText(getString(R.string.clear));
+        clearButton.setAlpha(0.5f);
+        clearButton.setClickable(false);
+        clearButton.setEnabled(false);
     }
 
     private void bind() {
@@ -149,11 +183,23 @@ public class MainPageActivity extends FragmentActivity {
 
     private void applySearch() {
         this.mainPageViewModel.getFilter().observe(this, (data) -> {
+            this.mainPageViewModel.getFilter().removeObservers(this);
 
             String name = this.mainPageViewModel.getSearch();
-            this.restaurantsViewModel.search(name, data);
 
-            this.mainPageViewModel.getFilter().removeObservers(this);
+            if(data != null) {
+                this.mainPageViewModel.setFilterApplied(true);
+            } else {
+                this.mainPageViewModel.setFilterApplied(false);
+            }
+
+            RestaurantFilter filter = data;
+
+            if(data == null) {
+                filter = new RestaurantFilter(null, 0, false);
+            }
+
+            this.restaurantsViewModel.search(name, filter);
         });
     }
 
@@ -164,17 +210,24 @@ public class MainPageActivity extends FragmentActivity {
         }).attach();
     }
 
-    public void openFilter() {
-        this.mainPageViewModel.setExpandFilter(true);
+    public void toggleFilter() {
+        if(!this.mainPageViewModel.isFilterApplied() && this.mainPageViewModel.getExpandFilter().getValue()) {
+            this.clearFilter();;
+        }
+        this.mainPageViewModel.toggleFilter();
     }
 
     public void closeFilter() {
-        this.mainPageViewModel.setExpandFilter(false);
+        this.mainPageViewModel.closeFilter();
+
+        if(!this.mainPageViewModel.isFilterApplied()) {
+            this.clearFilter();;
+        }
     }
 
     public void applyFilter() {
         this.applySearch();
-        this.mainPageViewModel.setExpandFilter(false);
+        this.mainPageViewModel.closeFilter();
     }
 
     public void clearFilter() {
@@ -186,18 +239,19 @@ public class MainPageActivity extends FragmentActivity {
 
     }
 
-    public void clearAll() {
-        this.mainPageViewModel.clearAll();
-        this.restaurantsViewModel.clearSearch();
-    }
-
     public void clearHazardLevel() {
         this.mainPageViewModel.clearHazardLevel();
-        this.applySearch();
+
+        if(this.mainPageViewModel.isFilterApplied()) {
+            this.applySearch();
+        }
     }
 
     public void clearNumberCritical() {
         this.mainPageViewModel.clearNumberCritical();
-        this.applySearch();
+
+        if(this.mainPageViewModel.isFilterApplied()) {
+            this.applySearch();
+        }
     }
 }

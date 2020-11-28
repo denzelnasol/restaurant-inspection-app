@@ -92,7 +92,7 @@ public class RestaurantListFragment extends Fragment {
 
         @Override
         public void onItemClick(String trackingNumber) {
-            MainPageViewModel.getInstance().setExpandFilter(false);
+            MainPageViewModel.getInstance().clearFilter();
             Intent intent = RestaurantDetailActivity.startActivity(getActivity(), trackingNumber);
             startActivity(intent);
         }

@@ -33,6 +33,7 @@ import com.group11.cmpt276_project.service.repository.impl.json.JsonViolationRep
 import com.group11.cmpt276_project.service.repository.impl.json.SharedPreferenceRepository;
 import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
+import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
 import com.group11.cmpt276_project.viewmodel.WelcomeViewModel;
@@ -153,7 +154,10 @@ public class WelcomeActivity extends AppCompatActivity {
 
         IViolationRepository violationRepository = new RoomViolationRepository(restaurantDatabase.violationDao());
         //IViolationRepository violationRepository = new JsonViolationRepository(getApplicationContext());
-        ViolationsViewModel.getInstance().init(violationRepository);
+        ViolationsViewModel violationsViewModel = ViolationsViewModel.getInstance();
+        violationsViewModel.init(violationRepository);
+
+        MainPageViewModel.getInstance().init(this.inspectionReportsViewModel.getReports(), violationsViewModel.getViolations(), this.restaurantsViewModel.getRestaurants());
     }
 
     private void bind() {
