@@ -1,5 +1,7 @@
 package com.group11.cmpt276_project.viewmodel;
 
+import android.util.Pair;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -21,15 +23,16 @@ public class MainPageViewModel {
 
     private MutableLiveData<Boolean> expandFilter;
 
+    private MediatorLiveData<RestaurantFilter> filter;
+    private MediatorLiveData<Boolean> isLoadingDB;
     private MediatorLiveData<Integer> numberFiltersApplied;
+    private MediatorLiveData<Pair<List<Restaurant>, List<InspectionReport>>> updates;
 
     public MutableLiveData<String> number;
     public MutableLiveData<Integer> isGrt;
     public MutableLiveData<Integer> hazardLevel;
     public MutableLiveData<Boolean> isFavorite;
-
-    private MediatorLiveData<RestaurantFilter> filter;
-    private MediatorLiveData<Boolean> isLoadingDB;
+    private MutableLiveData<Boolean> didUpdate;
 
     private int selectedTab;
     private String search;
@@ -37,12 +40,15 @@ public class MainPageViewModel {
     private LiveData<Map<String, List<InspectionReport>>> reports;
     private LiveData<Map<String, Violation>> violations;
     private LiveData<Map<String, Restaurant>> restaurants;
+    private LiveData<List<InspectionReport>> newInspections;
 
     private static class MainPageViewModelHolder {
         private static final MainPageViewModel INSTANCE = new MainPageViewModel();
     }
 
-    public void init(LiveData<Map<String, List<InspectionReport>>> reports, LiveData<Map<String, Violation>> violations, LiveData<Map<String, Restaurant>> restaurants) {
+    public void init(LiveData<Map<String, List<InspectionReport>>> reports,
+                     LiveData<Map<String, Violation>> violations, LiveData<Map<String,
+            Restaurant>> restaurants, LiveData<List<InspectionReport>> newInspections) {
         this.isLoadingDB = new MediatorLiveData<>();
         this.isLoadingDB.addSource(reports, (data) -> {
             this.checkIfLoadingIsDone();
@@ -54,9 +60,25 @@ public class MainPageViewModel {
             this.checkIfLoadingIsDone();
         });
 
+        this.didUpdate = new MutableLiveData<>(false);
+
+        this.updates = new MediatorLiveData<>();
+
+        this.updates.addSource(reports, (data) -> {
+            this.generateUpdateList();
+        });
+
+        this.updates.addSource(this.didUpdate, (data) -> {
+            this.generateUpdateList();
+        });
+        this.updates.addSource(newInspections, (data) -> {
+            this.generateUpdateList();
+        });
+
         this.reports = reports;
         this.violations = violations;
         this.restaurants = restaurants;
+        this.newInspections = newInspections;
     }
 
     public LiveData<RestaurantFilter> getFilter() {
@@ -255,5 +277,28 @@ public class MainPageViewModel {
 
     public LiveData<Boolean> getIsLoadingDB() {
         return isLoadingDB;
+    }
+
+    public LiveData<Pair<List<Restaurant>, List<InspectionReport>>> getUpdates() {
+        return updates;
+    }
+
+    public LiveData<Boolean> getDidUpdate() {
+        return didUpdate;
+    }
+
+    public void setDidUpdate(boolean didUpdate) {
+        this.didUpdate.setValue(didUpdate);
+    }
+
+    private void generateUpdateList() {
+
+        Map<String, Restaurant> restaurants = this.restaurants.getValue();
+        List<InspectionReport> newInspections = this.newInspections.getValue();
+        boolean didUpdate = this.didUpdate.getValue() != null ? this.didUpdate.getValue() : false;
+
+        if (restaurants != null && newInspections != null && didUpdate) {
+
+        }
     }
 }

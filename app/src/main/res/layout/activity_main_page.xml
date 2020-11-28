@@ -157,7 +157,10 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_no_bg"
                 android:onClick="@{() -> activity.clearFilter()}"
-                android:text="@string/clear"
+                android:text="@{mainPageViewModel.numberFiltersApplied != 0 ? String.format(@string/clear_amount, mainPageViewModel.numberFiltersApplied) : @string/clear}"
+                android:alpha="@{mainPageViewModel.numberFiltersApplied != 0 ? 1.0f : 0.5f}"
+                android:clickable="@{mainPageViewModel.numberFiltersApplied != 0}"
+                android:enabled="@{mainPageViewModel.numberFiltersApplied != 0}"
                 app:layout_constraintBottom_toBottomOf="@+id/button5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/button5" />

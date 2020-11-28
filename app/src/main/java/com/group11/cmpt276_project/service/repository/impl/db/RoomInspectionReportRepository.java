@@ -5,13 +5,10 @@ import androidx.lifecycle.LiveData;
 import com.group11.cmpt276_project.exception.RepositoryReadError;
 import com.group11.cmpt276_project.exception.RepositoryWriteError;
 import com.group11.cmpt276_project.service.dao.InspectionReportDao;
-import com.group11.cmpt276_project.service.db.RestaurantDatabase;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.repository.IInspectionReportRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class RoomInspectionReportRepository implements IInspectionReportRepository {
 
@@ -29,7 +26,7 @@ public class RoomInspectionReportRepository implements IInspectionReportReposito
     }
 
     @Override
-    public void saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError {
-        this.inspectionReportDao.insertOrUpdate(inspections);
+    public List<InspectionReport> saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError {
+        return this.inspectionReportDao.insertOrUpdate(inspections);
     }
 }

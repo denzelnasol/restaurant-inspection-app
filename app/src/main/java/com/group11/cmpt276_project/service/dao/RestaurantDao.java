@@ -25,7 +25,7 @@ public abstract class RestaurantDao {
     public abstract LiveData<List<Restaurant>> getAllRestaurants();
 
     @RawQuery(observedEntities = Restaurant.class)
-    public abstract  LiveData<List<Restaurant>> search(SupportSQLiteQuery query);
+    public abstract  LiveData<List<Restaurant>> getRestaurantByQuery(SupportSQLiteQuery query);
 
     @Query("DELETE FROM Restaurant")
     public  abstract void deleteAll();

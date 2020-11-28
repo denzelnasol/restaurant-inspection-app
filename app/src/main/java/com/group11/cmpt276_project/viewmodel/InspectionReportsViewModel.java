@@ -25,6 +25,8 @@ public class InspectionReportsViewModel {
     private LiveData<List<InspectionReport>> mData;
     private IInspectionReportRepository inspectionReportRepository;
 
+    private MutableLiveData<List<InspectionReport>> newInspections;
+
     private InspectionReportsViewModel() {
 
     }
@@ -47,6 +49,8 @@ public class InspectionReportsViewModel {
                 this.mData = new MutableLiveData<>();
             }
 
+            this.newInspections = new MutableLiveData<>();
+
             this.mReports = new MediatorLiveData<>();
             this.mReports.addSource(this.mData, (data) -> {
 
@@ -65,6 +69,10 @@ public class InspectionReportsViewModel {
 
     public LiveData<Map<String, List<InspectionReport>>> getReports() {
         return this.mReports;
+    }
+
+    public LiveData<List<InspectionReport>> getNewInspections() {
+        return this.newInspections;
     }
 
     public void save(List<InspectionReportDto> newReports) {
@@ -86,7 +94,7 @@ public class InspectionReportsViewModel {
             }
 
 
-            this.inspectionReportRepository.saveInspections(toAdd);
+            this.newInspections.setValue(this.inspectionReportRepository.saveInspections(toAdd));
         } catch (RepositoryWriteError repositoryWriteError) {
             repositoryWriteError.printStackTrace();
         }

@@ -56,6 +56,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private InspectionReportsViewModel inspectionReportsViewModel;
     private RestaurantsViewModel restaurantsViewModel;
+    private MainPageViewModel mainPageViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +121,7 @@ public class WelcomeActivity extends AppCompatActivity {
         this.welcomeViewModel.getIsCancelled().observe(this, (data) -> {
             if (data) {
                 this.moveToMainActivity(500);
+                this.mainPageViewModel.setDidUpdate(true);
             }
         });
     }
@@ -157,7 +159,8 @@ public class WelcomeActivity extends AppCompatActivity {
         ViolationsViewModel violationsViewModel = ViolationsViewModel.getInstance();
         violationsViewModel.init(violationRepository);
 
-        MainPageViewModel.getInstance().init(this.inspectionReportsViewModel.getReports(), violationsViewModel.getViolations(), this.restaurantsViewModel.getRestaurants());
+        this.mainPageViewModel = MainPageViewModel.getInstance();
+        this.mainPageViewModel.init(this.inspectionReportsViewModel.getReports(), violationsViewModel.getViolations(), this.restaurantsViewModel.getRestaurants(), this.inspectionReportsViewModel.getNewInspections());
     }
 
     private void bind() {

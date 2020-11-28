@@ -74,9 +74,6 @@ public class MainPageActivity extends FragmentActivity {
             this.binding.filterMenuContainer.setVisibility(data ? View.VISIBLE : View.GONE);
             this.binding.backdrop.setVisibility(data ? View.VISIBLE : View.GONE);
         });
-        this.mainPageViewModel.getNumberFiltersApplied().observe(this, (data) -> {
-            this.updateClearButtonText(data);
-        });
         this.mainPageViewModel.getIsLoadingDB().observe(this, (data) -> {
             if(data) {
                 this.binding.mainPageViewPager.setVisibility(View.VISIBLE);
@@ -91,25 +88,6 @@ public class MainPageActivity extends FragmentActivity {
 
     public GPSCoordiantes getGpsCoordinates() {
         return this.gpsCoordinates;
-    }
-
-    private void updateClearButtonText(int amount) {
-
-        Button clearButton = this.binding.clearAllFilters;
-
-        if(amount != 0) {
-            clearButton.setText(String.format(getString(R.string.clear_amount), amount));
-            clearButton.setAlpha(1);
-            clearButton.setClickable(true);
-            clearButton.setEnabled(true);
-            return;
-        }
-
-
-        clearButton.setText(getString(R.string.clear));
-        clearButton.setAlpha(0.5f);
-        clearButton.setClickable(false);
-        clearButton.setEnabled(false);
     }
 
     private void bind() {

@@ -6,10 +6,13 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.RawQuery;
 import androidx.room.Transaction;
 import androidx.room.Update;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.group11.cmpt276_project.service.model.InspectionReport;
+import com.group11.cmpt276_project.service.model.Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +23,8 @@ public abstract class InspectionReportDao {
     @Query("SELECT * FROM InspectionReport ORDER BY inspection_date DESC")
     public abstract LiveData<List<InspectionReport>> getAllInspectionReports();
 
-    @Query("SELECT * FROM inspectionreport WHERE tracking_number == :trackingNumber")
-    public abstract List<InspectionReport> getInspectionReportsByTrackingNumber(String trackingNumber);
+    @RawQuery(observedEntities = InspectionReport.class)
+    public abstract LiveData<List<InspectionReport>> getInspectionsByQuery(SupportSQLiteQuery query);
 
     @Query("DELETE FROM InspectionReport")
     public  abstract void deleteAll();
@@ -50,10 +53,11 @@ public abstract class InspectionReportDao {
     }
 
     @Transaction
-    public void insertOrUpdate(List<InspectionReport> objList) {
+    public List<InspectionReport> insertOrUpdate(List<InspectionReport> objList) {
         List<Long> insertResults = insert(objList);
 
         List<InspectionReport> updateList = new ArrayList<>();
+        List<InspectionReport> newInsertList = new ArrayList<>();
 
         for(int i = 0; i < insertResults.size(); i++) {
 
@@ -61,11 +65,16 @@ public abstract class InspectionReportDao {
 
             if(index == -1L) {
                 updateList.add(objList.get(i));
+                continue;
             }
+
+            newInsertList.add(objList.get(i));
         }
 
         if(!updateList.isEmpty()) {
             update(updateList);
         }
+
+        return newInsertList;
     }
 }

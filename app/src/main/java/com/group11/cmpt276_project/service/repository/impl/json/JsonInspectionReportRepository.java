@@ -16,9 +16,9 @@ import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.utils.Utils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /* This class serves to load the inspection report json file
  * The get function will load the json file using getJsonFromAssets util function and implement
@@ -72,7 +72,7 @@ public class JsonInspectionReportRepository implements IInspectionReportReposito
     }
 
     @Override
-    public void saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError {
+    public List<InspectionReport> saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError {
         try {
             String jsonString = this.objectMapper.writeValueAsString(inspections);
             Utils.writeJSONToStorage(this.context, Constants.INSPECTION_REPORT_FILE, jsonString);
@@ -80,5 +80,7 @@ public class JsonInspectionReportRepository implements IInspectionReportReposito
         } catch (IOException e) {
             throw new RepositoryWriteError(e.getMessage());
         }
+
+        return new ArrayList<>();
     }
 }

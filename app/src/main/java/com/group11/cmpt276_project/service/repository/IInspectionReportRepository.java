@@ -11,8 +11,7 @@ import java.util.List;
 //An interface describing what functions a InspectionRepository should have.
 public interface IInspectionReportRepository {
 
-   LiveData<List<InspectionReport>> getInspections() throws RepositoryReadError;
+    LiveData<List<InspectionReport>> getInspections() throws RepositoryReadError;
 
-    void saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError;
-
+    List<InspectionReport> saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError;
 }

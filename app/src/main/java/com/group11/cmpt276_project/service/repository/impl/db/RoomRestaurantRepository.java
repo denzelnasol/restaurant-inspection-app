@@ -78,7 +78,7 @@ public class RoomRestaurantRepository implements IRestaurantRepository {
 
         SimpleSQLiteQuery query = new SimpleSQLiteQuery(queryBuilder.toString(), queryParameters.toArray());
 
-        return this.restaurantDao.search(query);
+        return this.restaurantDao.getRestaurantByQuery(query);
     }
 
     @Override
