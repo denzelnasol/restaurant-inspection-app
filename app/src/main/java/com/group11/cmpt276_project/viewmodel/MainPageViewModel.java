@@ -310,7 +310,7 @@ public class MainPageViewModel {
 
                 Restaurant restaurant = restaurants.get(trackingNumber);
 
-                if(restaurant != null) {
+                if(restaurant != null && restaurant.isFavorite()) {
                     InspectionReport mostRecent = reports.get(trackingNumber).get(0);
 
                     updatedRestaurants.add(restaurant);
