@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
 
@@ -23,7 +22,6 @@ import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.service.model.RestaurantFilter;
 import com.group11.cmpt276_project.view.adapter.TabAdapter;
-import com.group11.cmpt276_project.view.adapter.UpdateAdapter;
 import com.group11.cmpt276_project.view.ui.fragment.MapFragment;
 import com.group11.cmpt276_project.view.ui.fragment.RestaurantListFragment;
 import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
@@ -94,12 +92,8 @@ public class MainPageActivity extends FragmentActivity {
                 List<Restaurant> restaurants = data.first;
                 List<InspectionReport> reports = data.second;
 
-                UpdateAdapter updateAdapter = new UpdateAdapter(restaurants, reports);
-
-
                 RecyclerView recyclerView = this.binding.updateScreen.updateList;
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                recyclerView.setAdapter(updateAdapter);
             }
         });
     }
