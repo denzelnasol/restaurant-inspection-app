@@ -63,6 +63,15 @@ public class RestaurantsViewModel {
         }
     }
 
+    public void clearSearch() {
+        if(this.mSearch != null) {
+            this.mRestaurants.removeSource(this.mSearch);
+            this.mSearch = null;
+            this.searchResult = null;
+            this.mergeSource();
+        }
+    }
+
     public void search(String name, RestaurantFilter restaurantFilter) {
 
         if(this.mSearch != null) {

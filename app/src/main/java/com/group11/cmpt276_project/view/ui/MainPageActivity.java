@@ -177,6 +177,11 @@ public class MainPageActivity extends FragmentActivity {
 
             String name = this.mainPageViewModel.getSearch();
 
+            if((name == null || name.isEmpty()) && data == null) {
+                this.restaurantsViewModel.clearSearch();
+                return;
+            }
+
             if (data != null) {
                 this.mainPageViewModel.setFilterApplied(true);
             } else {
