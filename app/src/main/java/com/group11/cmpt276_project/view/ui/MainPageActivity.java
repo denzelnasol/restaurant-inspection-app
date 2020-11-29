@@ -70,10 +70,6 @@ public class MainPageActivity extends FragmentActivity {
     }
 
     private void observe() {
-        this.mainPageViewModel.getExpandFilter().observe(this, (data) -> {
-            this.binding.filterMenuContainer.setVisibility(data ? View.VISIBLE : View.GONE);
-            this.binding.backdrop.setVisibility(data ? View.VISIBLE : View.GONE);
-        });
         this.mainPageViewModel.getIsLoadingDB().observe(this, (data) -> {
             if(data) {
                 this.binding.mainPageViewPager.setVisibility(View.VISIBLE);
