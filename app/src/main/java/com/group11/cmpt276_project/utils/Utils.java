@@ -126,7 +126,7 @@ public class Utils {
 
         for(List<String> row : csv) {
             RestaurantDto restaurantDto = new RestaurantDto.RestaurantDtoBuilder()
-                    .withTrackingNumber(row.get(0))
+                    .withTrackingNumber(row.get(0).trim())
                     .withName(row.get(1))
                     .withPhysicalAddress(row.get(2))
                     .withPhysicalCity(row.get(3))
@@ -145,7 +145,7 @@ public class Utils {
        List<InspectionReportDto> newInspections = new ArrayList<>();
 
         for(List<String> row : csv) {
-            String trackingNumber = row.get(0);
+            String trackingNumber = row.get(0).trim();
 
             if(trackingNumber == null | trackingNumber.isEmpty()) {
                 continue;
@@ -169,7 +169,7 @@ public class Utils {
 
             InspectionReportDto inspectionReportDto = new InspectionReportDto.InspectionReportDtoBuilder()
                     .withTrackingNumber(trackingNumber)
-                    .withInspectionDate(row.get(1))
+                    .withInspectionDate(row.get(1).trim())
                     .withInspectionType(row.get(2))
                     .withNumberCritical(Integer.parseInt(row.get(3)))
                     .withNumberNonCritical(Integer.parseInt(row.get(4)))

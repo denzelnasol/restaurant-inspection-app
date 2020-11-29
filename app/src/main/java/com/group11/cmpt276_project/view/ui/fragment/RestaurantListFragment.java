@@ -79,8 +79,6 @@ public class RestaurantListFragment extends Fragment {
     private void observeRestaurants() {
         this.restaurantListFragmentViewModel.getData().observe(getActivity(), (data) -> {
 
-            System.out.println(data.first.size());
-
             RestaurantAdapter restaurantAdapter = new RestaurantAdapter(data.first, data.second, new RestaurantItemOnClickTrackingNumber());
 
             RecyclerView restaurantList = this.binding.restaurantList;

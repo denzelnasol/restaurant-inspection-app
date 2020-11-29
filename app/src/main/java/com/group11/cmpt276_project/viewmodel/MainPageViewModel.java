@@ -303,8 +303,6 @@ public class MainPageViewModel {
             List<Restaurant> updatedRestaurants = new ArrayList<>();
             List<InspectionReport> mostRecentReports = new ArrayList<>();
 
-            System.out.println("Size in update " + restaurants.size());
-
             for (String trackingNumber : newInspections) {
                 if (reports.get(trackingNumber) == null || reports.get(trackingNumber).isEmpty()) {
                     continue;
@@ -312,15 +310,12 @@ public class MainPageViewModel {
 
                 Restaurant restaurant = restaurants.get(trackingNumber);
 
-                if(restaurant == null) {
-                    System.out.println(trackingNumber);
-                    continue;
+                if(restaurant != null) {
+                    InspectionReport mostRecent = reports.get(trackingNumber).get(0);
+
+                    updatedRestaurants.add(restaurant);
+                    mostRecentReports.add(mostRecent);
                 }
-
-                InspectionReport mostRecent = reports.get(trackingNumber).get(0);
-
-                updatedRestaurants.add(restaurant);
-                mostRecentReports.add(mostRecent);
             }
 
             Collections.sort(updatedRestaurants, (Restaurant a, Restaurant b) -> a.getName().compareTo(b.getName()));
