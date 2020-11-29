@@ -42,15 +42,11 @@ import com.group11.cmpt276_project.service.model.ClusterItem;
 import com.group11.cmpt276_project.service.model.GPSCoordiantes;
 import com.group11.cmpt276_project.view.ui.MainPageActivity;
 import com.group11.cmpt276_project.view.ui.RestaurantDetailActivity;
-import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.MapFragmentViewModel;
-import com.group11.cmpt276_project.view.adapter.ClusterRenderer;
+import com.group11.cmpt276_project.view.renderer.ClusterRenderer;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.factory.MapFragmentViewModelFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 // Fragment to implement a map including user location and restaurant markers
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -122,6 +118,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 @Override
                 public void onSuccess(Location location) {
                     currentLocation = location;
+
+                    if(currentLocation == null) {
+                        return;
+                    }
+
                     if (selected == null && shouldFollow) {
                         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
                     }

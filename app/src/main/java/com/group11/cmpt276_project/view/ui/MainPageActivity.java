@@ -10,6 +10,8 @@ import android.widget.SearchView;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -17,13 +19,18 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.ActivityMainPageBinding;
 import com.group11.cmpt276_project.service.model.GPSCoordiantes;
+import com.group11.cmpt276_project.service.model.InspectionReport;
+import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.service.model.RestaurantFilter;
 import com.group11.cmpt276_project.view.adapter.TabAdapter;
+import com.group11.cmpt276_project.view.adapter.UpdateAdapter;
 import com.group11.cmpt276_project.view.ui.fragment.MapFragment;
 import com.group11.cmpt276_project.view.ui.fragment.RestaurantListFragment;
 import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
+
+import java.util.List;
 
 //The main page of the app. It contains tabs for the map and list. On startup the map will be shown
 public class MainPageActivity extends FragmentActivity {
@@ -71,14 +78,29 @@ public class MainPageActivity extends FragmentActivity {
 
     private void observe() {
         this.mainPageViewModel.getIsLoadingDB().observe(this, (data) -> {
-            if(data) {
+            if (!data) {
                 this.binding.mainPageViewPager.setVisibility(View.VISIBLE);
                 this.binding.mainPageProgressBar.setVisibility(View.GONE);
+                this.binding.updateScreen.updateContainer.setVisibility(View.VISIBLE);
                 return;
             }
 
             this.binding.mainPageViewPager.setVisibility(View.INVISIBLE);
             this.binding.mainPageProgressBar.setVisibility(View.VISIBLE);
+            this.binding.updateScreen.updateContainer.setVisibility(View.INVISIBLE);
+        });
+        this.mainPageViewModel.getUpdates().observe(this, (data) -> {
+            if (data != null) {
+                List<Restaurant> restaurants = data.first;
+                List<InspectionReport> reports = data.second;
+
+                UpdateAdapter updateAdapter = new UpdateAdapter(restaurants, reports);
+
+
+                RecyclerView recyclerView = this.binding.updateScreen.updateList;
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                recyclerView.setAdapter(updateAdapter);
+            }
         });
     }
 
@@ -161,7 +183,7 @@ public class MainPageActivity extends FragmentActivity {
 
             String name = this.mainPageViewModel.getSearch();
 
-            if(data != null) {
+            if (data != null) {
                 this.mainPageViewModel.setFilterApplied(true);
             } else {
                 this.mainPageViewModel.setFilterApplied(false);
@@ -169,7 +191,7 @@ public class MainPageActivity extends FragmentActivity {
 
             RestaurantFilter filter = data;
 
-            if(data == null) {
+            if (data == null) {
                 filter = new RestaurantFilter(null, 0, false);
             }
 
@@ -185,8 +207,9 @@ public class MainPageActivity extends FragmentActivity {
     }
 
     public void toggleFilter() {
-        if(!this.mainPageViewModel.isFilterApplied() && this.mainPageViewModel.getExpandFilter().getValue()) {
-            this.clearFilter();;
+        if (!this.mainPageViewModel.isFilterApplied() && this.mainPageViewModel.getExpandFilter().getValue()) {
+            this.clearFilter();
+            ;
         }
         this.mainPageViewModel.toggleFilter();
     }
@@ -194,8 +217,9 @@ public class MainPageActivity extends FragmentActivity {
     public void closeFilter() {
         this.mainPageViewModel.closeFilter();
 
-        if(!this.mainPageViewModel.isFilterApplied()) {
-            this.clearFilter();;
+        if (!this.mainPageViewModel.isFilterApplied()) {
+            this.clearFilter();
+            ;
         }
     }
 
@@ -205,7 +229,8 @@ public class MainPageActivity extends FragmentActivity {
     }
 
     public void clearFilter() {
-        this.mainPageViewModel.clearFilter();;
+        this.mainPageViewModel.clearFilter();
+        ;
         this.applySearch();
     }
 
@@ -216,7 +241,7 @@ public class MainPageActivity extends FragmentActivity {
     public void clearHazardLevel() {
         this.mainPageViewModel.clearHazardLevel();
 
-        if(this.mainPageViewModel.isFilterApplied()) {
+        if (this.mainPageViewModel.isFilterApplied()) {
             this.applySearch();
         }
     }
@@ -224,8 +249,12 @@ public class MainPageActivity extends FragmentActivity {
     public void clearNumberCritical() {
         this.mainPageViewModel.clearNumberCritical();
 
-        if(this.mainPageViewModel.isFilterApplied()) {
+        if (this.mainPageViewModel.isFilterApplied()) {
             this.applySearch();
         }
+    }
+
+    public void dismissUpdate() {
+        this.mainPageViewModel.setDidUpdate(false);
     }
 }

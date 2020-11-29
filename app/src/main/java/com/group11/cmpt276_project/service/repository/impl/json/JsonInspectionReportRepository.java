@@ -72,7 +72,7 @@ public class JsonInspectionReportRepository implements IInspectionReportReposito
     }
 
     @Override
-    public List<InspectionReport> saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError {
+    public List<String> saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError {
         try {
             String jsonString = this.objectMapper.writeValueAsString(inspections);
             Utils.writeJSONToStorage(this.context, Constants.INSPECTION_REPORT_FILE, jsonString);

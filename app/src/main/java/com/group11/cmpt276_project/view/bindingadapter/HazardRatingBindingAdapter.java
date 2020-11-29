@@ -43,9 +43,9 @@ public class HazardRatingBindingAdapter {
 
         int color = 0;
 
-        if(Constants.LOW.equals(hazard)) {
+        if(hazard.contains(Constants.LOW)) {
             color = R.color.colorLow;
-        } else if(Constants.MODERATE.equals(hazard)) {
+        } else if(hazard.contains(Constants.MODERATE)) {
             color = R.color.colorMedium;
         } else {
             color = R.color.colorHigh;

@@ -27,9 +27,6 @@ import com.group11.cmpt276_project.service.repository.IViolationRepository;
 import com.group11.cmpt276_project.service.repository.impl.db.RoomInspectionReportRepository;
 import com.group11.cmpt276_project.service.repository.impl.db.RoomRestaurantRepository;
 import com.group11.cmpt276_project.service.repository.impl.db.RoomViolationRepository;
-import com.group11.cmpt276_project.service.repository.impl.json.JsonInspectionReportRepository;
-import com.group11.cmpt276_project.service.repository.impl.json.JsonRestaurantRepository;
-import com.group11.cmpt276_project.service.repository.impl.json.JsonViolationRepository;
 import com.group11.cmpt276_project.service.repository.impl.json.SharedPreferenceRepository;
 import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
@@ -100,6 +97,7 @@ public class WelcomeActivity extends AppCompatActivity {
         });
         this.welcomeViewModel.getUpdateDone().observe(this, (data) -> {
             if (data) {
+                this.mainPageViewModel.setDidUpdate(true);
                 moveToMainActivity(250);
             }
         });
@@ -121,7 +119,6 @@ public class WelcomeActivity extends AppCompatActivity {
         this.welcomeViewModel.getIsCancelled().observe(this, (data) -> {
             if (data) {
                 this.moveToMainActivity(500);
-                this.mainPageViewModel.setDidUpdate(true);
             }
         });
     }

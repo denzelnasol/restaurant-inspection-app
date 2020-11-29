@@ -13,5 +13,5 @@ public interface IInspectionReportRepository {
 
     LiveData<List<InspectionReport>> getInspections() throws RepositoryReadError;
 
-    List<InspectionReport> saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError;
+    List<String> saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError;
 }

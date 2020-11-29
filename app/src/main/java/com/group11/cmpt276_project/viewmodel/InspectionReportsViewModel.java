@@ -25,7 +25,7 @@ public class InspectionReportsViewModel {
     private LiveData<List<InspectionReport>> mData;
     private IInspectionReportRepository inspectionReportRepository;
 
-    private MutableLiveData<List<InspectionReport>> newInspections;
+    private MutableLiveData<List<String>> newInspections;
 
     private InspectionReportsViewModel() {
 
@@ -71,7 +71,7 @@ public class InspectionReportsViewModel {
         return this.mReports;
     }
 
-    public LiveData<List<InspectionReport>> getNewInspections() {
+    public LiveData<List<String>> getNewInspections() {
         return this.newInspections;
     }
 
@@ -94,7 +94,7 @@ public class InspectionReportsViewModel {
             }
 
 
-            this.newInspections.setValue(this.inspectionReportRepository.saveInspections(toAdd));
+            this.newInspections.postValue(this.inspectionReportRepository.saveInspections(toAdd));
         } catch (RepositoryWriteError repositoryWriteError) {
             repositoryWriteError.printStackTrace();
         }

@@ -13,6 +13,8 @@ import com.group11.cmpt276_project.service.model.RestaurantFilter;
 import com.group11.cmpt276_project.service.model.Violation;
 import com.group11.cmpt276_project.utils.Constants;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +34,7 @@ public class MainPageViewModel {
     public MutableLiveData<Integer> isGrt;
     public MutableLiveData<Integer> hazardLevel;
     public MutableLiveData<Boolean> isFavorite;
-    private MutableLiveData<Boolean> didUpdate;
+    public MutableLiveData<Boolean> didUpdate;
 
     private int selectedTab;
     private String search;
@@ -40,7 +42,7 @@ public class MainPageViewModel {
     private LiveData<Map<String, List<InspectionReport>>> reports;
     private LiveData<Map<String, Violation>> violations;
     private LiveData<Map<String, Restaurant>> restaurants;
-    private LiveData<List<InspectionReport>> newInspections;
+    private LiveData<List<String>> newInspections;
 
     private static class MainPageViewModelHolder {
         private static final MainPageViewModel INSTANCE = new MainPageViewModel();
@@ -48,7 +50,7 @@ public class MainPageViewModel {
 
     public void init(LiveData<Map<String, List<InspectionReport>>> reports,
                      LiveData<Map<String, Violation>> violations, LiveData<Map<String,
-            Restaurant>> restaurants, LiveData<List<InspectionReport>> newInspections) {
+            Restaurant>> restaurants, LiveData<List<String>> newInspections) {
         this.isLoadingDB = new MediatorLiveData<>();
         this.isLoadingDB.addSource(reports, (data) -> {
             this.checkIfLoadingIsDone();
@@ -56,7 +58,7 @@ public class MainPageViewModel {
         this.isLoadingDB.addSource(violations, (data) -> {
             this.checkIfLoadingIsDone();
         });
-        this.isLoadingDB.addSource(restaurants, (data) -> {
+        isLoadingDB.addSource(restaurants, (data) -> {
             this.checkIfLoadingIsDone();
         });
 
@@ -64,14 +66,13 @@ public class MainPageViewModel {
 
         this.updates = new MediatorLiveData<>();
 
-        this.updates.addSource(reports, (data) -> {
-            this.generateUpdateList();
-        });
-
         this.updates.addSource(this.didUpdate, (data) -> {
             this.generateUpdateList();
         });
         this.updates.addSource(newInspections, (data) -> {
+            this.generateUpdateList();
+        });
+        this.updates.addSource(this.isLoadingDB, (data) -> {
             this.generateUpdateList();
         });
 
@@ -268,11 +269,11 @@ public class MainPageViewModel {
         Map<String, Restaurant> restaurants = this.restaurants.getValue();
 
         if (reports != null && violations != null && restaurants != null) {
-            this.isLoadingDB.setValue(true);
+            this.isLoadingDB.setValue(false);
             return;
         }
 
-        this.isLoadingDB.setValue(false);
+        this.isLoadingDB.setValue(true);
     }
 
     public LiveData<Boolean> getIsLoadingDB() {
@@ -283,22 +284,53 @@ public class MainPageViewModel {
         return updates;
     }
 
-    public LiveData<Boolean> getDidUpdate() {
-        return didUpdate;
-    }
-
     public void setDidUpdate(boolean didUpdate) {
         this.didUpdate.setValue(didUpdate);
     }
 
     private void generateUpdateList() {
 
-        Map<String, Restaurant> restaurants = this.restaurants.getValue();
-        List<InspectionReport> newInspections = this.newInspections.getValue();
+        List<String> newInspections = this.newInspections.getValue();
+
         boolean didUpdate = this.didUpdate.getValue() != null ? this.didUpdate.getValue() : false;
+        boolean isLoadingDB = this.isLoadingDB.getValue() != null ? this.isLoadingDB.getValue() : true;
 
-        if (restaurants != null && newInspections != null && didUpdate) {
+        if (!isLoadingDB && newInspections != null && !newInspections.isEmpty() && didUpdate) {
 
+            Map<String, Restaurant> restaurants = this.restaurants.getValue();
+            Map<String, List<InspectionReport>> reports = this.reports.getValue();
+
+            List<Restaurant> updatedRestaurants = new ArrayList<>();
+            List<InspectionReport> mostRecentReports = new ArrayList<>();
+
+            System.out.println("Size in update " + restaurants.size());
+
+            for (String trackingNumber : newInspections) {
+                if (reports.get(trackingNumber) == null || reports.get(trackingNumber).isEmpty()) {
+                    continue;
+                }
+
+                Restaurant restaurant = restaurants.get(trackingNumber);
+
+                if(restaurant == null) {
+                    System.out.println(trackingNumber);
+                    continue;
+                }
+
+                InspectionReport mostRecent = reports.get(trackingNumber).get(0);
+
+                updatedRestaurants.add(restaurant);
+                mostRecentReports.add(mostRecent);
+            }
+
+            Collections.sort(updatedRestaurants, (Restaurant a, Restaurant b) -> a.getName().compareTo(b.getName()));
+            Collections.sort(mostRecentReports, (InspectionReport a, InspectionReport b) -> {
+                Restaurant aRestaurant = restaurants.get(a.getTrackingNumber());
+                Restaurant bRestaurant = restaurants.get(b.getTrackingNumber());
+
+                return aRestaurant.getName().compareTo(bRestaurant.getName());
+            });
+            this.updates.setValue(new Pair<>(updatedRestaurants, mostRecentReports));
         }
     }
 }

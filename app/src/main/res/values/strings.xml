@@ -46,4 +46,5 @@
     <string name="issues"># Issues within the last year</string>
     <string name="moderate">Moderate</string>
     <string name="high">High</string>
+    <string name="hazard_rating">%s hazard rating</string>
 </resources>

@@ -26,7 +26,7 @@ public class RoomInspectionReportRepository implements IInspectionReportReposito
     }
 
     @Override
-    public List<InspectionReport> saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError {
+    public List<String> saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError {
         return this.inspectionReportDao.insertOrUpdate(inspections);
     }
 }

@@ -15,7 +15,9 @@ import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Dao
 public abstract class InspectionReportDao {
@@ -53,11 +55,11 @@ public abstract class InspectionReportDao {
     }
 
     @Transaction
-    public List<InspectionReport> insertOrUpdate(List<InspectionReport> objList) {
+    public List<String> insertOrUpdate(List<InspectionReport> objList) {
         List<Long> insertResults = insert(objList);
 
         List<InspectionReport> updateList = new ArrayList<>();
-        List<InspectionReport> newInsertList = new ArrayList<>();
+        Set<String> newInsertList = new HashSet<>();
 
         for(int i = 0; i < insertResults.size(); i++) {
 
@@ -68,13 +70,13 @@ public abstract class InspectionReportDao {
                 continue;
             }
 
-            newInsertList.add(objList.get(i));
+            newInsertList.add(objList.get(i).getTrackingNumber());
         }
 
         if(!updateList.isEmpty()) {
             update(updateList);
         }
 
-        return newInsertList;
+        return new ArrayList(newInsertList);
     }
 }
