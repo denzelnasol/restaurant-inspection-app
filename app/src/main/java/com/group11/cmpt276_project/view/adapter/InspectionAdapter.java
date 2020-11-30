@@ -9,17 +9,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.group11.cmpt276_project.databinding.InspectionItemsBinding;
 import com.group11.cmpt276_project.service.model.InspectionReport;
-import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickIndex;
 
 import java.util.List;
 
 //Adapter for setting List of inspections in Restaurant detail activity
 public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.ViewHolder> {
     private List<InspectionReport> inspectionList;
-    private IItemOnClickIndex iItemOnClickTrackingNumber;
+    private IInspectionItemOnClick iItemOnClickTrackingNumber;
 
 
-    public InspectionAdapter(List<InspectionReport> inspectionReports, IItemOnClickIndex itemOnClick) {
+    public InspectionAdapter(List<InspectionReport> inspectionReports, IInspectionItemOnClick itemOnClick) {
         inspectionList = inspectionReports;
         this.iItemOnClickTrackingNumber = itemOnClick;
     }
@@ -47,11 +46,11 @@ public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.Vi
 
         private InspectionItemsBinding binding;
 
-        public ViewHolder(InspectionItemsBinding binding, IItemOnClickIndex inspectionOnClick) {
+        public ViewHolder(InspectionItemsBinding binding, IInspectionItemOnClick inspectionOnClick) {
             super(binding.getRoot());
             this.binding = binding;
             this.binding.getRoot().setOnClickListener((View view) -> {
-                inspectionOnClick.onItemClick(getAdapterPosition());
+                inspectionOnClick.onItemClick( getAdapterPosition());
             });
         }
 
@@ -61,4 +60,7 @@ public class InspectionAdapter extends RecyclerView.Adapter<InspectionAdapter.Vi
         }
     }
 
+    public interface IInspectionItemOnClick {
+        void onItemClick(int index);
+    }
 }

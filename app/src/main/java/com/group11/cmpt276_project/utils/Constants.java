@@ -12,6 +12,8 @@ public class Constants {
 
     public static String ENCODING = "UTF-8";
     public static String VIOLATION_FILE = "violations.json";
+    public static String VIOLATION_FILE_FRA = "violationsFra.json";
+    public static String VIOLATION_FILE_ENG = "violationsEng.json";
     public static final String INSPECTION_REPORT_FILE = "inspectionReports.json";
     public static final String RESTAURANT_FILE = "restaurants.json";
     public static final String LOW = "Low";

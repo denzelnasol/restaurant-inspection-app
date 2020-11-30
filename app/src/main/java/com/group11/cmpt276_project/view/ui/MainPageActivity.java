@@ -3,11 +3,14 @@ package com.group11.cmpt276_project.view.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.SearchView;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -15,19 +18,22 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.ActivityMainPageBinding;
 import com.group11.cmpt276_project.service.model.GPSCoordiantes;
+import com.group11.cmpt276_project.service.model.InspectionReport;
+import com.group11.cmpt276_project.service.model.Restaurant;
+import com.group11.cmpt276_project.service.model.RestaurantFilter;
 import com.group11.cmpt276_project.view.adapter.TabAdapter;
 import com.group11.cmpt276_project.view.ui.fragment.MapFragment;
 import com.group11.cmpt276_project.view.ui.fragment.RestaurantListFragment;
-import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
 
+import java.util.List;
+
 //The main page of the app. It contains tabs for the map and list. On startup the map will be shown
 public class MainPageActivity extends FragmentActivity {
 
-    private static final String SHOULD_UPDATE = "shouldUpdate";
-    private static final String GPS_COORDINATES = "gpsCoordiantes";
+    private static final String GPS_COORDINATES = "gpsCoordinates";
 
     private final int[] tabs = new int[]{R.string.map, R.string.list};
 
@@ -38,6 +44,8 @@ public class MainPageActivity extends FragmentActivity {
 
     private GPSCoordiantes gpsCoordinates;
 
+    private RestaurantsViewModel restaurantsViewModel;
+
     public static Intent startActivity(Context context, GPSCoordiantes gpsCoordiantes) {
         Intent intent = new Intent(context, MainPageActivity.class);
         intent.putExtra(GPS_COORDINATES, gpsCoordiantes);
@@ -47,10 +55,13 @@ public class MainPageActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        RestaurantsViewModel.getInstance().save();
-        InspectionReportsViewModel.getInstance().save();
-        ViolationsViewModel.getInstance().save();
         this.finishAffinity();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ViolationsViewModel.getInstance().updateLanguage();
     }
 
     @Override
@@ -59,6 +70,32 @@ public class MainPageActivity extends FragmentActivity {
         this.bind();
         this.setUpViewPager();
         this.setUpTabs();
+        this.setUpSearch();
+        this.observe();
+    }
+
+    private void observe() {
+        this.mainPageViewModel.getIsLoadingDB().observe(this, (data) -> {
+            if (!data) {
+                this.binding.mainPageViewPager.setVisibility(View.VISIBLE);
+                this.binding.mainPageProgressBar.setVisibility(View.GONE);
+                this.binding.updateScreen.updateContainer.setVisibility(View.VISIBLE);
+                return;
+            }
+
+            this.binding.mainPageViewPager.setVisibility(View.INVISIBLE);
+            this.binding.mainPageProgressBar.setVisibility(View.VISIBLE);
+            this.binding.updateScreen.updateContainer.setVisibility(View.INVISIBLE);
+        });
+        this.mainPageViewModel.getUpdates().observe(this, (data) -> {
+            if (data != null) {
+                List<Restaurant> restaurants = data.first;
+                List<InspectionReport> reports = data.second;
+
+                RecyclerView recyclerView = this.binding.updateScreen.updateList;
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            }
+        });
     }
 
     public GPSCoordiantes getGpsCoordinates() {
@@ -68,6 +105,11 @@ public class MainPageActivity extends FragmentActivity {
     private void bind() {
         this.mainPageViewModel = MainPageViewModel.getInstance();
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_main_page);
+        this.binding.setMainPageViewModel(this.mainPageViewModel);
+        this.binding.setActivity(this);
+        this.binding.setLifecycleOwner(this);
+
+        this.restaurantsViewModel = RestaurantsViewModel.getInstance();
 
         Intent intent = getIntent();
 
@@ -87,8 +129,72 @@ public class MainPageActivity extends FragmentActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                mainPageViewModel.setSelectedTabTab(position);
+                mainPageViewModel.setSelectedTab(position);
             }
+        });
+    }
+
+    private void setUpSearch() {
+
+        int searchEditTextId = this.binding.searchRestaurant.getContext().getResources()
+                .getIdentifier("android:id/search_src_text", null, null);
+
+        EditText searchEditText = this.binding.searchRestaurant.findViewById(searchEditTextId);
+        searchEditText.setText(this.mainPageViewModel.getSearch());
+
+
+        this.binding.searchRestaurant.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                mainPageViewModel.setSearch(s);
+                applySearch();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                mainPageViewModel.setSearch(s);
+                applySearch();
+                return false;
+            }
+        });
+
+        int searchCloseButtonId = this.binding.searchRestaurant.getContext().getResources()
+                .getIdentifier("android:id/search_close_btn", null, null);
+
+        this.binding.searchRestaurant.findViewById(searchCloseButtonId).setOnClickListener((view) -> {
+
+            EditText editText = this.binding.searchRestaurant.findViewById(searchEditTextId);
+            editText.setText("");
+
+            mainPageViewModel.setSearch("");
+        });
+    }
+
+    private void applySearch() {
+        this.mainPageViewModel.getFilter().observe(this, (data) -> {
+            this.mainPageViewModel.getFilter().removeObservers(this);
+
+            String name = this.mainPageViewModel.getSearch();
+
+            if((name == null || name.isEmpty()) && data == null) {
+                this.restaurantsViewModel.clearSearch();
+                return;
+            }
+
+            if (data != null) {
+                this.mainPageViewModel.setFilterApplied(true);
+            } else {
+                this.mainPageViewModel.setFilterApplied(false);
+            }
+
+            RestaurantFilter filter = data;
+
+            if (data == null) {
+                filter = new RestaurantFilter(null, 0, false);
+            }
+
+            this.restaurantsViewModel.search(name, filter);
         });
     }
 
@@ -99,5 +205,55 @@ public class MainPageActivity extends FragmentActivity {
         }).attach();
     }
 
+    public void toggleFilter() {
+        if (!this.mainPageViewModel.isFilterApplied() && this.mainPageViewModel.getExpandFilter().getValue()) {
+            this.clearFilter();
+            ;
+        }
+        this.mainPageViewModel.toggleFilter();
+    }
 
+    public void closeFilter() {
+        this.mainPageViewModel.closeFilter();
+
+        if (!this.mainPageViewModel.isFilterApplied()) {
+            this.clearFilter();
+            ;
+        }
+    }
+
+    public void applyFilter() {
+        this.applySearch();
+        this.mainPageViewModel.closeFilter();
+    }
+
+    public void clearFilter() {
+        this.mainPageViewModel.clearFilter();
+        ;
+        this.applySearch();
+    }
+
+    public void noOp() {
+
+    }
+
+    public void clearHazardLevel() {
+        this.mainPageViewModel.clearHazardLevel();
+
+        if (this.mainPageViewModel.isFilterApplied()) {
+            this.applySearch();
+        }
+    }
+
+    public void clearNumberCritical() {
+        this.mainPageViewModel.clearNumberCritical();
+
+        if (this.mainPageViewModel.isFilterApplied()) {
+            this.applySearch();
+        }
+    }
+
+    public void dismissUpdate() {
+        this.mainPageViewModel.setDidUpdate(false);
+    }
 }

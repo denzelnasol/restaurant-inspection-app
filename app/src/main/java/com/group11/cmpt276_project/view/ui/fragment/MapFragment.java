@@ -12,13 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -33,32 +32,21 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.ClusterManager;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.FragmentMapBinding;
 import com.group11.cmpt276_project.service.model.ClusterItem;
 import com.group11.cmpt276_project.service.model.GPSCoordiantes;
-import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.view.ui.MainPageActivity;
 import com.group11.cmpt276_project.view.ui.RestaurantDetailActivity;
-import com.group11.cmpt276_project.view.ui.layout.OnDragConstraintLayout;
-import com.group11.cmpt276_project.viewmodel.ClusterItemViewModel;
-import com.group11.cmpt276_project.view.adapter.ClusterRenderer;
+import com.group11.cmpt276_project.viewmodel.MapFragmentViewModel;
+import com.group11.cmpt276_project.view.renderer.ClusterRenderer;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.group11.cmpt276_project.viewmodel.factory.MapFragmentViewModelFactory;
 
 // Fragment to implement a map including user location and restaurant markers
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -73,7 +61,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private RestaurantsViewModel restaurantsViewModel;
     private InspectionReportsViewModel inspectionReportsViewModel;
-    private ClusterItemViewModel clusterItemViewModel;
+    private MapFragmentViewModel mapFragmentViewModel;
 
     private GPSCoordiantes selected;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -83,37 +71,43 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private ClusterRenderer clusterRenderer;
     private Location currentLocation;
 
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera.
+     * In this case, we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to
+     * install it inside the SupportMapFragment. This method will only be triggered once the
+     * user has installed Google Play services and returned to the app.
+     */
 
-        @Override
-        public void onMapReady(GoogleMap googleMap) {
-            mGoogleMap = googleMap;
-            mGoogleMap.setOnMyLocationButtonClickListener(() -> {
-                selected = null;
-                shouldFollow = true;
-                return false;
-            });
-            if (currentLocation != null) {
-                LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-                mGoogleMap.setMyLocationEnabled(true);
-            }
-            setUpClusters();
-            addClusterItemsToMap();
-            if (selected != null) {
-                zoomToCoordinates();
-            } else {
-                zoomToUserLocation();
-            }
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.mGoogleMap = googleMap;
+        this.mGoogleMap.setOnMyLocationButtonClickListener(() -> {
+            this.selected = null;
+            this.shouldFollow = true;
+            return false;
+        });
+        if (currentLocation != null) {
+            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            this.mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            this.mGoogleMap.setMyLocationEnabled(true);
         }
+        this.setUpClusters();
+        this.mapFragmentViewModel.getClusterItems().observe(this, (data) -> {
+            this.mGoogleMap.clear();
+            this.clusterManager.clearItems();
+            this.clusterManager.addItems(data);
+            this.clusterManager.cluster();
+        });
+
+        if (this.selected != null) {
+            this.zoomToCoordinates();
+        } else {
+            this.zoomToUserLocation();
+        }
+    }
 
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
@@ -124,6 +118,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 @Override
                 public void onSuccess(Location location) {
                     currentLocation = location;
+
+                    if(currentLocation == null) {
+                        return;
+                    }
+
                     if (selected == null && shouldFollow) {
                         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())));
                     }
@@ -152,7 +151,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         this.inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
         MainPageActivity activity = (MainPageActivity) getActivity();
         this.selected = activity.getGpsCoordinates();
-        this.clusterItemViewModel = ClusterItemViewModel.getInstance();
+
+        MapFragmentViewModelFactory mapFragmentViewModelFactory = new MapFragmentViewModelFactory(
+                getActivity(),
+                this.restaurantsViewModel.getRestaurants(),
+                this.inspectionReportsViewModel.getReports()
+        );
+
+        this.mapFragmentViewModel = new ViewModelProvider(this, mapFragmentViewModelFactory).get(MapFragmentViewModel.class);
     }
 
     @Override
@@ -265,12 +271,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    private void addClusterItemsToMap() {
-        List<ClusterItem> clusterItems = new ArrayList<>(this.clusterItemViewModel.get().values());
-        this.clusterManager.addItems(clusterItems);
-        this.clusterManager.cluster();
-    }
-
 /*    public void enableUserLocation() {
         mGoogleMap.setMyLocationEnabled(true);
     }*/
@@ -279,7 +279,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case LOCATION_PERMISSION_CODE:
-                if  (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     fetchLastLocation();
                 }
                 break;

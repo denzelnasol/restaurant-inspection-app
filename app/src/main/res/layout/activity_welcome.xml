@@ -28,7 +28,7 @@
             android:layout_height="25dp"
             android:layout_marginEnd="16dp"
             android:alpha="@{welcomeViewModel.mCanCancel ? 1.0f : 0.50f}"
-            android:background="@drawable/round_btn"
+            android:background="@drawable/round_btn_download"
             android:clickable="@{welcomeViewModel.mCanCancel}"
             android:enabled="@{welcomeViewModel.mCanCancel}"
             android:onClick="@{()-> activity.onCancelClick()}"
@@ -43,11 +43,11 @@
             android:id="@+id/linearLayout2"
             android:layout_width="160dp"
             android:layout_height="170dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="225dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/app_name"
             app:layout_constraintEnd_toEndOf="@+id/app_name"
-            app:layout_constraintStart_toStartOf="@+id/app_name">
+            app:layout_constraintStart_toStartOf="@+id/app_name"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/welcomeAnimRepo"
@@ -64,13 +64,13 @@
             android:id="@+id/app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="180dp"
+            android:layout_marginTop="16dp"
             android:text="@string/app_name"
             android:textSize="20sp"
             app:fontFamily="sans-serif"
-            app:layout_constraintBottom_toTopOf="@+id/progress_text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 
         <ProgressBar
