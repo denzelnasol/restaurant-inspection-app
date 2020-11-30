@@ -21,11 +21,12 @@ import java.util.Map;
  */
 public class ViolationsViewModel {
     private LiveData<List<Violation>> mData;
-    private MediatorLiveData<Map<String, Violation>> mViolations;
+    private final MediatorLiveData<Map<String, Violation>> mViolations;
 
     private IViolationRepository violationRepository;
 
     private ViolationsViewModel() {
+        this.mViolations = new MediatorLiveData<>();
     }
 
     private static class ViolationsViewModelHolder {
@@ -46,7 +47,6 @@ public class ViolationsViewModel {
                 this.mData = new MutableLiveData<>();
             }
 
-            this.mViolations = new MediatorLiveData<>();
             this.mViolations.addSource(this.mData, (data) -> {
                 this.createViolationMap(data);
             });

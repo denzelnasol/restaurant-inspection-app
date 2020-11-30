@@ -56,6 +56,7 @@ public class MainPageActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        this.restaurantsViewModel.clearSearch();
         this.finishAffinity();
     }
 

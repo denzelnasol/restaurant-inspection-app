@@ -26,7 +26,7 @@ public class RestaurantsViewModel {
 
     private LiveData<List<Restaurant>> mData;
     private LiveData<List<Restaurant>> mSearch;
-    private MediatorLiveData<Map<String, Restaurant>> mRestaurants;
+    private final MediatorLiveData<Map<String, Restaurant>> mRestaurants;
 
     private List<Restaurant> restaurants;
     private List<Restaurant> searchResult;
@@ -34,7 +34,7 @@ public class RestaurantsViewModel {
     private IRestaurantRepository restaurantRepository;
 
     private RestaurantsViewModel() {
-
+        this.mRestaurants = new MediatorLiveData<>();
     }
 
     private static class RestaurantsViewModelHolder {
@@ -55,7 +55,6 @@ public class RestaurantsViewModel {
                 this.mData = new MutableLiveData<>();
             }
 
-            this.mRestaurants = new MediatorLiveData<>();
             this.mRestaurants.addSource(this.mData, (data) -> {
                 this.restaurants = data;
                 mergeSource();

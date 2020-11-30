@@ -21,14 +21,15 @@ a Map to allow quick access without searching. The data is sorted in descending 
  */
 public class InspectionReportsViewModel {
 
-    private MediatorLiveData<Map<String, List<InspectionReport>>> mReports;
+    private final MediatorLiveData<Map<String, List<InspectionReport>>> mReports;
     private LiveData<List<InspectionReport>> mData;
     private IInspectionReportRepository inspectionReportRepository;
 
-    private MutableLiveData<List<String>> newInspections;
+    private final MutableLiveData<List<String>> newInspections;
 
     private InspectionReportsViewModel() {
-
+        this.mReports = new MediatorLiveData<>();
+        this.newInspections = new MutableLiveData<>();
     }
 
     private static class InspectionReportsViewModelHolder {
@@ -49,9 +50,6 @@ public class InspectionReportsViewModel {
                 this.mData = new MutableLiveData<>();
             }
 
-            this.newInspections = new MutableLiveData<>();
-
-            this.mReports = new MediatorLiveData<>();
             this.mReports.addSource(this.mData, (data) -> {
 
                 if(data == null) return;
