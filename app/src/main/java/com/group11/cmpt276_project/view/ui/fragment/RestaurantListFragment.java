@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,12 +16,14 @@ import android.view.ViewGroup;
 
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.FragmentRestaurantListBinding;
-import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.view.adapter.RestaurantAdapter;
-import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickTrackingNumber;
 import com.group11.cmpt276_project.view.ui.RestaurantDetailActivity;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
+import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
+import com.group11.cmpt276_project.viewmodel.RestaurantListFragmentViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
+import com.group11.cmpt276_project.viewmodel.factory.RestaurantListFragmentViewModelFactory;
+
 import java.util.HashMap;
 
 import java.util.Map;
@@ -32,6 +35,8 @@ public class RestaurantListFragment extends Fragment {
 
     private RestaurantsViewModel restaurantsViewModel;
     private InspectionReportsViewModel inspectionReportsViewModel;
+
+    private RestaurantListFragmentViewModel restaurantListFragmentViewModel;
 
     private FragmentRestaurantListBinding binding;
 
@@ -62,17 +67,19 @@ public class RestaurantListFragment extends Fragment {
     private void bind() {
         this.restaurantsViewModel = RestaurantsViewModel.getInstance();
         this.inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
+
+        RestaurantListFragmentViewModelFactory restaurantListFragmentViewModelFactory = new RestaurantListFragmentViewModelFactory(
+                this.restaurantsViewModel.getRestaurants(),
+                this.inspectionReportsViewModel.getReports()
+        );
+
+        this.restaurantListFragmentViewModel = new ViewModelProvider(this, restaurantListFragmentViewModelFactory).get(RestaurantListFragmentViewModel.class);
     }
 
     private void observeRestaurants() {
-        this.restaurantsViewModel.get().observe(getActivity(), (data) -> {
-            Map<String, InspectionReport> reports = new HashMap<>();
+        this.restaurantListFragmentViewModel.getData().observe(getActivity(), (data) -> {
 
-            for (String trackingNumber : data.keySet()) {
-                reports.put(trackingNumber, this.inspectionReportsViewModel.getMostRecentReport(trackingNumber));
-            }
-
-            RestaurantAdapter restaurantAdapter = new RestaurantAdapter(data, reports, new RestaurantItemOnClickTrackingNumber());
+            RestaurantAdapter restaurantAdapter = new RestaurantAdapter(data.first, data.second, new RestaurantItemOnClickTrackingNumber());
 
             RecyclerView restaurantList = this.binding.restaurantList;
 
@@ -81,7 +88,7 @@ public class RestaurantListFragment extends Fragment {
         });
     }
 
-    private class RestaurantItemOnClickTrackingNumber implements IItemOnClickTrackingNumber {
+    private class RestaurantItemOnClickTrackingNumber implements RestaurantAdapter.IRestaurantItemOnClick {
 
         @Override
         public void onItemClick(String trackingNumber) {

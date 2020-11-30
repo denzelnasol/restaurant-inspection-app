@@ -3,37 +3,55 @@ package com.group11.cmpt276_project.service.model;
 /*
 This classes represents a restaurant as an object
  */
+
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Restaurant {
-    String trackingNumber;
-    String name;
-    String physicalAddress;
-    String physicalCity;
-    String facilityType;
-    double latitude;
-    double longitude;
+
+    @NonNull
+    @PrimaryKey
+    @ColumnInfo(name = "tracking_number")
+    private String trackingNumber;
+
+    @ColumnInfo(name = "name")
+    private String name;
+
+    @ColumnInfo(name = "physical_address")
+    private String physicalAddress;
+
+    @ColumnInfo(name = "physical_city")
+    private String physicalCity;
+
+    @ColumnInfo(name = "facility_type")
+    private String facilityType;
+
+    @ColumnInfo(name = "latitude")
+    private double latitude;
+
+    @ColumnInfo(name = "longitude")
+    private double longitude;
+
+    @ColumnInfo(name = "is_favorite", defaultValue = "0")
+    private boolean isFavorite;
+
 
     public Restaurant() {
 
     }
 
-    private Restaurant(String trackingNumber, String name, String physicalAddress, String physicalCity, String facilityType, double latitude, double longitude) {
-        this.trackingNumber = trackingNumber;
-        this.name = name;
-        this.physicalAddress = physicalAddress;
-        this.physicalCity = physicalCity;
-        this.facilityType = facilityType;
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
-
     public static class RestaurantBuilder {
-        String trackingNumber;
-        String name;
-        String physicalAddress;
-        String physicalCity;
-        String facilityType;
-        double latitude;
-        double longitude;
+        private String trackingNumber;
+        private String name;
+        private String physicalAddress;
+        private String physicalCity;
+        private String facilityType;
+        private double latitude;
+        private double longitude;
+        private boolean isFavorite;
 
         public RestaurantBuilder withTrackingNumber(String trackingNumber) {
             this.trackingNumber = trackingNumber;
@@ -70,13 +88,23 @@ public class Restaurant {
             return this;
         }
 
+        public RestaurantBuilder withIsFavorite(boolean isFavorite) {
+            this.isFavorite = isFavorite;
+            return this;
+        }
+
         public Restaurant build() {
-            return new Restaurant(this.trackingNumber,
-                    this.name, this.physicalAddress,
-                    this.physicalCity,
-                    this.facilityType,
-                    this.latitude,
-                    this.longitude);
+            Restaurant restaurant = new Restaurant();
+
+            restaurant.trackingNumber = this.trackingNumber;
+            restaurant.name = this.name;
+            restaurant.physicalAddress = this.physicalAddress;
+            restaurant.physicalCity = this.physicalCity;
+            restaurant.facilityType = this.facilityType;
+            restaurant.latitude = this.latitude;
+            restaurant.longitude = this.longitude;
+            restaurant.isFavorite = this.isFavorite;
+            return restaurant;
         }
     }
 
@@ -136,4 +164,11 @@ public class Restaurant {
         return longitude;
     }
 
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
 }
