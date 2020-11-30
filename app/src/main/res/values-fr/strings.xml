@@ -34,6 +34,18 @@
     <string name = "finalize_updates"> Finalisation des mises à jour </string>
     <string name = "current_downloading"> Téléchargement %s… %s%% </string>
     <string name = "start_download"> Départ %s </string>
-    <string name = "hello_blank_fragment"> Bonjour fragment vierge </string>
+    <string name="find_a_restaurant">Trouver un restaurant</string>
+    <string name="gte"><![CDATA[>=]]></string>
+    <string name="lte"><![CDATA[<=]]></string>
+    <string name="apply">Appliquer</string>
+    <string name="clear">Claire</string>
+    <string name="clear_amount">Claire (%d)</string>
+    <string name="show_favorites">Afficher les favoris</string>
+    <string name="number_of_critical_issues">Nombre de problèmes critiques</string>
+    <string name="hazard_level">Niveau de danger du dernier rapport</string>
+    <string name="issues"># Problèmes au cours de la dernière année</string>
+    <string name="moderate">Modérer</string>
+    <string name="high">Haut</string>
+    <string name="hazard_rating">%s cote de danger</string>
 
 </resources>
