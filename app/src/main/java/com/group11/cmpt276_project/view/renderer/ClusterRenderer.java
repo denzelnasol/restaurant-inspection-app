@@ -1,4 +1,4 @@
-package com.group11.cmpt276_project.view.adapter;
+package com.group11.cmpt276_project.view.renderer;
 
 import android.content.Context;
 import android.graphics.Bitmap;

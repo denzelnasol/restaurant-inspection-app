@@ -22,6 +22,7 @@ public class RestaurantNameBindingAdapter {
         for(Map.Entry<String, Integer> entry : Constants.RESTAURANT_ICON_MAP.entrySet()) {
             if (restaurant.toLowerCase().contains(entry.getKey().toLowerCase())) {
                 resId = entry.getValue();
+                break;
             }
         }
 

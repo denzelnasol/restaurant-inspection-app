@@ -1,4 +1,4 @@
-package com.group11.cmpt276_project.service.repository.impl;
+package com.group11.cmpt276_project.service.repository.impl.json;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -52,7 +52,7 @@ public class DateBindingAdapter {
         int year = inspectionDate.getYear();
         int day = inspectionDate.getDayOfMonth();
 
-        String dateString = null;
+        String dateString;
 
         if(daysSince <= 30) {
             dateString = context.getString(R.string.days, daysSince);
@@ -64,7 +64,7 @@ public class DateBindingAdapter {
     }
 
     private static void formLast(TextView textView, Context context, LocalDate inspectionDate, long daysSince, int currentYear) {
-        String sinceString =  "";
+        String sinceString;
 
         String month = inspectionDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.CANADA);
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textSize="18sp"
+            android:text="@{restaurant.name}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/update_hazard_level"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textSize="16sp"
+            app:hazardText="@{String.format(@string/hazard_rating, report.hazardRating)}"
+            app:layout_constraintBottom_toBottomOf="@+id/update_hazard_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/update_hazard_image"
+            app:layout_constraintTop_toTopOf="@+id/update_hazard_image" />
+
+        <TextView
+            android:id="@+id/update_inspection_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:fullDate="@{report != null ? report.inspectionDate : @string/empty}"
+            app:layout_constraintStart_toStartOf="@+id/update_hazard_image"
+            app:layout_constraintTop_toBottomOf="@+id/update_hazard_image" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/update_hazard_image"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="8dp"
+            app:hazardIcon="@{report != null ? report.hazardRating: @string/low}"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toStartOf="@+id/textView3"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+        <variable
+            name="restaurant"
+            type="com.group11.cmpt276_project.service.model.Restaurant" />
+        <variable
+            name="report"
+            type="com.group11.cmpt276_project.service.model.InspectionReport" />
+    </data>
+</layout>
+

@@ -12,18 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.ActivityInspectionDetailBinding;
-import com.group11.cmpt276_project.service.model.InspectionReport;
-import com.group11.cmpt276_project.service.model.Violation;
 import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.view.adapter.ViolationAdapter;
-import com.group11.cmpt276_project.view.adapter.interfaces.IItemOnClickIndex;
 import com.group11.cmpt276_project.viewmodel.InspectionReportDetailViewModel;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
-import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
-import com.group11.cmpt276_project.viewmodel.factory.InspectionReportViewModelFactory;
+import com.group11.cmpt276_project.viewmodel.factory.InspectionReportDetailViewModelFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 /**
  This is an activity for the InspectionDetail.
@@ -46,22 +41,24 @@ public class InspectionDetailActivity extends AppCompatActivity {
 
     private ViolationsViewModel violationsViewModel;
     private InspectionReportsViewModel inspectionReportsViewModel;
-    private RestaurantsViewModel restaurantsViewModel;
     private InspectionReportDetailViewModel inspectionReportDetailViewModel;
 
-    private  List<Violation> violationList;
     private RecyclerView recyclerView;
 
 
     private ActivityInspectionDetailBinding binding;
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        this.violationsViewModel.updateLanguage();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.bind();
-        this.observeVisibility();
+        this.observe();
     }
 
     public void onBackClicked() {
@@ -73,47 +70,37 @@ public class InspectionDetailActivity extends AppCompatActivity {
         this.index = intent.getIntExtra(Constants.INDEX, -1);
         this.parent = intent.getStringExtra(Constants.PARENT);
 
-
         this.violationsViewModel = ViolationsViewModel.getInstance();
         this.inspectionReportsViewModel = InspectionReportsViewModel.getInstance();
-        this.restaurantsViewModel = RestaurantsViewModel.getInstance();
 
-        String trackingNumber = this.restaurantsViewModel.getByTrackingNumber(parent).getTrackingNumber();
-
-        InspectionReport inspectionReport = this.inspectionReportsViewModel.getByIndexAndTrackingNumbe(trackingNumber, index);
-
-        InspectionReportViewModelFactory inspectionReportViewModelFactory = new InspectionReportViewModelFactory(inspectionReport.getViolLump().size());
-        this.inspectionReportDetailViewModel = new ViewModelProvider(this, inspectionReportViewModelFactory).get(InspectionReportDetailViewModel.class);
-
-        this.violationList = this.getViolationList(inspectionReport.getViolLump());
+        InspectionReportDetailViewModelFactory inspectionReportDetailViewModelFactory = new InspectionReportDetailViewModelFactory(
+                this.inspectionReportsViewModel.getReports(),
+                this.violationsViewModel.getViolations(),
+                this.parent,
+                this.index
+        );
+        this.inspectionReportDetailViewModel = new ViewModelProvider(this, inspectionReportDetailViewModelFactory).get(InspectionReportDetailViewModel.class);
 
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_inspection_detail);
-        this.binding.setReport(inspectionReport);
         this.binding.setActivity(this);
 
         this.recyclerView = this.binding.violationList;
     }
 
-    private void observeVisibility() {
+    private void observe() {
 
-        this.inspectionReportDetailViewModel.getIsVisibleData().observe(this, (data) -> {
-            ViolationAdapter violationAdapter = new ViolationAdapter(violationList, data, new ViolationItemOnClickTrackingNumber());
+        this.inspectionReportsViewModel.getReports().observe(this, (data) -> {
+            this.binding.setReport(data.get(this.parent).get(this.index));
+        });
+
+        this.inspectionReportDetailViewModel.getData().observe(this, (data) -> {
+            ViolationAdapter violationAdapter = new ViolationAdapter(data.second, data.first, new ViolationItemOnClickTrackingNumber());
             this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
             this.recyclerView.setAdapter(violationAdapter);
         });
     }
 
-    private List<Violation> getViolationList(List<String> violationIds){
-        List<Violation> violationList = new ArrayList<>();
-
-        for(String id: violationIds) {
-            violationList.add(this.violationsViewModel.get(String.valueOf(id)));
-        }
-
-        return violationList;
-    }
-
-    private class ViolationItemOnClickTrackingNumber implements IItemOnClickIndex {
+    private class ViolationItemOnClickTrackingNumber implements ViolationAdapter.IViolationItemOnClick {
 
         @Override
         public void onItemClick(int position) {

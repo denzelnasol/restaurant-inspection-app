@@ -1,6 +1,9 @@
-package com.group11.cmpt276_project.service.repository.impl;
+package com.group11.cmpt276_project.service.repository.impl.json;
 
 import android.content.Context;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -13,6 +16,7 @@ import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.utils.Utils;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**This class serves to load the violations json file
@@ -23,13 +27,20 @@ public class JsonViolationRepository implements IViolationRepository {
     private Context context;
     private ObjectMapper objectMapper;
 
+    private MutableLiveData<List<Violation>> violations;
+
     public JsonViolationRepository(Context context) {
         this.context = context;
         this.objectMapper = new ObjectMapper();
     }
 
     @Override
-    public Map<String, Violation> getViolations() throws RepositoryReadError {
+    public LiveData<List<Violation>> getViolations() throws RepositoryReadError {
+
+        if(this.violations != null) {
+            return this.violations;
+        }
+
         String jsonString;
         try {
             jsonString = Utils.readJSONFromStorage(this.context, Constants.VIOLATION_FILE);
@@ -41,21 +52,22 @@ public class JsonViolationRepository implements IViolationRepository {
             }
         }
 
-        TypeReference<Map<String, Violation>> mapTypeReference = new TypeReference<Map<String, Violation>>() {};
+        TypeReference<List<Violation>> typeReference = new TypeReference<List<Violation>>() {};
 
         try {
-            return objectMapper.readValue(jsonString, mapTypeReference);
+            this.violations = new MutableLiveData<>(objectMapper.readValue(jsonString, typeReference));
+            return this.violations;
         } catch (JsonProcessingException e) {
             throw new RepositoryReadError(e.getMessage());
         }
     }
 
     @Override
-    public Map<String, Violation> saveViolations(Map<String, Violation> violations) throws RepositoryWriteError {
+    public void saveViolations(List<Violation> violations) throws RepositoryWriteError {
         try {
             String jsonString = this.objectMapper.writeValueAsString(violations);
             Utils.writeJSONToStorage(this.context, Constants.VIOLATION_FILE, jsonString);
-            return violations;
+            this.violations.postValue(violations);
         } catch (IOException e) {
             throw new RepositoryWriteError(e.getMessage());
         }
