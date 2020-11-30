@@ -11,14 +11,6 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Restaurant {
-    String trackingNumber;
-    String name;
-    String physicalAddress;
-    String physicalCity;
-    String facilityType;
-    double latitude;
-    double longitude;
-    boolean isFavourite;
 
     @NonNull
     @PrimaryKey

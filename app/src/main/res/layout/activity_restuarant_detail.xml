@@ -146,7 +146,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/btn_star"
             android:onClick="@{()->activity.toggleFavouriteButton()}"
-            app:setFavouriteButton="@{restaurant.isFavourite}"
+            app:setFavoriteButton="@{restaurant.isFavorite()}"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

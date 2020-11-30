@@ -129,15 +129,9 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     }
 
     public void toggleFavouriteButton() {
-        this.btn = (ImageButton)findViewById(R.id.favouriteImageButton);
-        if (!restaurant.getIsFavourite()) {
-            btn.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.star_big_on));
-            restaurant.setIsFavourite(true);
-        }
-        else {
-            btn.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.star_big_off));
-            restaurant.setIsFavourite(false);
-        }
+        //this.btn = (ImageButton)findViewById(R.id.favouriteImageButton);
+        //btn.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.star_big_on));
+        restaurantViewModel.favoriteRestaurant(trackingNumber);
     }
 }
 

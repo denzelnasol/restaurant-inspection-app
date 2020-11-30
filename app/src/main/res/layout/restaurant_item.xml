@@ -61,7 +61,7 @@
                     android:id="@+id/favouritedImage"
                     android:layout_width="40dp"
                     android:layout_height="38dp"
-                    app:favouriteIcon="@{restaurant.isFavourite}"
+                    app:favoriteIcon="@{restaurant.isFavorite()}"
                     app:layout_constraintBottom_toBottomOf="@+id/restaurant_icon"
                     app:layout_constraintEnd_toEndOf="@+id/restaurant_icon"
                     app:layout_constraintHorizontal_bias="0.0"
