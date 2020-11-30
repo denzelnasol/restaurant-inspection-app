@@ -21,6 +21,7 @@ import com.group11.cmpt276_project.service.model.GPSCoordiantes;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.service.model.RestaurantFilter;
+import com.group11.cmpt276_project.view.adapter.UpdateAdapter;
 import com.group11.cmpt276_project.view.adapter.TabAdapter;
 import com.group11.cmpt276_project.view.ui.fragment.MapFragment;
 import com.group11.cmpt276_project.view.ui.fragment.RestaurantListFragment;
@@ -92,8 +93,10 @@ public class MainPageActivity extends FragmentActivity {
                 List<Restaurant> restaurants = data.first;
                 List<InspectionReport> reports = data.second;
 
+                UpdateAdapter favoriteAdapter =  new UpdateAdapter(restaurants, reports);
                 RecyclerView recyclerView = this.binding.updateScreen.updateList;
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                recyclerView.setAdapter(favoriteAdapter);
             }
         });
     }
