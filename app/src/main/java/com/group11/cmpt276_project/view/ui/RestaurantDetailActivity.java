@@ -16,6 +16,7 @@ import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.ActivityRestuarantDetailBinding;
 import com.group11.cmpt276_project.service.model.GPSCoordiantes;
 import com.group11.cmpt276_project.service.model.InspectionReport;
+import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.view.adapter.InspectionAdapter;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
@@ -36,10 +37,10 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private InspectionReportsViewModel inspectionReportsViewModel;
 
     private String trackingNumber;
-    private boolean favourite;
-    private ImageButton btn;
 
     private ActivityRestuarantDetailBinding binding;
+
+    private Restaurant restaurant;
 
     public static Intent startActivity(Context context, String trackingNumber) {
         Intent intent = new Intent(context, RestaurantDetailActivity.class);
@@ -81,7 +82,23 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
     private void observe() {
         this.restaurantViewModel.getRestaurants().observe(this, (data) -> {
-            this.binding.setRestaurant(data.get(this.trackingNumber));
+
+            Restaurant restaurant = data.get(this.trackingNumber) == null ? this.restaurant : data.get(this.trackingNumber);
+
+            if(restaurant != null) {
+                this.restaurant = new Restaurant.RestaurantBuilder()
+                        .withLongitude(restaurant.getLongitude())
+                        .withLatitude(restaurant.getLatitude())
+                        .withFacilityType(restaurant.getFacilityType())
+                        .withPhysicalCity(restaurant.getPhysicalCity())
+                        .withPhysicalAddress(restaurant.getPhysicalAddress())
+                        .withName(restaurant.getName())
+                        .withTrackingNumber(restaurant.getTrackingNumber())
+                        .withIsFavorite(false)
+                        .build();
+            }
+
+            this.binding.setRestaurant(restaurant);
         });
 
         this.inspectionReportsViewModel.getReports().observe(this, (data) -> {
@@ -91,7 +108,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
     private void setupRecyclerView(List<InspectionReport> inspectionReports) {
         if (inspectionReports.size() != 0) {
-            InspectionAdapter adapter = new InspectionAdapter( inspectionReports, new InspectionOnClickTrackingNumber(trackingNumber));
+            InspectionAdapter adapter = new InspectionAdapter( inspectionReports, new InspectionOnClickTrackingNumber(this.trackingNumber));
             RecyclerView recyclerView = this.binding.resDetailRecycler;
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -104,11 +121,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
         Intent intent = MainPageActivity.startActivity(this, coordinates);
         MainPageViewModel.getInstance().setSelectedTab(0);
-        startActivity(intent);
-    }
-
-    public void onBackClick() {
-        Intent intent = MainPageActivity.startActivity(this, null);
         startActivity(intent);
     }
 
@@ -129,9 +141,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     }
 
     public void toggleFavouriteButton() {
-        //this.btn = (ImageButton)findViewById(R.id.favouriteImageButton);
-        //btn.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.star_big_on));
-        restaurantViewModel.favoriteRestaurant(trackingNumber);
+        this.restaurantViewModel.favoriteRestaurant(this.trackingNumber);
     }
 }
 
