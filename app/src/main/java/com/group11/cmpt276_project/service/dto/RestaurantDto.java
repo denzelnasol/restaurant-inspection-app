@@ -1,5 +1,8 @@
 package com.group11.cmpt276_project.service.dto;
 
+/**
+ * This class represents the restaurant data transfer object
+ */
 public class RestaurantDto {
 
     private String trackingNumber;

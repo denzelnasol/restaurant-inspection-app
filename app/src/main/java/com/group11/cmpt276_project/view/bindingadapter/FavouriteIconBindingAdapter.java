@@ -9,6 +9,9 @@ import androidx.databinding.BindingAdapter;
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.utils.Constants;
 
+/**
+ * This is an adapter to set the favourite icon and button in the restaurant list and restaurant detail
+ */
 public class FavouriteIconBindingAdapter {
     @BindingAdapter("app:favoriteIcon")
     public static void setFavoriteIcon(ImageView imageView, boolean isFavourite){

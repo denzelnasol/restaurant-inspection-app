@@ -14,6 +14,9 @@ import com.group11.cmpt276_project.service.model.Violation;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the violation data access object
+ */
 @Dao
 public abstract class ViolationDao  {
 

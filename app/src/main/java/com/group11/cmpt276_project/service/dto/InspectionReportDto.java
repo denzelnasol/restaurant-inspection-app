@@ -2,6 +2,9 @@ package com.group11.cmpt276_project.service.dto;
 
 import java.util.List;
 
+/**
+ * This class represents the inspection data transfer object
+ */
 public class InspectionReportDto {
 
     private String trackingNumber;

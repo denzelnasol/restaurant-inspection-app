@@ -53,12 +53,13 @@
 
         <TextView
             android:id="@+id/res_detail_name"
-            android:text="@{restaurant.getName()}"
-            android:layout_width="299dp"
-            android:layout_height="31dp"
+            android:layout_width="302dp"
+            android:layout_height="23dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:fontFamily="sans-serif-black"
-            android:textSize="24sp"
+            android:text="@{restaurant.getName()}"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/restaurant_icon" />
@@ -68,10 +69,11 @@
             android:layout_width="296dp"
             android:layout_height="23dp"
             android:layout_marginTop="4dp"
-            app:fontFamily="sans-serif-light"
             android:text="@{String.format(@string/address, restaurant.physicalAddress, restaurant.physicalCity)}"
             android:textSize="18sp"
+            app:fontFamily="sans-serif-light"
             app:layout_constraintEnd_toEndOf="@+id/res_detail_name"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/res_detail_name"
             app:layout_constraintTop_toBottomOf="@+id/res_detail_name" />
 
@@ -80,17 +82,18 @@
             android:layout_width="295dp"
             android:layout_height="26dp"
             android:layout_marginTop="4dp"
-            android:textSize="18sp"
             android:onClick="@{() -> activity.onCoordinateClicked(restaurant.latitude, restaurant.longitude)}"
-            app:link="@{String.format(@string/coord, restaurant.latitude, restaurant.longitude)}"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/res_detail_address"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/res_detail_address"
-            app:layout_constraintTop_toBottomOf="@+id/res_detail_address" />
+            app:layout_constraintTop_toBottomOf="@+id/res_detail_address"
+            app:link="@{String.format(@string/coord, restaurant.latitude, restaurant.longitude)}" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="87dp"
+            android:layout_height="81dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:orientation="vertical"
@@ -101,7 +104,7 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animationView"
-                android:layout_width="match_parent"
+                android:layout_width="87dp"
                 android:layout_height="match_parent"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="false"
