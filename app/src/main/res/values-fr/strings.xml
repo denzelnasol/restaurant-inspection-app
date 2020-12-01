@@ -1,0 +1,51 @@
+<resources>
+    <string name = "app_name"> Rapports sur les restaurants </string>
+    <string name = "res_png"> res_png </string>
+    <string name = "cutlery"> couverts </string>
+    <string name = "critical_issues"> Problèmes critiques - </string>
+    <string name = "non_critical_issues"> Problèmes non critiques - </string>
+    <string name = "time"> Heure - </string>
+    <string name = "number_violations">%d violations détectées lors de l inspection </string>
+    <string name = "last_inspect"> La dernière inspection était %s </string>
+    <string name = "days"> %d il y a quelques jours </string>
+    <string name = "month"> sur %s %d </string>
+    <string name = "year"> dans %s %d </string>
+    <string name = "empty" />
+    <string name = "low"> Faible </string>
+    <string name = "no_inspections"> Aucune inspection jusqu à présent </string>
+    <string name = "inspections"> Inspections </string>
+    <string name = "backText"> retour </string>
+    <string name = "inspection_type"> Type d inspection: %s </string>
+    <string name = "non_critical"> # Problèmes non critiques détectés: %d </string>
+    <string name = "critical"> # Problèmes critiques détectés: %d </string>
+    <string name = "back"> Retour </string>
+    <string name = "violation_summary">%s - %s </string>
+    <string name = "full_date">%s %d, %d </string>
+    <string name = "date">%s %d </string>
+    <string name = "address">%s, %s</string>
+    <string name = "coord">%s, %s </string>
+    <string name = "hazard_text">%s - Indice de danger: %s </string>
+    <string name = "violations"> Violations </string>
+    <string name = "map"> Carte </string>
+    <string name = "list"> Liste </string>
+    <string name = "cancel"> Annuler </string>
+    <string name = "ok"> Télécharger maintenant </string>
+    <string name = "updates"> De nouvelles mises à jour sont disponibles </string>
+    <string name = "finalize_updates"> Finalisation des mises à jour </string>
+    <string name = "current_downloading"> Téléchargement %s… %s%% </string>
+    <string name = "start_download"> Départ %s </string>
+    <string name="find_a_restaurant">Trouver un restaurant</string>
+    <string name="gte"><![CDATA[>=]]></string>
+    <string name="lte"><![CDATA[<=]]></string>
+    <string name="apply">Appliquer</string>
+    <string name="clear">Claire</string>
+    <string name="clear_amount">Claire (%d)</string>
+    <string name="show_favorites">Afficher les favoris</string>
+    <string name="number_of_critical_issues">Nombre de problèmes critiques</string>
+    <string name="hazard_level">Niveau de danger du dernier rapport</string>
+    <string name="issues"># Problèmes au cours de la dernière année</string>
+    <string name="moderate">Modérer</string>
+    <string name="high">Haut</string>
+    <string name="hazard_rating">%s cote de danger</string>
+
+</resources>
