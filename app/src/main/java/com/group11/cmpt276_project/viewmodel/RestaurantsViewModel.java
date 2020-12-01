@@ -45,21 +45,24 @@ public class RestaurantsViewModel {
         return RestaurantsViewModelHolder.INSTANCE;
     }
 
-    public void init(IRestaurantRepository jsonRestaurantRepository) {
-        if (this.restaurantRepository == null) {
-            this.restaurantRepository = jsonRestaurantRepository;
+    public void init(IRestaurantRepository restaurantRepository) {
+        this.restaurantRepository = restaurantRepository;
 
-            try {
-                this.mData = this.restaurantRepository.getRestaurants();
-            } catch (RepositoryReadError repositoryReadError) {
-                this.mData = new MutableLiveData<>();
-            }
-
-            this.mRestaurants.addSource(this.mData, (data) -> {
-                this.restaurants = data;
-                mergeSource();
-            });
+        try {
+            this.mData = this.restaurantRepository.getRestaurants();
+        } catch (RepositoryReadError repositoryReadError) {
+            this.mData = new MutableLiveData<>();
         }
+
+        this.mRestaurants.addSource(this.mData, (data) -> {
+            this.restaurants = data;
+            mergeSource();
+        });
+    }
+
+    public void cleanUp() {
+        this.clearSearch();
+        this.mRestaurants.removeSource(this.mData);
     }
 
     public void clearSearch() {

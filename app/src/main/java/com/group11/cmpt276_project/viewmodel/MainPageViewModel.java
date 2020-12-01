@@ -24,7 +24,9 @@ public class MainPageViewModel {
 
     private boolean isFilterApplied;
 
-    private MutableLiveData<Boolean> expandFilter;
+    private final MutableLiveData<Boolean> expandFilter;
+    private final MutableLiveData<Boolean> shouldShowUpdates;
+    private final MutableLiveData<Boolean> didUpdate;
 
     private final MediatorLiveData<RestaurantFilter> filter;
     private final MediatorLiveData<Boolean> isLoadingDB;
@@ -35,7 +37,6 @@ public class MainPageViewModel {
     public final MutableLiveData<Integer> isGrt;
     public final MutableLiveData<Integer> hazardLevel;
     public final MutableLiveData<Boolean> isFavorite;
-    public final MutableLiveData<Boolean> didUpdate;
 
     private int selectedTab;
     private String search;
@@ -79,6 +80,15 @@ public class MainPageViewModel {
         this.newInspections = newInspections;
     }
 
+    public void cleanUp() {
+        this.isLoadingDB.removeSource(this.reports);
+        this.isLoadingDB.removeSource(this.violations);
+        this.isLoadingDB.removeSource(this.restaurants);
+        this.updates.removeSource(this.didUpdate);
+        this.updates.removeSource(this.newInspections);
+        this.updates.removeSource(this.isLoadingDB);
+    }
+
     public LiveData<RestaurantFilter> getFilter() {
         return this.filter;
     }
@@ -88,6 +98,7 @@ public class MainPageViewModel {
         this.selectedTab = 0;
 
         this.expandFilter = new MutableLiveData<>(false);
+        this.shouldShowUpdates = new MutableLiveData<>(false);
 
         this.number = new MutableLiveData<>();
         this.isFavorite = new MutableLiveData<>(false);
@@ -289,6 +300,14 @@ public class MainPageViewModel {
         this.didUpdate.setValue(didUpdate);
     }
 
+    public void setShouldShowUpdates(boolean shouldShowUpdates) {
+        this.shouldShowUpdates.setValue(shouldShowUpdates);
+    }
+
+    public LiveData<Boolean> getShouldShowUpdates() {
+        return this.shouldShowUpdates;
+    }
+
     private void generateUpdateList() {
 
         List<String> newInspections = this.newInspections.getValue();
@@ -326,6 +345,10 @@ public class MainPageViewModel {
 
                 return aRestaurant.getName().compareTo(bRestaurant.getName());
             });
+
+            if(!restaurants.isEmpty()) {
+                this.shouldShowUpdates.setValue(true);
+            }
             this.updates.setValue(new Pair<>(updatedRestaurants, mostRecentReports));
         }
     }

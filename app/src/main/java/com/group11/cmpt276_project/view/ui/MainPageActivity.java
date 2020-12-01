@@ -25,6 +25,7 @@ import com.group11.cmpt276_project.view.adapter.UpdateAdapter;
 import com.group11.cmpt276_project.view.adapter.TabAdapter;
 import com.group11.cmpt276_project.view.ui.fragment.MapFragment;
 import com.group11.cmpt276_project.view.ui.fragment.RestaurantListFragment;
+import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
@@ -56,7 +57,11 @@ public class MainPageActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        this.restaurantsViewModel.clearSearch();
+        this.mainPageViewModel.setDidUpdate(false);
+        this.mainPageViewModel.cleanUp();
+        this.restaurantsViewModel.cleanUp();
+        ViolationsViewModel.getInstance().cleanUp();
+        InspectionReportsViewModel.getInstance().cleanUp();
         this.finishAffinity();
     }
 
@@ -99,6 +104,15 @@ public class MainPageActivity extends FragmentActivity {
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setAdapter(favoriteAdapter);
             }
+        });
+
+        this.mainPageViewModel.getShouldShowUpdates().observe(this, (data) -> {
+            if(data) {
+                this.binding.updateScreen.getRoot().setVisibility(View.VISIBLE);
+                return;
+            }
+
+            this.binding.updateScreen.getRoot().setVisibility(View.GONE);
         });
     }
 
@@ -259,5 +273,6 @@ public class MainPageActivity extends FragmentActivity {
 
     public void dismissUpdate() {
         this.mainPageViewModel.setDidUpdate(false);
+        this.mainPageViewModel.setShouldShowUpdates(false);
     }
 }

@@ -41,28 +41,30 @@ public class InspectionReportsViewModel {
     }
 
     public void init(IInspectionReportRepository jsonInspectionReportRepository) {
-        if(this.inspectionReportRepository == null) {
-            this.inspectionReportRepository = jsonInspectionReportRepository;
+        this.inspectionReportRepository = jsonInspectionReportRepository;
 
-            try {
-                this.mData = this.inspectionReportRepository.getInspections();
-            } catch (RepositoryReadError e) {
-                this.mData = new MutableLiveData<>();
+        try {
+            this.mData = this.inspectionReportRepository.getInspections();
+        } catch (RepositoryReadError e) {
+            this.mData = new MutableLiveData<>();
+        }
+
+        this.mReports.addSource(this.mData, (data) -> {
+
+            if (data == null) return;
+
+            Map<String, List<InspectionReport>> inspectionReports = new HashMap<>();
+
+            for (InspectionReport inspectionReport : data) {
+                inspectionReports.computeIfAbsent(inspectionReport.getTrackingNumber(), (key) -> new ArrayList<>()).add(inspectionReport);
             }
 
-            this.mReports.addSource(this.mData, (data) -> {
+            this.mReports.setValue(inspectionReports);
+        });
+    }
 
-                if(data == null) return;
-
-                Map<String, List<InspectionReport>> inspectionReports = new HashMap<>();
-
-                for(InspectionReport inspectionReport : data) {
-                    inspectionReports.computeIfAbsent(inspectionReport.getTrackingNumber(), (key) -> new ArrayList<>()).add(inspectionReport);
-                }
-
-                this.mReports.setValue(inspectionReports);
-            });
-        }
+    public void cleanUp() {
+        this.mReports.removeSource(this.mData);
     }
 
     public LiveData<Map<String, List<InspectionReport>>> getReports() {
@@ -77,7 +79,7 @@ public class InspectionReportsViewModel {
         try {
             List<InspectionReport> toAdd = new ArrayList<>();
 
-            for(InspectionReportDto dto : newReports) {
+            for (InspectionReportDto dto : newReports) {
                 InspectionReport report = new InspectionReport.InspectionReportBuilder()
                         .withTrackingNumber(dto.getTrackingNumber())
                         .withHazardRating(dto.getHazardRating())
