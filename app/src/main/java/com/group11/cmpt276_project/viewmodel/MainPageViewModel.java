@@ -81,6 +81,12 @@ public class MainPageViewModel {
     }
 
     public void cleanUp() {
+        this.number.setValue(null);
+        this.isGrt.setValue(null);
+        this.isFavorite.setValue(false);
+        this.hazardLevel.setValue(null);
+        this.isLoadingDB.setValue(true);
+        this.shouldShowUpdates.setValue(false);
         this.isLoadingDB.removeSource(this.reports);
         this.isLoadingDB.removeSource(this.violations);
         this.isLoadingDB.removeSource(this.restaurants);
