@@ -63,6 +63,7 @@ public class RestaurantsViewModel {
     public void cleanUp() {
         this.clearSearch();
         this.mRestaurants.removeSource(this.mData);
+        this.mRestaurants.setValue(null);
     }
 
     public void clearSearch() {

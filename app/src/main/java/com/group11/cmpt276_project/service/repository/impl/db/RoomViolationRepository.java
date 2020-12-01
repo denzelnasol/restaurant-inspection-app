@@ -8,6 +8,7 @@ import com.group11.cmpt276_project.service.dao.ViolationDao;
 import com.group11.cmpt276_project.service.db.RestaurantDatabase;
 import com.group11.cmpt276_project.service.model.Violation;
 import com.group11.cmpt276_project.service.repository.IViolationRepository;
+import com.group11.cmpt276_project.utils.Constants;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,7 @@ public class RoomViolationRepository implements IViolationRepository {
 
     @Override
     public LiveData<List<Violation>> getViolations() throws RepositoryReadError {
-        return this.violationDao.getAllViolations(Locale.getDefault().getISO3Language());
+        return this.violationDao.getAllViolations(Constants.SUPPORTED_LANGUAGES.getOrDefault(Locale.getDefault().getISO3Language(), Constants.ENG));
     }
 
     @Override

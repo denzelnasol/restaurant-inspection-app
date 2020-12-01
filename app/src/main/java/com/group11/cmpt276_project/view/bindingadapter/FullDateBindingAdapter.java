@@ -6,6 +6,7 @@ import android.widget.TextView;
 import androidx.databinding.BindingAdapter;
 
 import com.group11.cmpt276_project.R;
+import com.group11.cmpt276_project.utils.Constants;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +21,8 @@ public class FullDateBindingAdapter {
     @BindingAdapter("fullDate")
     public static void setFullDateText(TextView textView, String date) {
 
+        Locale locale = Constants.SUPPORTED_LANGUAGES_TO_LOCALE.getOrDefault(Locale.getDefault().getISO3Language(), Locale.ENGLISH);
+
         if(date == null || date.isEmpty()) {
             return;
         }
@@ -30,7 +33,7 @@ public class FullDateBindingAdapter {
 
         Context context = textView.getContext();
 
-        String month = inspectionDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.CANADA);
+        String month = inspectionDate.getMonth().getDisplayName(TextStyle.SHORT, locale);
         int day = inspectionDate.getDayOfMonth();
         int year = inspectionDate.getYear();
 

@@ -38,6 +38,8 @@ public class RestaurantListFragment extends Fragment {
 
     private RestaurantListFragmentViewModel restaurantListFragmentViewModel;
 
+    private RestaurantAdapter restaurantAdapter;
+
     private FragmentRestaurantListBinding binding;
 
     public RestaurantListFragment() {
@@ -61,6 +63,7 @@ public class RestaurantListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        this.setUpRecyclerView();
         this.observeRestaurants();
     }
 
@@ -78,14 +81,17 @@ public class RestaurantListFragment extends Fragment {
 
     private void observeRestaurants() {
         this.restaurantListFragmentViewModel.getData().observe(getActivity(), (data) -> {
-
-            RestaurantAdapter restaurantAdapter = new RestaurantAdapter(data.first, data.second, new RestaurantItemOnClickTrackingNumber());
-
-            RecyclerView restaurantList = this.binding.restaurantList;
-
-            restaurantList.setLayoutManager(new LinearLayoutManager(getContext()));
-            restaurantList.setAdapter(restaurantAdapter);
+            this.restaurantAdapter.postUpdates(data.first, data.second);
         });
+    }
+
+    public void setUpRecyclerView() {
+        this.restaurantAdapter = new RestaurantAdapter(new RestaurantItemOnClickTrackingNumber(), new FavouriteOnClick());
+
+        RecyclerView restaurantList = this.binding.restaurantList;
+
+        restaurantList.setLayoutManager(new LinearLayoutManager(getContext()));
+        restaurantList.setAdapter(restaurantAdapter);
     }
 
     private class RestaurantItemOnClickTrackingNumber implements RestaurantAdapter.IRestaurantItemOnClick {
@@ -94,6 +100,14 @@ public class RestaurantListFragment extends Fragment {
         public void onItemClick(String trackingNumber) {
             Intent intent = RestaurantDetailActivity.startActivity(getActivity(), trackingNumber);
             startActivity(intent);
+        }
+    }
+
+    private class FavouriteOnClick implements RestaurantAdapter.IFavouriteOnClick {
+
+        @Override
+        public void onClick(String trackingNumber) {
+            restaurantsViewModel.favoriteRestaurant(trackingNumber);
         }
     }
 }
