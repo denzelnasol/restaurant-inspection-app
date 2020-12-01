@@ -21,11 +21,12 @@ import java.util.Map;
  */
 public class ViolationsViewModel {
     private LiveData<List<Violation>> mData;
-    private MediatorLiveData<Map<String, Violation>> mViolations;
+    private final MediatorLiveData<Map<String, Violation>> mViolations;
 
     private IViolationRepository violationRepository;
 
     private ViolationsViewModel() {
+        this.mViolations = new MediatorLiveData<>();
     }
 
     private static class ViolationsViewModelHolder {
@@ -36,21 +37,22 @@ public class ViolationsViewModel {
         return ViolationsViewModelHolder.INSTANCE;
     }
 
-    public void init(IViolationRepository jsonViolationRepository) {
-        if (this.violationRepository == null) {
-            this.violationRepository = jsonViolationRepository;
+    public void init(IViolationRepository violationRepository) {
+        this.violationRepository = violationRepository;
 
-            try {
-                this.mData = this.violationRepository.getViolations();
-            } catch (RepositoryReadError e) {
-                this.mData = new MutableLiveData<>();
-            }
-
-            this.mViolations = new MediatorLiveData<>();
-            this.mViolations.addSource(this.mData, (data) -> {
-                this.createViolationMap(data);
-            });
+        try {
+            this.mData = this.violationRepository.getViolations();
+        } catch (RepositoryReadError e) {
+            this.mData = new MutableLiveData<>();
         }
+
+        this.mViolations.addSource(this.mData, (data) -> {
+            this.createViolationMap(data);
+        });
+    }
+
+    public void cleanUp() {
+        this.mViolations.removeSource(this.mData);
     }
 
     public LiveData<Map<String, Violation>> getViolations() {
@@ -62,7 +64,7 @@ public class ViolationsViewModel {
 
             List<Violation> toAdd = new ArrayList<>();
 
-            for(ViolationDto dto : newViolations) {
+            for (ViolationDto dto : newViolations) {
                 Violation violation = new Violation.ViolationBuilder()
                         .withDetails(dto.getDetails())
                         .withId(dto.getId())
@@ -91,11 +93,11 @@ public class ViolationsViewModel {
     }
 
     public void createViolationMap(List<Violation> data) {
-        if(data == null) return;
+        if (data == null) return;
 
         Map<String, Violation> violations = new HashMap<>();
 
-        for(Violation violation : data) {
+        for (Violation violation : data) {
             violations.put(violation.getId(), violation);
         }
 

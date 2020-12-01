@@ -4,8 +4,10 @@ package com.group11.cmpt276_project.view.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +16,7 @@ import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.ActivityRestuarantDetailBinding;
 import com.group11.cmpt276_project.service.model.GPSCoordiantes;
 import com.group11.cmpt276_project.service.model.InspectionReport;
+import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.utils.Constants;
 import com.group11.cmpt276_project.view.adapter.InspectionAdapter;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
@@ -36,6 +39,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private String trackingNumber;
 
     private ActivityRestuarantDetailBinding binding;
+
+    private Restaurant restaurant;
 
     public static Intent startActivity(Context context, String trackingNumber) {
         Intent intent = new Intent(context, RestaurantDetailActivity.class);
@@ -77,7 +82,23 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
     private void observe() {
         this.restaurantViewModel.getRestaurants().observe(this, (data) -> {
-            this.binding.setRestaurant(data.get(this.trackingNumber));
+
+            Restaurant restaurant = data.get(this.trackingNumber) == null ? this.restaurant : data.get(this.trackingNumber);
+
+            if(restaurant != null) {
+                this.restaurant = new Restaurant.RestaurantBuilder()
+                        .withLongitude(restaurant.getLongitude())
+                        .withLatitude(restaurant.getLatitude())
+                        .withFacilityType(restaurant.getFacilityType())
+                        .withPhysicalCity(restaurant.getPhysicalCity())
+                        .withPhysicalAddress(restaurant.getPhysicalAddress())
+                        .withName(restaurant.getName())
+                        .withTrackingNumber(restaurant.getTrackingNumber())
+                        .withIsFavorite(false)
+                        .build();
+            }
+
+            this.binding.setRestaurant(restaurant);
         });
 
         this.inspectionReportsViewModel.getReports().observe(this, (data) -> {
@@ -87,7 +108,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
     private void setupRecyclerView(List<InspectionReport> inspectionReports) {
         if (inspectionReports.size() != 0) {
-            InspectionAdapter adapter = new InspectionAdapter( inspectionReports, new InspectionOnClickTrackingNumber(trackingNumber));
+            InspectionAdapter adapter = new InspectionAdapter( inspectionReports, new InspectionOnClickTrackingNumber(this.trackingNumber));
             RecyclerView recyclerView = this.binding.resDetailRecycler;
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -100,11 +121,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
         Intent intent = MainPageActivity.startActivity(this, coordinates);
         MainPageViewModel.getInstance().setSelectedTab(0);
-        startActivity(intent);
-    }
-
-    public void onBackClick() {
-        Intent intent = MainPageActivity.startActivity(this, null);
         startActivity(intent);
     }
 
@@ -122,6 +138,10 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             Intent intent = InspectionDetailActivity.startActivity(RestaurantDetailActivity.this, position, this.parent);
             startActivity(intent);
         }
+    }
+
+    public void toggleFavouriteButton() {
+        this.restaurantViewModel.favoriteRestaurant(this.trackingNumber);
     }
 }
 

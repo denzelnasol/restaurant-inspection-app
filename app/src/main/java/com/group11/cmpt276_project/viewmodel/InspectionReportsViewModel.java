@@ -21,14 +21,15 @@ a Map to allow quick access without searching. The data is sorted in descending 
  */
 public class InspectionReportsViewModel {
 
-    private MediatorLiveData<Map<String, List<InspectionReport>>> mReports;
+    private final MediatorLiveData<Map<String, List<InspectionReport>>> mReports;
     private LiveData<List<InspectionReport>> mData;
     private IInspectionReportRepository inspectionReportRepository;
 
-    private MutableLiveData<List<String>> newInspections;
+    private final MutableLiveData<List<String>> newInspections;
 
     private InspectionReportsViewModel() {
-
+        this.mReports = new MediatorLiveData<>();
+        this.newInspections = new MutableLiveData<>();
     }
 
     private static class InspectionReportsViewModelHolder {
@@ -40,31 +41,30 @@ public class InspectionReportsViewModel {
     }
 
     public void init(IInspectionReportRepository jsonInspectionReportRepository) {
-        if(this.inspectionReportRepository == null) {
-            this.inspectionReportRepository = jsonInspectionReportRepository;
+        this.inspectionReportRepository = jsonInspectionReportRepository;
 
-            try {
-                this.mData = this.inspectionReportRepository.getInspections();
-            } catch (RepositoryReadError e) {
-                this.mData = new MutableLiveData<>();
+        try {
+            this.mData = this.inspectionReportRepository.getInspections();
+        } catch (RepositoryReadError e) {
+            this.mData = new MutableLiveData<>();
+        }
+
+        this.mReports.addSource(this.mData, (data) -> {
+
+            if (data == null) return;
+
+            Map<String, List<InspectionReport>> inspectionReports = new HashMap<>();
+
+            for (InspectionReport inspectionReport : data) {
+                inspectionReports.computeIfAbsent(inspectionReport.getTrackingNumber(), (key) -> new ArrayList<>()).add(inspectionReport);
             }
 
-            this.newInspections = new MutableLiveData<>();
+            this.mReports.setValue(inspectionReports);
+        });
+    }
 
-            this.mReports = new MediatorLiveData<>();
-            this.mReports.addSource(this.mData, (data) -> {
-
-                if(data == null) return;
-
-                Map<String, List<InspectionReport>> inspectionReports = new HashMap<>();
-
-                for(InspectionReport inspectionReport : data) {
-                    inspectionReports.computeIfAbsent(inspectionReport.getTrackingNumber(), (key) -> new ArrayList<>()).add(inspectionReport);
-                }
-
-                this.mReports.setValue(inspectionReports);
-            });
-        }
+    public void cleanUp() {
+        this.mReports.removeSource(this.mData);
     }
 
     public LiveData<Map<String, List<InspectionReport>>> getReports() {
@@ -79,7 +79,7 @@ public class InspectionReportsViewModel {
         try {
             List<InspectionReport> toAdd = new ArrayList<>();
 
-            for(InspectionReportDto dto : newReports) {
+            for (InspectionReportDto dto : newReports) {
                 InspectionReport report = new InspectionReport.InspectionReportBuilder()
                         .withTrackingNumber(dto.getTrackingNumber())
                         .withHazardRating(dto.getHazardRating())

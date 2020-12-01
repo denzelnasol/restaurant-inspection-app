@@ -26,7 +26,7 @@ public class RestaurantsViewModel {
 
     private LiveData<List<Restaurant>> mData;
     private LiveData<List<Restaurant>> mSearch;
-    private MediatorLiveData<Map<String, Restaurant>> mRestaurants;
+    private final MediatorLiveData<Map<String, Restaurant>> mRestaurants;
 
     private List<Restaurant> restaurants;
     private List<Restaurant> searchResult;
@@ -34,7 +34,7 @@ public class RestaurantsViewModel {
     private IRestaurantRepository restaurantRepository;
 
     private RestaurantsViewModel() {
-
+        this.mRestaurants = new MediatorLiveData<>();
     }
 
     private static class RestaurantsViewModelHolder {
@@ -45,22 +45,24 @@ public class RestaurantsViewModel {
         return RestaurantsViewModelHolder.INSTANCE;
     }
 
-    public void init(IRestaurantRepository jsonRestaurantRepository) {
-        if (this.restaurantRepository == null) {
-            this.restaurantRepository = jsonRestaurantRepository;
+    public void init(IRestaurantRepository restaurantRepository) {
+        this.restaurantRepository = restaurantRepository;
 
-            try {
-                this.mData = this.restaurantRepository.getRestaurants();
-            } catch (RepositoryReadError repositoryReadError) {
-                this.mData = new MutableLiveData<>();
-            }
-
-            this.mRestaurants = new MediatorLiveData<>();
-            this.mRestaurants.addSource(this.mData, (data) -> {
-                this.restaurants = data;
-                mergeSource();
-            });
+        try {
+            this.mData = this.restaurantRepository.getRestaurants();
+        } catch (RepositoryReadError repositoryReadError) {
+            this.mData = new MutableLiveData<>();
         }
+
+        this.mRestaurants.addSource(this.mData, (data) -> {
+            this.restaurants = data;
+            mergeSource();
+        });
+    }
+
+    public void cleanUp() {
+        this.clearSearch();
+        this.mRestaurants.removeSource(this.mData);
     }
 
     public void clearSearch() {

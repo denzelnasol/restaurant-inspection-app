@@ -21,9 +21,11 @@ import com.group11.cmpt276_project.service.model.GPSCoordiantes;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.service.model.RestaurantFilter;
+import com.group11.cmpt276_project.view.adapter.UpdateAdapter;
 import com.group11.cmpt276_project.view.adapter.TabAdapter;
 import com.group11.cmpt276_project.view.ui.fragment.MapFragment;
 import com.group11.cmpt276_project.view.ui.fragment.RestaurantListFragment;
+import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
 import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.ViolationsViewModel;
@@ -55,6 +57,11 @@ public class MainPageActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        this.mainPageViewModel.setDidUpdate(false);
+        this.mainPageViewModel.cleanUp();
+        this.restaurantsViewModel.cleanUp();
+        ViolationsViewModel.getInstance().cleanUp();
+        InspectionReportsViewModel.getInstance().cleanUp();
         this.finishAffinity();
     }
 
@@ -92,9 +99,21 @@ public class MainPageActivity extends FragmentActivity {
                 List<Restaurant> restaurants = data.first;
                 List<InspectionReport> reports = data.second;
 
+                UpdateAdapter favoriteAdapter =  new UpdateAdapter(restaurants, reports);
                 RecyclerView recyclerView = this.binding.updateScreen.updateList;
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                recyclerView.setAdapter(favoriteAdapter);
             }
+        });
+
+        this.mainPageViewModel.getShouldShowUpdates().observe(this, (data) -> {
+            System.out.println(data);
+            if(data) {
+                this.binding.updateScreen.getRoot().setVisibility(View.VISIBLE);
+                return;
+            }
+
+            this.binding.updateScreen.getRoot().setVisibility(View.GONE);
         });
     }
 
@@ -179,6 +198,7 @@ public class MainPageActivity extends FragmentActivity {
 
             if((name == null || name.isEmpty()) && data == null) {
                 this.restaurantsViewModel.clearSearch();
+                this.mainPageViewModel.setFilterApplied(false);
                 return;
             }
 
@@ -215,10 +235,13 @@ public class MainPageActivity extends FragmentActivity {
 
     public void closeFilter() {
         this.mainPageViewModel.closeFilter();
+        if(this.mainPageViewModel.isFavorite.getValue()) {
+            this.mainPageViewModel.isFavorite.setValue(false);
+            this.applySearch();
+        }
 
         if (!this.mainPageViewModel.isFilterApplied()) {
             this.clearFilter();
-            ;
         }
     }
 
@@ -229,7 +252,6 @@ public class MainPageActivity extends FragmentActivity {
 
     public void clearFilter() {
         this.mainPageViewModel.clearFilter();
-        ;
         this.applySearch();
     }
 
@@ -255,5 +277,10 @@ public class MainPageActivity extends FragmentActivity {
 
     public void dismissUpdate() {
         this.mainPageViewModel.setDidUpdate(false);
+        this.mainPageViewModel.setShouldShowUpdates(false);
+    }
+
+    public void applyFavoriteFilter() {
+        this.applySearch();
     }
 }
