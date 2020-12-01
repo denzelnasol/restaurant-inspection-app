@@ -3,7 +3,12 @@ package com.group11.cmpt276_project.view.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.SearchView;
 
@@ -21,6 +26,7 @@ import com.group11.cmpt276_project.service.model.GPSCoordiantes;
 import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.service.model.RestaurantFilter;
+import com.group11.cmpt276_project.utils.Utils;
 import com.group11.cmpt276_project.view.adapter.UpdateAdapter;
 import com.group11.cmpt276_project.view.adapter.TabAdapter;
 import com.group11.cmpt276_project.view.ui.fragment.MapFragment;
@@ -231,6 +237,7 @@ public class MainPageActivity extends FragmentActivity {
             ;
         }
         this.mainPageViewModel.toggleFilter();
+        Utils.hideKeyboard(this);
     }
 
     public void closeFilter() {
@@ -243,16 +250,21 @@ public class MainPageActivity extends FragmentActivity {
         if (!this.mainPageViewModel.isFilterApplied()) {
             this.clearFilter();
         }
+        Utils.hideKeyboard(this);
     }
 
     public void applyFilter() {
         this.applySearch();
         this.mainPageViewModel.closeFilter();
+        Utils.hideKeyboard(this);
     }
+
+
 
     public void clearFilter() {
         this.mainPageViewModel.clearFilter();
         this.applySearch();
+
     }
 
     public void noOp() {

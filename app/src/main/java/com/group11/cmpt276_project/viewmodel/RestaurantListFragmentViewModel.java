@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * View model to manage the state of the restaurant list
+ */
 public class RestaurantListFragmentViewModel extends ViewModel {
 
     private MediatorLiveData<Pair<Map<String, Restaurant>, Map<String, InspectionReport>>> mData;

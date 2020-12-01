@@ -1,5 +1,6 @@
 package com.group11.cmpt276_project.service.model;
 
+// This class filters restaurants
 public class RestaurantFilter {
 
     private final String hazardLevel;

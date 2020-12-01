@@ -10,6 +10,9 @@ import com.group11.cmpt276_project.service.repository.IInspectionReportRepositor
 
 import java.util.List;
 
+/**
+ * Room database to handle inspections
+ */
 public class RoomInspectionReportRepository implements IInspectionReportRepository {
 
     private InspectionReportDao inspectionReportDao;

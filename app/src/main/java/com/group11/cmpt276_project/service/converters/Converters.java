@@ -9,6 +9,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is a class of converters that convert from string to list and vice versa
+ */
 public class Converters {
 
     @TypeConverter

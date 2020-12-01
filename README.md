@@ -11,3 +11,9 @@ Iteration 2 Roles
 - Product Owner: Jacqueline (jsl59)
 - Repo Manager: Denzel (dnasol)
 - Team Member: Wenhao (wenhaoz)
+
+Iteration 3 Roles
+- Scrum Master - Denzel (dnasol)
+- Product Owner - Wenhao (wenhaoz)
+- Repo Master - Jacqueline (jsl59)
+- Team Member - Karamveer (ksa133)

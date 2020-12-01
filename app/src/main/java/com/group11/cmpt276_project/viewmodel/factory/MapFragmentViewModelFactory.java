@@ -14,7 +14,9 @@ import com.group11.cmpt276_project.viewmodel.MapFragmentViewModel;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * This factory is used to create a MapFragmentViewModel
+ */
 public class MapFragmentViewModelFactory implements ViewModelProvider.Factory {
 
     private final Context context;

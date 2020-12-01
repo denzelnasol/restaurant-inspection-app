@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Room database to handle violations
+ */
 public class RoomViolationRepository implements IViolationRepository {
 
     private ViolationDao violationDao;

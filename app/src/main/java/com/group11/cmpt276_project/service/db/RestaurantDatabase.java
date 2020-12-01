@@ -28,6 +28,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * This class represents the restaurant database
+ */
 @Database(entities = {InspectionReport.class, Restaurant.class, Violation.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class RestaurantDatabase extends RoomDatabase {
