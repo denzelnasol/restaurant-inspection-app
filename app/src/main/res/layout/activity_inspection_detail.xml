@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="com.group11.cmpt276_project.utils.Constants"/>
         <variable
             name="activity"
             type="com.group11.cmpt276_project.view.ui.InspectionDetailActivity" />
@@ -46,7 +47,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="@{String.format(@string/inspection_type, report.inspectionType)}"
+            android:text="@{String.format(@string/inspection_type, report.inspectionType.contains(Constants.FOLLOW_UP) ? @string/follow_up : @string/routine)}"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/inspection_item_hazard"

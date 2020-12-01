@@ -20,13 +20,11 @@ public class HazardRatingBindingAdapter {
         }
 
 
-        int resId = 0;
+        int resId = R.drawable.ic_smiling;
 
-        if(Constants.LOW.equals(hazard)) {
-            resId = R.drawable.ic_smiling;
-        } else if(Constants.MODERATE.equals(hazard)) {
+        if(Constants.MODERATE.equals(hazard)) {
             resId = R.drawable.ic_neutral;
-        } else {
+        } else if(Constants.HIGH.equals(hazard)) {
             resId = R.drawable.ic_sad;
         }
 
@@ -39,18 +37,24 @@ public class HazardRatingBindingAdapter {
             return;
         }
 
-        textView.setText(hazard);
+        int translatedLevelId = R.string.low;
+        int color = R.color.colorLow;
 
-        int color = 0;
+        String toReplace = Constants.LOW;
 
-        if(hazard.contains(Constants.LOW)) {
-            color = R.color.colorLow;
-        } else if(hazard.contains(Constants.MODERATE)) {
+         if(hazard.contains(Constants.MODERATE)) {
             color = R.color.colorMedium;
-        } else {
+             translatedLevelId = R.string.moderate;
+             toReplace = Constants.MODERATE;
+        } else if(hazard.contains(Constants.HIGH)){
             color = R.color.colorHigh;
+             translatedLevelId = R.string.high;
+             toReplace = Constants.HIGH;
         }
 
+        textView.getContext().getString(translatedLevelId);
+
+        textView.setText(hazard.replace(toReplace, textView.getContext().getString(translatedLevelId)));
         textView.setTextColor(textView.getContext().getColor(color));
     }
  }

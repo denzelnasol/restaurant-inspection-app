@@ -47,4 +47,8 @@
     <string name="moderate">Moderate</string>
     <string name="high">High</string>
     <string name="hazard_rating">%s hazard rating</string>
+    <string name="new_inspections">New Inspections</string>
+    <string name="your_favorite_restaurants_got_inspected">Your favorite restaurants got inspected</string>
+    <string name="routine">Routine</string>
+    <string name="follow_up">Follow-Up</string>
 </resources>

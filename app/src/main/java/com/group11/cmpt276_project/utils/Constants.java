@@ -52,6 +52,8 @@ public class Constants {
     public static final String WENDYS = "Wendy's";
     public static final String ENG = "eng";
     public static final String FRA = "fra";
+    public static final String FOLLOW_UP = "Follow-Up";
+    public static final String ROUTINE = "Routine";
 
     public static final Map<String, Integer> RESTAURANT_ICON_MAP = new HashMap<String, Integer>(){{
         put(Constants.SEVEN_ELEVEN, R.drawable.res_ic_7eleven);

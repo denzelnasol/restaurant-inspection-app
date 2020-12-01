@@ -47,5 +47,8 @@
     <string name="moderate">Modérer</string>
     <string name="high">Haut</string>
     <string name="hazard_rating">%s cote de danger</string>
-
+    <string name="new_inspections">Nouvelles Inspections</string>
+    <string name="your_favorite_restaurants_got_inspected">Vos restaurants préférés ont été inspectés</string>
+    <string name="routine">Routine</string>
+    <string name="follow_up">Suivre</string>
 </resources>

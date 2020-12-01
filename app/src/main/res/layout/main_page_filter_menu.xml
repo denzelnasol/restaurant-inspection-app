@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintGuide_percent="0.59"
+            app:layout_constraintGuide_percent="0.6"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,14 +71,16 @@
             android:id="@+id/checkBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:checked="@={mainPageViewModel.isFavorite}"
             android:text="@string/show_favorites"
             android:textSize="14sp"
-            android:onClick="@{() -> activity.applyFavoriteFilter()}"
             app:layout_constraintBottom_toBottomOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toTopOf="@+id/textView2" />
+            app:layout_constraintTop_toTopOf="@+id/textView2"
+            app:layout_constraintVertical_bias="0.384" />
 
         <EditText
             android:id="@+id/editTextNumber"
@@ -159,10 +161,11 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
             android:text="@string/number_of_critical_issues"
             android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/clear_issues"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view" />
 
@@ -170,7 +173,7 @@
             android:id="@+id/clear_issues"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="4dp"
             android:background="@drawable/btn_no_bg"
             android:onClick="@{() -> activity.clearNumberCritical()}"
             android:src="@drawable/ic_close"
@@ -181,10 +184,14 @@
 
         <TextView
             android:id="@+id/textView6"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:ellipsize="none"
+            android:scrollHorizontally="false"
+            android:singleLine="false"
             android:text="@string/hazard_level"
+            app:layout_constraintEnd_toStartOf="@+id/clear_hazard_level"
             app:layout_constraintStart_toStartOf="@+id/editTextNumber"
             app:layout_constraintTop_toBottomOf="@+id/editTextNumber" />
 
@@ -192,7 +199,7 @@
             android:id="@+id/clear_hazard_level"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="4dp"
             android:background="@drawable/btn_no_bg"
             android:onClick="@{() -> activity.clearHazardLevel()}"
             android:src="@drawable/ic_close"
