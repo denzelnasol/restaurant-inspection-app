@@ -352,7 +352,7 @@ public class MainPageViewModel {
                 return aRestaurant.getName().compareTo(bRestaurant.getName());
             });
 
-            if(!restaurants.isEmpty()) {
+            if(!updatedRestaurants.isEmpty()) {
                 this.shouldShowUpdates.setValue(true);
             }
             this.updates.setValue(new Pair<>(updatedRestaurants, mostRecentReports));

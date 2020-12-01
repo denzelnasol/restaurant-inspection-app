@@ -107,6 +107,7 @@ public class MainPageActivity extends FragmentActivity {
         });
 
         this.mainPageViewModel.getShouldShowUpdates().observe(this, (data) -> {
+            System.out.println(data);
             if(data) {
                 this.binding.updateScreen.getRoot().setVisibility(View.VISIBLE);
                 return;
