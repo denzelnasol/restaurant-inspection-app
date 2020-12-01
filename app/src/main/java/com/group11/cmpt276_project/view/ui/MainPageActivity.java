@@ -275,4 +275,8 @@ public class MainPageActivity extends FragmentActivity {
         this.mainPageViewModel.setDidUpdate(false);
         this.mainPageViewModel.setShouldShowUpdates(false);
     }
+
+    public void applyFavoriteFilter() {
+        this.applySearch();
+    }
 }

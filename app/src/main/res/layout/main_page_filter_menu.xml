@@ -75,6 +75,7 @@
             android:checked="@={mainPageViewModel.isFavorite}"
             android:text="@string/show_favorites"
             android:textSize="14sp"
+            android:onClick="@{() -> activity.applyFavoriteFilter()}"
             app:layout_constraintBottom_toBottomOf="@+id/textView2"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toTopOf="@+id/textView2" />
