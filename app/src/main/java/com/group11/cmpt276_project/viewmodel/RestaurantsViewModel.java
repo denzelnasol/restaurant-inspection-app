@@ -67,7 +67,7 @@ public class RestaurantsViewModel {
     }
 
     public void clearSearch() {
-        if(this.mSearch != null) {
+        if (this.mSearch != null) {
             this.mRestaurants.removeSource(this.mSearch);
             this.mSearch = null;
             this.searchResult = null;
@@ -77,7 +77,7 @@ public class RestaurantsViewModel {
 
     public void search(String name, RestaurantFilter restaurantFilter) {
 
-        if(this.mSearch != null) {
+        if (this.mSearch != null) {
             this.mRestaurants.removeSource(this.mSearch);
             this.searchResult = null;
             this.mSearch = null;
@@ -108,7 +108,7 @@ public class RestaurantsViewModel {
 
             List<RestaurantUpdate> toSave = new ArrayList<>();
 
-            for (RestaurantDto restaurantDto: newRestaurants) {
+            for (RestaurantDto restaurantDto : newRestaurants) {
                 String trackingNumber = restaurantDto.getTrackingNumber();
                 String newFacilityType = restaurantDto.getFacilityType();
                 double newLatitude = restaurantDto.getLatitude();
@@ -119,14 +119,14 @@ public class RestaurantsViewModel {
 
 
                 RestaurantUpdate restaurant = new RestaurantUpdate.RestaurantUpdateBuilder()
-                            .withFacilityType(newFacilityType)
-                            .withLatitude(newLatitude)
-                            .withLongitude(newLongitude)
-                            .withPhysicalAddress(newPhysicalAddress)
-                            .withPhysicalCity(newPhysicalCity)
-                            .withName(newName)
-                            .withTrackingNumber(trackingNumber)
-                            .build();
+                        .withFacilityType(newFacilityType)
+                        .withLatitude(newLatitude)
+                        .withLongitude(newLongitude)
+                        .withPhysicalAddress(newPhysicalAddress)
+                        .withPhysicalCity(newPhysicalCity)
+                        .withName(newName)
+                        .withTrackingNumber(trackingNumber)
+                        .build();
 
                 toSave.add(restaurant);
             }
@@ -137,17 +137,13 @@ public class RestaurantsViewModel {
         }
     }
 
-    public void favoriteRestaurant(String trackingNumber) {
-        Restaurant restaurant = this.mRestaurants.getValue().get(trackingNumber);
-
-        if(restaurant != null) {
-            restaurant.setFavorite(!restaurant.isFavorite());
-            try {
-                this.restaurantRepository.saveRestaurant(restaurant);
-            } catch (RepositoryWriteError repositoryWriteError) {
-                repositoryWriteError.printStackTrace();
-            }
+    public void saveRestaurant(Restaurant restaurant) {
+        try {
+            this.restaurantRepository.saveRestaurant(restaurant);
+        } catch (RepositoryWriteError repositoryWriteError) {
+            repositoryWriteError.printStackTrace();
         }
+
     }
 
     private void mergeSource() {
@@ -160,7 +156,7 @@ public class RestaurantsViewModel {
 
         Map<String, Restaurant> restaurants = new HashMap<>();
 
-        for(Restaurant restaurant : data) {
+        for (Restaurant restaurant : data) {
             restaurants.put(restaurant.getTrackingNumber(), restaurant);
         }
 

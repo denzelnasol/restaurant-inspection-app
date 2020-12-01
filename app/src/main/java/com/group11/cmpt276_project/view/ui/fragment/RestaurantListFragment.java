@@ -16,17 +16,13 @@ import android.view.ViewGroup;
 
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.FragmentRestaurantListBinding;
+import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.view.adapter.RestaurantAdapter;
 import com.group11.cmpt276_project.view.ui.RestaurantDetailActivity;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
-import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantListFragmentViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.factory.RestaurantListFragmentViewModelFactory;
-
-import java.util.HashMap;
-
-import java.util.Map;
 
 /**
  * This fragment displays the restaurant list
@@ -106,8 +102,9 @@ public class RestaurantListFragment extends Fragment {
     private class FavouriteOnClick implements RestaurantAdapter.IFavouriteOnClick {
 
         @Override
-        public void onClick(String trackingNumber) {
-            restaurantsViewModel.favoriteRestaurant(trackingNumber);
+        public void onClick(Restaurant restaurant) {
+            restaurant.setFavorite(!restaurant.isFavorite());
+            restaurantsViewModel.saveRestaurant(restaurant);
         }
     }
 }

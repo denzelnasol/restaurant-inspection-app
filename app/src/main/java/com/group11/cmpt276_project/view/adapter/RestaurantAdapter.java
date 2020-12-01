@@ -87,7 +87,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
                 onRestaurantItemClick.onItemClick(trackingNumbers.get(getAdapterPosition()));
             });
             this.binding.favouritedImage.setOnClickListener((view) -> {
-                onFavouriteClick.onClick(trackingNumbers.get(getAdapterPosition()));
+                onFavouriteClick.onClick(restaurants.get(trackingNumbers.get(getAdapterPosition())));
             });
         }
 
@@ -103,7 +103,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
     }
 
     public interface IFavouriteOnClick {
-        void onClick(String trackingNumber);
+        void onClick(Restaurant restaurant);
     }
 
 }
