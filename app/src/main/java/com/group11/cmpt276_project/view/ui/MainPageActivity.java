@@ -197,6 +197,7 @@ public class MainPageActivity extends FragmentActivity {
 
             if((name == null || name.isEmpty()) && data == null) {
                 this.restaurantsViewModel.clearSearch();
+                this.mainPageViewModel.setFilterApplied(false);
                 return;
             }
 
@@ -233,10 +234,13 @@ public class MainPageActivity extends FragmentActivity {
 
     public void closeFilter() {
         this.mainPageViewModel.closeFilter();
+        if(this.mainPageViewModel.isFavorite.getValue()) {
+            this.mainPageViewModel.isFavorite.setValue(false);
+            this.applySearch();
+        }
 
         if (!this.mainPageViewModel.isFilterApplied()) {
             this.clearFilter();
-            ;
         }
     }
 
@@ -247,7 +251,6 @@ public class MainPageActivity extends FragmentActivity {
 
     public void clearFilter() {
         this.mainPageViewModel.clearFilter();
-        ;
         this.applySearch();
     }
 
