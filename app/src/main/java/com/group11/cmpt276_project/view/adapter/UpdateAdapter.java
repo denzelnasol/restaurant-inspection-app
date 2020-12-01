@@ -12,6 +12,9 @@ import com.group11.cmpt276_project.service.model.Restaurant;
 
 import java.util.List;
 
+/**
+ * This class is an adapter to hook the RecyclerView with DataBinding for the update list.
+ */
 public class UpdateAdapter extends RecyclerView.Adapter<UpdateAdapter.FavoriteViewHolder>{
 
     private List<Restaurant> restaurants;

@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+// Class to detect dragging gestures on the map
 public class OnDragConstraintLayout extends ConstraintLayout {
 
     private IDragCallBack dragCallBack;

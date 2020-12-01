@@ -15,6 +15,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Room database to handle restaurants
+ */
 public class RoomRestaurantRepository implements IRestaurantRepository {
 
     private RestaurantDao restaurantDao;

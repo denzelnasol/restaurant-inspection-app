@@ -18,6 +18,9 @@ import com.group11.cmpt276_project.service.model.RestaurantUpdate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the restaurant data access object
+ */
 @Dao
 public abstract class RestaurantDao {
 

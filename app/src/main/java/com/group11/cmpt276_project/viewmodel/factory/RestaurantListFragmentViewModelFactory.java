@@ -14,6 +14,10 @@ import com.group11.cmpt276_project.viewmodel.RestaurantListFragmentViewModel;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This factory is used to create a RestaurantListFragmentViewModel. It is is needed because the constructor
+ * has arguments
+ */
 public class RestaurantListFragmentViewModelFactory implements ViewModelProvider.Factory {
 
     private final LiveData<Map<String, Restaurant>> restaurants;

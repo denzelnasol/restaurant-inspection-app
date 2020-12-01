@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.PrimaryKey;
 
+/**
+ * This class helps to update restaurants
+ */
 public class RestaurantUpdate {
 
     @NonNull
