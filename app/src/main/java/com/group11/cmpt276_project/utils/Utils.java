@@ -1,8 +1,11 @@
 package com.group11.cmpt276_project.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.util.Pair;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.group11.cmpt276_project.service.dto.InspectionReportDto;
 import com.group11.cmpt276_project.service.dto.RestaurantDto;
@@ -184,5 +187,13 @@ public class Utils {
         Collections.sort(newInspections, (InspectionReportDto A, InspectionReportDto B) -> Integer.parseInt(B.getInspectionDate()) - Integer.parseInt(A.getInspectionDate()));
 
         return newInspections;
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = activity.getCurrentFocus();
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
