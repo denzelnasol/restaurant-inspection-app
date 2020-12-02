@@ -34,31 +34,24 @@
             android:onClick="@{()-> activity.onCancelClick()}"
             android:text="@string/cancel"
             android:textColor="#EDE6E6"
-            android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="@id/progress_bar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/progress_bar" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="160dp"
-            android:layout_height="170dp"
-            android:layout_marginTop="225dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="@+id/app_name"
-            app:layout_constraintStart_toStartOf="@+id/app_name"
-            app:layout_constraintTop_toTopOf="parent">
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/welcomeAnimRepo"
+            android:layout_width="175dp"
+            android:layout_height="175dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/progress_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/welcomescreen_report" />
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/welcomeAnimRepo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/welcomescreen_report" />
-
-        </LinearLayout>
 
         <TextView
             android:id="@+id/app_name"
@@ -68,10 +61,9 @@
             android:text="@string/app_name"
             android:textSize="20sp"
             app:fontFamily="sans-serif"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
-
+            app:layout_constraintEnd_toEndOf="@+id/welcomeAnimRepo"
+            app:layout_constraintStart_toStartOf="@+id/welcomeAnimRepo"
+            app:layout_constraintTop_toBottomOf="@+id/welcomeAnimRepo" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -83,7 +75,7 @@
             android:layout_marginBottom="180dp"
             android:max="100"
             android:progress="@{welcomeViewModel.mProgress}"
-            android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button2"
             app:layout_constraintStart_toStartOf="parent" />
@@ -98,7 +90,7 @@
             android:text="@{welcomeViewModel.mDownloadText}"
             android:textAlignment="center"
             android:textSize="16sp"
-            android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.INVISIBLE}"
             app:fontFamily="sans-serif-light"
             app:layout_constraintBottom_toTopOf="@+id/progress_bar"
             app:layout_constraintEnd_toStartOf="@+id/progressBarSpinner"
@@ -110,7 +102,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:indeterminate="true"
-            android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{welcomeViewModel.mIsDownloading ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/progress_text"
             app:layout_constraintEnd_toEndOf="@+id/progress_bar"
             app:layout_constraintTop_toTopOf="@+id/progress_text" />

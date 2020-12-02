@@ -67,6 +67,11 @@ public class JsonRestaurantRepository implements IRestaurantRepository {
     }
 
     @Override
+    public LiveData<List<Restaurant>> getFavouriteRestaurants() throws RepositoryReadError {
+        return null;
+    }
+
+    @Override
     public LiveData<List<Restaurant>> getRestaurantsBySearch(String name, boolean isFavorite, int numberCritical, String hazardLevel) throws RepositoryReadError {
         return null;
     }

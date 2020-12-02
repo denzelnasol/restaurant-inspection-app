@@ -25,6 +25,7 @@ so anything observing will change accordingly
 public class RestaurantsViewModel {
 
     private LiveData<List<Restaurant>> mData;
+    private LiveData<List<Restaurant>> mDataFavourite;
     private LiveData<List<Restaurant>> mSearch;
     private final MediatorLiveData<Map<String, Restaurant>> mRestaurants;
 
@@ -50,6 +51,7 @@ public class RestaurantsViewModel {
 
         try {
             this.mData = this.restaurantRepository.getRestaurants();
+            this.mDataFavourite = this.restaurantRepository.getFavouriteRestaurants();
         } catch (RepositoryReadError repositoryReadError) {
             this.mData = new MutableLiveData<>();
         }
@@ -97,6 +99,10 @@ public class RestaurantsViewModel {
         } catch (RepositoryReadError repositoryReadError) {
             repositoryReadError.printStackTrace();
         }
+    }
+
+    public LiveData<List<Restaurant>> getFavouriteRestaurants() {
+        return this.mDataFavourite;
     }
 
     public LiveData<Map<String, Restaurant>> getRestaurants() {

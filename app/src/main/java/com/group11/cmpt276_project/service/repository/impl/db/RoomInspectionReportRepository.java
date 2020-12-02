@@ -9,6 +9,7 @@ import com.group11.cmpt276_project.service.model.InspectionReport;
 import com.group11.cmpt276_project.service.repository.IInspectionReportRepository;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Room database to handle inspections
@@ -29,7 +30,7 @@ public class RoomInspectionReportRepository implements IInspectionReportReposito
     }
 
     @Override
-    public List<String> saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError {
+    public Set<String> saveInspections(List<InspectionReport> inspections) throws RepositoryWriteError {
         return this.inspectionReportDao.insertOrUpdate(inspections);
     }
 }

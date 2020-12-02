@@ -58,7 +58,7 @@ public abstract class InspectionReportDao {
     }
 
     @Transaction
-    public List<String> insertOrUpdate(List<InspectionReport> objList) {
+    public Set<String> insertOrUpdate(List<InspectionReport> objList) {
         List<Long> insertResults = insert(objList);
 
         List<InspectionReport> updateList = new ArrayList<>();
@@ -80,6 +80,6 @@ public abstract class InspectionReportDao {
             update(updateList);
         }
 
-        return new ArrayList(newInsertList);
+        return newInsertList;
     }
 }
