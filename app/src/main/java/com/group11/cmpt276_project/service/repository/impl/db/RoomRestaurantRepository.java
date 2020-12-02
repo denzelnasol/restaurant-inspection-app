@@ -22,15 +22,22 @@ public class RoomRestaurantRepository implements IRestaurantRepository {
 
     private RestaurantDao restaurantDao;
     private LiveData<List<Restaurant>> restaurants;
+    private LiveData<List<Restaurant>> favouriteRestaurants;
 
     public RoomRestaurantRepository(RestaurantDao restaurantDao) {
         this.restaurantDao = restaurantDao;
         this.restaurants = this.restaurantDao.getAllRestaurants();
+        this.favouriteRestaurants = this.restaurantDao.getFavouriteRestaurants();
     }
 
     @Override
     public LiveData<List<Restaurant>> getRestaurants() throws RepositoryReadError {
         return this.restaurants;
+    }
+
+    @Override
+    public LiveData<List<Restaurant>> getFavouriteRestaurants() throws RepositoryReadError {
+        return this.favouriteRestaurants;
     }
 
     @Override

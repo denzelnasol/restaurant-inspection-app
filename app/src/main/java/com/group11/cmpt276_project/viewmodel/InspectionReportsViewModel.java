@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /*
 This class is a singleton that contains the inspection reports data provided. The class stores the data in
@@ -25,7 +26,7 @@ public class InspectionReportsViewModel {
     private LiveData<List<InspectionReport>> mData;
     private IInspectionReportRepository inspectionReportRepository;
 
-    private final MutableLiveData<List<String>> newInspections;
+    private final MutableLiveData<Set<String>> newInspections;
 
     private InspectionReportsViewModel() {
         this.mReports = new MediatorLiveData<>();
@@ -72,7 +73,7 @@ public class InspectionReportsViewModel {
         return this.mReports;
     }
 
-    public LiveData<List<String>> getNewInspections() {
+    public LiveData<Set<String>> getNewInspections() {
         return this.newInspections;
     }
 

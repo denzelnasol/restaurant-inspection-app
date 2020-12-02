@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 //Singleton to handle the state of the main page. Currently it only manages the selectedTab
 public class MainPageViewModel {
@@ -44,7 +45,8 @@ public class MainPageViewModel {
     private LiveData<Map<String, List<InspectionReport>>> reports;
     private LiveData<Map<String, Violation>> violations;
     private LiveData<Map<String, Restaurant>> restaurants;
-    private LiveData<List<String>> newInspections;
+    private LiveData<Set<String>> newInspections;
+    private LiveData<List<Restaurant>> favouriteRestaurants;
 
     private static class MainPageViewModelHolder {
         private static final MainPageViewModel INSTANCE = new MainPageViewModel();
@@ -52,7 +54,8 @@ public class MainPageViewModel {
 
     public void init(LiveData<Map<String, List<InspectionReport>>> reports,
                      LiveData<Map<String, Violation>> violations, LiveData<Map<String,
-            Restaurant>> restaurants, LiveData<List<String>> newInspections) {
+            Restaurant>> restaurants, LiveData<Set<String>> newInspections,
+                     LiveData<List<Restaurant>> favouriteRestaurants) {
 
         this.isLoadingDB.addSource(reports, (data) -> {
             this.checkIfLoadingIsDone();
@@ -73,11 +76,15 @@ public class MainPageViewModel {
         this.updates.addSource(this.isLoadingDB, (data) -> {
             this.generateUpdateList();
         });
+        this.updates.addSource(favouriteRestaurants, (data) -> {
+            this.generateUpdateList();
+        });
 
         this.reports = reports;
         this.violations = violations;
         this.restaurants = restaurants;
         this.newInspections = newInspections;
+        this.favouriteRestaurants = favouriteRestaurants;
     }
 
     public void cleanUp() {
@@ -93,6 +100,7 @@ public class MainPageViewModel {
         this.updates.removeSource(this.didUpdate);
         this.updates.removeSource(this.newInspections);
         this.updates.removeSource(this.isLoadingDB);
+        this.selectedTab = 0;
     }
 
     public LiveData<RestaurantFilter> getFilter() {
@@ -316,27 +324,32 @@ public class MainPageViewModel {
 
     private void generateUpdateList() {
 
-        List<String> newInspections = this.newInspections.getValue();
+        Set<String> newInspections = this.newInspections.getValue();
+        List<Restaurant> favouriteRestaurants = this.favouriteRestaurants.getValue();
 
         boolean didUpdate = this.didUpdate.getValue() != null ? this.didUpdate.getValue() : false;
         boolean isLoadingDB = this.isLoadingDB.getValue() != null ? this.isLoadingDB.getValue() : true;
 
-        if (!isLoadingDB && newInspections != null && !newInspections.isEmpty() && didUpdate) {
+        if (favouriteRestaurants != null && favouriteRestaurants.isEmpty() && didUpdate) {
+            this.didUpdate.setValue(false);
+        }
 
-            Map<String, Restaurant> restaurants = this.restaurants.getValue();
+
+        if (!isLoadingDB &&
+                newInspections != null && !newInspections.isEmpty() &&
+                favouriteRestaurants != null && !favouriteRestaurants.isEmpty()
+                && didUpdate) {
+
             Map<String, List<InspectionReport>> reports = this.reports.getValue();
 
             List<Restaurant> updatedRestaurants = new ArrayList<>();
             List<InspectionReport> mostRecentReports = new ArrayList<>();
 
-            for (String trackingNumber : newInspections) {
-                if (reports.get(trackingNumber) == null || reports.get(trackingNumber).isEmpty()) {
-                    continue;
-                }
+            for (Restaurant restaurant : favouriteRestaurants) {
 
-                Restaurant restaurant = restaurants.get(trackingNumber);
+                String trackingNumber = restaurant.getTrackingNumber();
 
-                if(restaurant != null && restaurant.isFavorite()) {
+                if(newInspections.contains(trackingNumber)) {
                     InspectionReport mostRecent = reports.get(trackingNumber).get(0);
 
                     updatedRestaurants.add(restaurant);
@@ -344,17 +357,10 @@ public class MainPageViewModel {
                 }
             }
 
-            Collections.sort(updatedRestaurants, (Restaurant a, Restaurant b) -> a.getName().compareTo(b.getName()));
-            Collections.sort(mostRecentReports, (InspectionReport a, InspectionReport b) -> {
-                Restaurant aRestaurant = restaurants.get(a.getTrackingNumber());
-                Restaurant bRestaurant = restaurants.get(b.getTrackingNumber());
-
-                return aRestaurant.getName().compareTo(bRestaurant.getName());
-            });
-
-            if(!updatedRestaurants.isEmpty()) {
+            if (!updatedRestaurants.isEmpty()) {
                 this.shouldShowUpdates.setValue(true);
             }
+
             this.updates.setValue(new Pair<>(updatedRestaurants, mostRecentReports));
         }
     }

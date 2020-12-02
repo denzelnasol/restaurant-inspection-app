@@ -27,6 +27,9 @@ public abstract class RestaurantDao {
     @Query("SELECT * FROM Restaurant ORDER BY name")
     public abstract LiveData<List<Restaurant>> getAllRestaurants();
 
+    @Query("SELECT * FROM Restaurant WHERE is_favorite == 1 ORDER BY name")
+    public abstract LiveData<List<Restaurant>> getFavouriteRestaurants();
+
     @RawQuery(observedEntities = Restaurant.class)
     public abstract  LiveData<List<Restaurant>> getRestaurantByQuery(SupportSQLiteQuery query);
 

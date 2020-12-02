@@ -157,7 +157,13 @@ public class WelcomeActivity extends AppCompatActivity {
         violationsViewModel.init(violationRepository);
 
         this.mainPageViewModel = MainPageViewModel.getInstance();
-        this.mainPageViewModel.init(this.inspectionReportsViewModel.getReports(), violationsViewModel.getViolations(), this.restaurantsViewModel.getRestaurants(), this.inspectionReportsViewModel.getNewInspections());
+        this.mainPageViewModel.init(
+                this.inspectionReportsViewModel.getReports(),
+                violationsViewModel.getViolations(),
+                this.restaurantsViewModel.getRestaurants(),
+                this.inspectionReportsViewModel.getNewInspections(),
+                this.restaurantsViewModel.getFavouriteRestaurants()
+        );
     }
 
     private void bind() {

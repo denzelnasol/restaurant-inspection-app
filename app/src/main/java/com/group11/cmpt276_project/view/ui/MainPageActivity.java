@@ -109,6 +109,7 @@ public class MainPageActivity extends FragmentActivity {
                 RecyclerView recyclerView = this.binding.updateScreen.updateList;
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setAdapter(favoriteAdapter);
+                return;
             }
         });
 
