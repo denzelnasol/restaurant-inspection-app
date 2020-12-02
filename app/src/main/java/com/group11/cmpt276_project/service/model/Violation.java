@@ -30,6 +30,9 @@ public class Violation {
     @ColumnInfo(name = "lang_code")
     private String langCode;
 
+    @ColumnInfo(name = "status_code")
+    private String statusCode;
+
     public Violation() {
     }
 
@@ -38,6 +41,8 @@ public class Violation {
         private String status;
         private String details;
         private String type;
+        private String statusCode;
+        private String langCode;
 
         public ViolationBuilder withId(String id) {
             this.id = id;
@@ -59,12 +64,25 @@ public class Violation {
             return this;
         }
 
+        public ViolationBuilder withStatusCodee(String statusCode) {
+            this.statusCode = statusCode;
+            return this;
+        }
+
+        public ViolationBuilder withLangCode(String langCode) {
+            this.langCode = langCode;
+            return this;
+        }
+
+
         public Violation build() {
             Violation violation = new Violation();
             violation.details = this.details;
             violation.id = this.id;
             violation.status = this.status;
             violation.type = this.type;
+            violation.langCode = this.langCode;
+            violation.statusCode = this.statusCode;
 
             return violation;
         }
@@ -108,5 +126,13 @@ public class Violation {
 
     public void setLangCode(String langCode) {
         this.langCode = langCode;
+    }
+
+    public String getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
     }
 }

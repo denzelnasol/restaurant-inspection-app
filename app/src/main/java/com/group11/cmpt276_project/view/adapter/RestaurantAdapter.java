@@ -13,21 +13,33 @@ import com.group11.cmpt276_project.service.model.Restaurant;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- This class is an adapter to hook the RecyclerView with DataBinding for the restaurant list.
+ * This class is an adapter to hook the RecyclerView with DataBinding for the restaurant list.
  **/
-public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>{
+public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder> {
 
-    private final Map<String,Restaurant> restaurants;
-    private final List<String> trackingNumbers;
-    private final Map<String, InspectionReport> inspectionReports;
+    private Map<String, Restaurant> restaurants;
+    private List<String> trackingNumbers;
+    private Map<String, InspectionReport> inspectionReports;
     private final IRestaurantItemOnClick onRestaurantItemClick;
+    private final IFavouriteOnClick onFavouriteClick;
 
-    public RestaurantAdapter(Map<String,Restaurant> restaurants, Map<String, InspectionReport> inspectionReports, IRestaurantItemOnClick onRestaurantItemClick) {
+    public RestaurantAdapter(IRestaurantItemOnClick onRestaurantItemClick, IFavouriteOnClick onFavouriteClick) {
+        this.onRestaurantItemClick = onRestaurantItemClick;
+        this.onFavouriteClick = onFavouriteClick;
+
+        this.restaurants = new HashMap<>();
+        this.inspectionReports = new HashMap<>();
+        this.trackingNumbers = new ArrayList<>(restaurants.keySet());
+    }
+
+    public void postUpdates(Map<String, Restaurant> restaurants, Map<String, InspectionReport> inspectionReports) {
         this.restaurants = restaurants;
+        this.inspectionReports = inspectionReports;
         this.trackingNumbers = new ArrayList<>(restaurants.keySet());
 
         Collections.sort(this.trackingNumbers, (String a, String b) -> {
@@ -36,9 +48,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
 
             return aRestaurant.getName().toLowerCase().compareTo(bRestaurant.getName().toLowerCase());
         });
-
-        this.inspectionReports = inspectionReports;
-        this.onRestaurantItemClick = onRestaurantItemClick;
+        notifyDataSetChanged();
     }
 
 
@@ -47,7 +57,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
     public RestaurantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         RestaurantItemBinding itemBinding = RestaurantItemBinding.inflate(layoutInflater, parent, false);
-        return new RestaurantViewHolder(itemBinding, this.onRestaurantItemClick);
+        return new RestaurantViewHolder(itemBinding, this.onRestaurantItemClick, this.onFavouriteClick);
     }
 
     @Override
@@ -70,11 +80,14 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
 
         private final RestaurantItemBinding binding;
 
-        public RestaurantViewHolder(RestaurantItemBinding binding, IRestaurantItemOnClick onRestaurantItemClick) {
+        public RestaurantViewHolder(RestaurantItemBinding binding, IRestaurantItemOnClick onRestaurantItemClick, IFavouriteOnClick onFavouriteClick) {
             super(binding.getRoot());
             this.binding = binding;
-            this.binding.getRoot().setOnClickListener((View view) -> {
+            this.binding.getRoot().setOnClickListener((view) -> {
                 onRestaurantItemClick.onItemClick(trackingNumbers.get(getAdapterPosition()));
+            });
+            this.binding.favouritedImage.setOnClickListener((view) -> {
+                onFavouriteClick.onClick(restaurants.get(trackingNumbers.get(getAdapterPosition())));
             });
         }
 
@@ -87,6 +100,10 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
 
     public interface IRestaurantItemOnClick {
         void onItemClick(String trackingNumber);
+    }
+
+    public interface IFavouriteOnClick {
+        void onClick(Restaurant restaurant);
     }
 
 }

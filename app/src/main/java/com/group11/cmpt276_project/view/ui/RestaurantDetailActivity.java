@@ -4,10 +4,8 @@ package com.group11.cmpt276_project.view.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -85,17 +83,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
             Restaurant restaurant = data.get(this.trackingNumber) == null ? this.restaurant : data.get(this.trackingNumber);
 
-            if(restaurant != null) {
-                this.restaurant = new Restaurant.RestaurantBuilder()
-                        .withLongitude(restaurant.getLongitude())
-                        .withLatitude(restaurant.getLatitude())
-                        .withFacilityType(restaurant.getFacilityType())
-                        .withPhysicalCity(restaurant.getPhysicalCity())
-                        .withPhysicalAddress(restaurant.getPhysicalAddress())
-                        .withName(restaurant.getName())
-                        .withTrackingNumber(restaurant.getTrackingNumber())
-                        .withIsFavorite(false)
-                        .build();
+            if (restaurant != null) {
+                this.restaurant = restaurant;
             }
 
             this.binding.setRestaurant(restaurant);
@@ -108,7 +97,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
     private void setupRecyclerView(List<InspectionReport> inspectionReports) {
         if (inspectionReports.size() != 0) {
-            InspectionAdapter adapter = new InspectionAdapter( inspectionReports, new InspectionOnClickTrackingNumber(this.trackingNumber));
+            InspectionAdapter adapter = new InspectionAdapter(inspectionReports, new InspectionOnClickTrackingNumber(this.trackingNumber));
             RecyclerView recyclerView = this.binding.resDetailRecycler;
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -141,7 +130,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     }
 
     public void toggleFavouriteButton() {
-        this.restaurantViewModel.favoriteRestaurant(this.trackingNumber);
+        this.restaurant.setFavorite(!restaurant.isFavorite());
+        this.restaurantViewModel.saveRestaurant(this.restaurant);
     }
 }
 

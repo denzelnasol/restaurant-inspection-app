@@ -16,17 +16,13 @@ import android.view.ViewGroup;
 
 import com.group11.cmpt276_project.R;
 import com.group11.cmpt276_project.databinding.FragmentRestaurantListBinding;
+import com.group11.cmpt276_project.service.model.Restaurant;
 import com.group11.cmpt276_project.view.adapter.RestaurantAdapter;
 import com.group11.cmpt276_project.view.ui.RestaurantDetailActivity;
 import com.group11.cmpt276_project.viewmodel.InspectionReportsViewModel;
-import com.group11.cmpt276_project.viewmodel.MainPageViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantListFragmentViewModel;
 import com.group11.cmpt276_project.viewmodel.RestaurantsViewModel;
 import com.group11.cmpt276_project.viewmodel.factory.RestaurantListFragmentViewModelFactory;
-
-import java.util.HashMap;
-
-import java.util.Map;
 
 /**
  * This fragment displays the restaurant list
@@ -37,6 +33,8 @@ public class RestaurantListFragment extends Fragment {
     private InspectionReportsViewModel inspectionReportsViewModel;
 
     private RestaurantListFragmentViewModel restaurantListFragmentViewModel;
+
+    private RestaurantAdapter restaurantAdapter;
 
     private FragmentRestaurantListBinding binding;
 
@@ -61,6 +59,7 @@ public class RestaurantListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        this.setUpRecyclerView();
         this.observeRestaurants();
     }
 
@@ -78,14 +77,17 @@ public class RestaurantListFragment extends Fragment {
 
     private void observeRestaurants() {
         this.restaurantListFragmentViewModel.getData().observe(getActivity(), (data) -> {
-
-            RestaurantAdapter restaurantAdapter = new RestaurantAdapter(data.first, data.second, new RestaurantItemOnClickTrackingNumber());
-
-            RecyclerView restaurantList = this.binding.restaurantList;
-
-            restaurantList.setLayoutManager(new LinearLayoutManager(getContext()));
-            restaurantList.setAdapter(restaurantAdapter);
+            this.restaurantAdapter.postUpdates(data.first, data.second);
         });
+    }
+
+    public void setUpRecyclerView() {
+        this.restaurantAdapter = new RestaurantAdapter(new RestaurantItemOnClickTrackingNumber(), new FavouriteOnClick());
+
+        RecyclerView restaurantList = this.binding.restaurantList;
+
+        restaurantList.setLayoutManager(new LinearLayoutManager(getContext()));
+        restaurantList.setAdapter(restaurantAdapter);
     }
 
     private class RestaurantItemOnClickTrackingNumber implements RestaurantAdapter.IRestaurantItemOnClick {
@@ -94,6 +96,15 @@ public class RestaurantListFragment extends Fragment {
         public void onItemClick(String trackingNumber) {
             Intent intent = RestaurantDetailActivity.startActivity(getActivity(), trackingNumber);
             startActivity(intent);
+        }
+    }
+
+    private class FavouriteOnClick implements RestaurantAdapter.IFavouriteOnClick {
+
+        @Override
+        public void onClick(Restaurant restaurant) {
+            restaurant.setFavorite(!restaurant.isFavorite());
+            restaurantsViewModel.saveRestaurant(restaurant);
         }
     }
 }

@@ -53,31 +53,11 @@ public class ViolationsViewModel {
 
     public void cleanUp() {
         this.mViolations.removeSource(this.mData);
+        this.mViolations.setValue(null);
     }
 
     public LiveData<Map<String, Violation>> getViolations() {
         return this.mViolations;
-    }
-
-    public void save(List<ViolationDto> newViolations) {
-        try {
-
-            List<Violation> toAdd = new ArrayList<>();
-
-            for (ViolationDto dto : newViolations) {
-                Violation violation = new Violation.ViolationBuilder()
-                        .withDetails(dto.getDetails())
-                        .withId(dto.getId())
-                        .withStatus(dto.getStatus())
-                        .withType(dto.getType())
-                        .build();
-
-                toAdd.add(violation);
-            }
-            this.violationRepository.saveViolations(toAdd);
-        } catch (RepositoryWriteError repositoryWriteError) {
-            repositoryWriteError.printStackTrace();
-        }
     }
 
     public void updateLanguage() {

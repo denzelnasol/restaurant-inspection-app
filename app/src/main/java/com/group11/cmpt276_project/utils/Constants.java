@@ -3,6 +3,7 @@ package com.group11.cmpt276_project.utils;
 import com.group11.cmpt276_project.R;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /*
@@ -19,8 +20,8 @@ public class Constants {
     public static final String LOW = "Low";
     public static final String MODERATE = "Moderate";
     public static final String HIGH = "High";
-    public static final String CRITICAL = "Critical";
-    public static final String NOT_CRITICAL = "Not Critical";
+    public static final String CRITICAL = "C";
+    public static final String NOT_CRITICAL = "NC";
     public static final String TRACKING_NUMBER = "trackingNumber";
     public static final String INDEX = "index";
     public static final String PARENT = "parent";
@@ -49,6 +50,11 @@ public class Constants {
     public static final String TIM_HORTONS = "Tim Hortons";
     public static final String WALMART = "Wal-mart";
     public static final String WENDYS = "Wendy's";
+    public static final String ENG = "eng";
+    public static final String FRA = "fra";
+    public static final String FOLLOW_UP = "Follow-Up";
+    public static final String ROUTINE = "Routine";
+
     public static final Map<String, Integer> RESTAURANT_ICON_MAP = new HashMap<String, Integer>(){{
         put(Constants.SEVEN_ELEVEN, R.drawable.res_ic_7eleven);
         put(Constants.AW, R.drawable.res_ic_aw);
@@ -69,5 +75,15 @@ public class Constants {
         put(Constants.TIM_HORTONS, R.drawable.res_ic_tim_hortons);
         put(Constants.WALMART, R.drawable.res_ic_walmart);
         put(Constants.WENDYS, R.drawable.res_ic_wendys);
+    }};
+
+    public static final Map<String, String> SUPPORTED_LANGUAGES = new HashMap<String, String>() {{
+       put(ENG, ENG);
+       put(FRA, FRA);
+    }};
+
+    public static final Map<String, Locale> SUPPORTED_LANGUAGES_TO_LOCALE = new HashMap<String, Locale>() {{
+        put(ENG, Locale.ENGLISH);
+        put(FRA, Locale.FRENCH);
     }};
 }

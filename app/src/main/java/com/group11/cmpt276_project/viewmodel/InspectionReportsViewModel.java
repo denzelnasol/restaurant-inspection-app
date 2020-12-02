@@ -65,6 +65,7 @@ public class InspectionReportsViewModel {
 
     public void cleanUp() {
         this.mReports.removeSource(this.mData);
+        this.mReports.setValue(null);
     }
 
     public LiveData<Map<String, List<InspectionReport>>> getReports() {

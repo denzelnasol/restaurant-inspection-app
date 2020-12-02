@@ -242,10 +242,6 @@ public class MainPageActivity extends FragmentActivity {
 
     public void closeFilter() {
         this.mainPageViewModel.closeFilter();
-        if(this.mainPageViewModel.isFavorite.getValue()) {
-            this.mainPageViewModel.isFavorite.setValue(false);
-            this.applySearch();
-        }
 
         if (!this.mainPageViewModel.isFilterApplied()) {
             this.clearFilter();
@@ -258,7 +254,6 @@ public class MainPageActivity extends FragmentActivity {
         this.mainPageViewModel.closeFilter();
         Utils.hideKeyboard(this);
     }
-
 
 
     public void clearFilter() {
@@ -292,7 +287,4 @@ public class MainPageActivity extends FragmentActivity {
         this.mainPageViewModel.setShouldShowUpdates(false);
     }
 
-    public void applyFavoriteFilter() {
-        this.applySearch();
-    }
 }

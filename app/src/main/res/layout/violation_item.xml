@@ -45,7 +45,7 @@
                     android:scaleType="fitXY"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:severity="@{violation.status}" />
+                    app:severity="@{violation.statusCode}" />
 
                 <ImageView
                     android:id="@+id/violation_category_icon"

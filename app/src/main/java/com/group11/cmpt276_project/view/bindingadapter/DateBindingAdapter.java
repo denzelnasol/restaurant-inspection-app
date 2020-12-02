@@ -6,6 +6,7 @@ import android.widget.TextView;
 import androidx.databinding.BindingAdapter;
 
 import com.group11.cmpt276_project.R;
+import com.group11.cmpt276_project.utils.Constants;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -48,7 +49,9 @@ public class DateBindingAdapter {
 
     private static void formatNormal(TextView textView, Context context, LocalDate inspectionDate, long daysSince, int currentYear) {
 
-        String month = inspectionDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.CANADA);
+        Locale locale = Constants.SUPPORTED_LANGUAGES_TO_LOCALE.getOrDefault(Locale.getDefault().getISO3Language(), Locale.ENGLISH);
+
+        String month = inspectionDate.getMonth().getDisplayName(TextStyle.SHORT, locale);
         int year = inspectionDate.getYear();
         int day = inspectionDate.getDayOfMonth();
 
@@ -64,9 +67,11 @@ public class DateBindingAdapter {
     }
 
     private static void formLast(TextView textView, Context context, LocalDate inspectionDate, long daysSince, int currentYear) {
+        Locale locale = Constants.SUPPORTED_LANGUAGES_TO_LOCALE.getOrDefault(Locale.getDefault().getISO3Language(), Locale.ENGLISH);
+
         String sinceString;
 
-        String month = inspectionDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.CANADA);
+        String month = inspectionDate.getMonth().getDisplayName(TextStyle.SHORT, locale);
 
         if(daysSince <= 30) {
             sinceString = context.getString(R.string.days, daysSince);
