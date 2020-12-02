@@ -17,3 +17,5 @@ Iteration 3 Roles
 - Product Owner - Wenhao (wenhaoz)
 - Repo Master - Jacqueline (jsl59)
 - Team Member - Karamveer (ksa133)
+
+Supported Languages: English, French
