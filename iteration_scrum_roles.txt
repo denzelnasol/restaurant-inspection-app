@@ -14,7 +14,7 @@ Team Member: Wenhao (wenhaoz)
 
 Iteration 3 Roles
 
-Scrum Master -Wenhao (wenhaoz) 
-Product Owner -  Karamveer (ksa133)
-Repo Master - Jacqueline (jsl59)
-Team Member - Denzel (dnasol)
+- Scrum Master: Wenhao (wenhaoz) 
+- Product Owner: Karamveer (ksa133)
+- Repo Master: Jacqueline (jsl59)
+- Team Member: Denzel (dnasol)
