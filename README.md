@@ -13,9 +13,9 @@ Iteration 2 Roles
 - Team Member: Wenhao (wenhaoz)
 
 Iteration 3 Roles
-- Scrum Master - Denzel (dnasol)
-- Product Owner - Wenhao (wenhaoz)
-- Repo Master - Jacqueline (jsl59)
-- Team Member - Karamveer (ksa133)
+- Scrum Master: Wenhao (wenhaoz) 
+- Product Owner: Karamveer (ksa133)
+- Repo Master: Jacqueline (jsl59)
+- Team Member: Denzel (dnasol)
 
 Supported Languages: English, French
