@@ -18,4 +18,7 @@ Iteration 3 Roles
 - Repo Master: Jacqueline (jsl59)
 - Team Member: Denzel (dnasol)
 
+Before using iteration 3 version of the app, please uninstall any previous versions.
+
 Supported Languages: English, French
+
