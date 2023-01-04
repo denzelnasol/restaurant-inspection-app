@@ -1,3 +1,5 @@
+A Restaurant Inspection application made using Java and Android Studio which fetches real-world restaurant inspection data displays it on an interactive map
+
 Iteration 1 Roles
 
 - Scrum Master: Jacqueline (jsl59)
